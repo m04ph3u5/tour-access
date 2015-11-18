@@ -1,0 +1,29 @@
+<h1 class="text-center">Login operatore</h1>
+<div class="col-sm-offset-4 col-sm-4 col-xs-12 text-center" data-ng-hide="login.usernameInserted" 
+	class="box" style="border:solid 2px; border-color: #142857;">
+	<div style="margin: 20px;">
+		<h3>Appoggia la tessera sul lettore</h3>
+		<form>
+			<input type="text" autofocus data-ng-model="login.username">
+			<br>
+			<input style="margin-top:10px;" type="submit" data-ng-click="login.postUsername()" value="Avanti">
+		</form>
+	</div>
+</div>
+
+<div class="col-sm-offset-4 col-sm-4 col-xs-12 text-center" data-ng-show="login.usernameInserted" 
+	class="box" style="border:solid 2px; border-color: #142857;">
+	<div style="margin: 20px;">
+		<h3>Ciao {{login.name}}</h3>
+		<h4>Inserisci la tua password</h4>
+		<form>
+			<input type="password" autofocus data-ng-model="login.password">
+			<br>
+			<input style="margin-top:10px;" type="submit" data-ng-click="login.login()" value="Login">
+		</form>
+	</div>
+</div>
+
+<div data-ng-show="login.showError" class="col-sm-offset-4 col-sm-4 col-xs-12 text-center">
+	<p style="color: red;">Attenzione, credenziali errate.</p>
+</div>

@@ -27,6 +27,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<constructor-arg ref="converter" />
 	</bean>
 
-	<mongo:repositories base-package="it.polito.applied.smiled.repository"/>
+	<mongo:repositories base-package="it.polito.applied.asti.clan.repository"/>
 
 </beans>
