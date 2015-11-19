@@ -1,5 +1,7 @@
 package it.polito.applied.asti.clan.controller;
 
+import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.service.UserService;
 
@@ -19,7 +21,9 @@ public class ApiRestController {
 	
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public Name getNameOfUser(@RequestParam(value = "username", required=false) String username){
+	public Name getNameOfUser(@RequestParam(value = "username", required=false) String username) throws BadRequestException, NotFoundException{
+		if(username==null || username.equals(""))
+			throw new BadRequestException();
 		return userService.getNameByUserName(username);
 	}
 

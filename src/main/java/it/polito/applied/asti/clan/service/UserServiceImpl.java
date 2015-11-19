@@ -1,5 +1,6 @@
 package it.polito.applied.asti.clan.service;
 
+import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.repository.UserRepository;
@@ -25,8 +26,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public Name getNameByUserName(String username) {
+	public Name getNameByUserName(String username) throws NotFoundException {
 		User u = userRepo.findByUsername(username);
+		if(u==null)
+			throw new NotFoundException();
 		return new Name(u.getFirstname(),u.getLastname());
 	}
 

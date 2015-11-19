@@ -11,7 +11,7 @@ angular.module('asti.application')
 		})
 		.state('operatorDashboard',{
 			templateUrl: 'assets/public/partials/operator.html',
-			url : '/',
+			url : '/dashboard',
 			controller : 'operatorCtrl',
 			controllerAs : 'operator'
 		})
