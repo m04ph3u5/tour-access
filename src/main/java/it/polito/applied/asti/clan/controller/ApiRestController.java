@@ -4,15 +4,19 @@ import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Place;
+import it.polito.applied.asti.clan.pojo.TicketDTO;
 import it.polito.applied.asti.clan.repository.PlaceRepository;
-import it.polito.applied.asti.clan.repository.PlaceRepositoryImpl;
 import it.polito.applied.asti.clan.service.UserService;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +45,14 @@ public class ApiRestController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Place> getPlaces() {
 		return placeRepo.findAll();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_OPERATOR')")
+	@RequestMapping(value="/v1/tickets", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void postTickets(@RequestBody @Valid TicketDTO ticketDTO, BindingResult result) throws BadRequestException {
+		if(result.hasErrors())
+			throw new BadRequestException();
 	}
 
 }

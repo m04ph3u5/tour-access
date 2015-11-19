@@ -388,10 +388,15 @@ span.clickable:hover {
 	background-color:rgba(245, 242, 234, 0.5);
 /* 	padding-left : 100%; */
 /* 	padding-right : 100%; */
-	padding-top : 2%;
-	padding-bottom : 2%;
-	margin-bottom : 5px;
-	margin-top  : 5px;
+	padding-top : 1%;
+	height: 300px;
+	padding-bottom : 1%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left : 5px;
+	margin-right : 5px;
+	border : solid 1px;
+	border-color: #142857;
 }
 
 .row-fluid {
@@ -423,4 +428,31 @@ span.clickable:hover {
  */
 .cf {
     *zoom: 1;
+}
+
+
+/*PLACES DASHBOARD OPERATORE*/
+.boxPlaces {
+	border-style: solid;
+	border-width: 3px;
+	border-color:#142857;
+	background-color: #e5e0c3;
+	text-align: center;
+	padding: 1%;
+	position: relative;
+	overflow-y : scroll;
+	overflow-x : hidden;
+}
+
+.selectable:hover {
+	-moz-box-shadow: 2px 2px 3px #000; 
+ 	-webkit-box-shadow: 2px 2px 3px #000; 
+ 	box-shadow: 2px 2px 3px #000; 
+}
+
+.selectedBox {
+	-moz-box-shadow: 3px 3px 4px #000; 
+ 	-webkit-box-shadow: 3px 3px 4px #000; 
+ 	box-shadow: 3px 3px 4px #000; 
+ 	opacity : 0.7;
 }

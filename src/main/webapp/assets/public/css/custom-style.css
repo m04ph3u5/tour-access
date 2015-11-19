@@ -637,6 +637,10 @@
 			height:280px;
 		}
 		
+		.singleRowPlaces{
+			height:350px;
+		}
+		
 		.doubleRow{
 			height:560px;
 			max-height:100%;

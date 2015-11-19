@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,11 +14,15 @@ public class Ticket {
 
 	@Id
 	private String id;
+	@NotNull
 	@Digits(fraction = 0, integer = 10)
 	private String ticketNumber;
+	
 	private String operatorId;
 	private Date validityStartDate;
 	private Date validityEndDate;
+	
+	@NotNull
 	private List<String> places;
 	
 	
