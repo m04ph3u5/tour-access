@@ -8,6 +8,7 @@ import it.polito.applied.asti.clan.pojo.TicketDTO;
 import it.polito.applied.asti.clan.repository.PlaceRepository;
 import it.polito.applied.asti.clan.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
