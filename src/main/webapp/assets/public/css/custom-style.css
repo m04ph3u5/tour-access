@@ -589,14 +589,14 @@
 		.titleNav{
 			font-family: 'Coustard', sans-serif;
 			font-size:20px;
-			color: #cb654f;						
+			color: #142857;;						
 		}
 		.titleNav{
 			font-size:20px;
-			color: #cb654f;						
+			color: #142857;						
 		}
 		.titleNav::hover{			
-			color: #cb654f;						
+			color: #142857;						
 		}
 		
 		.navWithoutPad{

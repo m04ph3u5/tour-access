@@ -85,7 +85,10 @@
 	<!-- CONTROLLERS -->
 	<script src="/assets/public/js/controller/loginController.js"></script>
 	<script src="/assets/public/js/controller/operatorController.js"></script>
+	<script src="/assets/public/js/controller/navbarController.js"></script>
 	<!-- SERVICES -->
-	<script src="/assets/public/js/service/userService.js"></script>	
+	<script src="/assets/public/js/service/userService.js"></script>
+	<script src="/assets/public/js/service/apiService.js"></script>	
+		
 </body>
 </html>

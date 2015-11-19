@@ -14,8 +14,17 @@ public class Place {
 	private int type;
 	private String address;
 	private String timetable;
+	private String imageUrl;
 	
 	
+	
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 	public String getName() {
 		return name;
 	}
