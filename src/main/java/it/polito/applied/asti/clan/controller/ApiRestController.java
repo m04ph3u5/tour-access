@@ -3,9 +3,12 @@ package it.polito.applied.asti.clan.controller;
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Name;
-import it.polito.applied.asti.clan.pojo.Place;
-import it.polito.applied.asti.clan.pojo.TicketDTO;
-import it.polito.applied.asti.clan.repository.PlaceRepository;
+import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiToSell;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.User;
+import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +35,10 @@ public class ApiRestController {
 	private UserService userService;
 	
 	@Autowired
-	private PlaceRepository placeRepo;
+	private PoiRepository placeRepo;
+	
+	@Autowired
+	private TicketService ticketService;
 	
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -42,18 +49,37 @@ public class ApiRestController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
-	@RequestMapping(value="/v1/places", method=RequestMethod.GET)
+	@RequestMapping(value="/v1/poiToSell", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Place> getPlaces() {
-		return placeRepo.findAll();
+	public List<PoiToSell> getPoiToSell() {
+		List<PoiToSell> poiToSell = new ArrayList<PoiToSell>();
+		List<Poi> poiList = placeRepo.findAll();
+		if(poiList!=null){
+			for(Poi p : poiList){
+				poiToSell.add(new PoiToSell(p));
+			}
+		}
+		return poiToSell;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/tickets", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void postTickets(@RequestBody @Valid TicketDTO ticketDTO, BindingResult result) throws BadRequestException {
+	public void postTickets(@RequestBody @Valid TicketRequest ticketRequest, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException {
 		if(result.hasErrors())
 			throw new BadRequestException();
+		
+		System.out.println(ticketRequest.getInfo());
+		ticketService.operatorGenerateTickets(ticketRequest, u.getId());
+	}
+	
+	@PreAuthorize("hasRole('ROLE_OPERATOR')")
+	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<String> accessiblePlaces(@RequestParam(value="ticketNumber", required=true) String ticketNumber) throws BadRequestException {
+		if(ticketNumber==null || ticketNumber.isEmpty())
+			throw new BadRequestException();
+		return ticketService.accessiblePlaces(ticketNumber);
 	}
 
 }

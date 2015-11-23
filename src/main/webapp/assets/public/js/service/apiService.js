@@ -2,9 +2,9 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
                function userService($http, $q){
 
 
-	var getPlaces = function(){
+	var getPlacesToSell = function(){
 		var p = $q.defer();
-		$http.get('/api/v1/places').then(
+		$http.get('/api/v1/poiToSell').then(
 				function(response){
 					p.resolve(response.data);
 				},
@@ -15,11 +15,23 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 
-	
+	var orderTicket = function(ticketRequest){
+		var p = $q.defer();
+		$http.post('/api/v1/tickets', ticketRequest).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		return p.promise;
+	}
 	
 	
 	return {
-		getPlaces : getPlaces
+		getPlacesToSell : getPlacesToSell,
+		orderTicket : orderTicket
 	}
 
 }]);

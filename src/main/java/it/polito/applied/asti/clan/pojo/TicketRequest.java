@@ -3,11 +3,12 @@ package it.polito.applied.asti.clan.pojo;
 import java.util.Date;
 import java.util.List;
 
-public class TicketDTO {
+public class TicketRequest {
 
 	private List<String> ticketNumbers;
 	private List<String> placesId;
 	private Date startDate;
+	private InfoTicketRequest info;
 	
 	public List<String> getTicketNumbers() {
 		return ticketNumbers;
@@ -27,6 +28,13 @@ public class TicketDTO {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+	public InfoTicketRequest getInfo() {
+		return info;
+	}
+	public void setInfo(InfoTicketRequest info) {
+		this.info = info;
+	}
+	
 	
 	
 }

@@ -9,11 +9,93 @@ angular.module('asti.application')
 			controller : 'loginCtrl',
 			controllerAs : 'login'
 		})
-		.state('operatorDashboard',{
-			templateUrl: 'assets/public/partials/operator.html',
-			url : '/dashboard',
-			controller : 'operatorCtrl',
-			controllerAs : 'operator'
+		.state('logged',{
+			templateUrl: 'assets/public/partials/operator-logged.html',
+			abstract: true
+		})
+		.state('logged.selectPlace',{
+			url : '/places',
+			views : {
+				"body" : {
+					templateUrl : "assets/public/partials/selectPlace.html",
+					controller : 'selectPlaceCtrl',
+					controllerAs : 'selectPlace'
+				}
+			}
+		})
+		.state('logged.selectPlace.infoTicket',{
+			url : '/info',
+			views : {
+				"body@logged" : {
+					templateUrl : "assets/public/partials/infoTicket.html", 
+					controller : 'infoCtrl',
+					controllerAs : 'info'
+				}
+			},
+			params : {
+				places : null,
+				numTicket : null,
+			},
+			resolve : {
+				places : function($stateParams, $q) {
+					var deferred = $q.defer();
+					if($stateParams.places && $stateParams.places.length>0)
+						deferred.resolve($stateParams.places);
+					else
+						deferred.reject();
+					
+                    return deferred.promise;
+                },
+                numTicket : function($stateParams, $q) {
+                	var deferred = $q.defer();
+					if($stateParams.numTicket && $stateParams.numTicket>0)
+						deferred.resolve($stateParams.numTicket);
+					else
+						deferred.reject();
+                    return deferred.promise;                }
+			}
+		})
+		.state('logged.selectPlace.associateTicket',{
+			url : '/validate',
+			views : {
+				"body@logged" : {
+					templateUrl : "assets/public/partials/associateTicket.html", 
+					controller : 'associateCtrl',
+					controllerAs : 'associate'
+				}
+			},
+			params : {
+				places : null,
+				numTicket : null,
+				info : null
+			},
+			resolve : {
+				places : function($stateParams, $q) {
+					var deferred = $q.defer();
+					if($stateParams.places && $stateParams.places.length>0)
+						deferred.resolve($stateParams.places);
+					else
+						deferred.reject();
+					
+                    return deferred.promise;
+                },
+                numTicket : function($stateParams, $q) {
+                	var deferred = $q.defer();
+					if($stateParams.numTicket && $stateParams.numTicket>0)
+						deferred.resolve($stateParams.numTicket);
+					else
+						deferred.reject();
+                    return deferred.promise;                
+                },
+                info : function($stateParams, $q) {
+                	var deferred = $q.defer();
+					if($stateParams.info)
+						deferred.resolve($stateParams.info);
+					else
+						deferred.reject();
+                    return deferred.promise;                
+                }
+			}
 		})
 		
 		$urlRouterProvider.otherwise(function($injector,$location){
@@ -27,6 +109,13 @@ angular.module('asti.application')
 		
 		$rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
+        
+        $rootScope.$on('$stateChangeError', 
+   			 function(event, toState, toParams, fromState, fromParams, error){
+   		 		event.preventDefault();	
+   		 		console.log("RESOLVE FAILED");
+   		 		$state.go("logged.selectPlace");
+   	 });	
         
     });                                
 

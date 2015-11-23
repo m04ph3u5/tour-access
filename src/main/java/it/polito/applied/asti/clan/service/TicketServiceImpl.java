@@ -1,33 +1,82 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.pojo.Place;
-import it.polito.applied.asti.clan.pojo.TicketDTO;
-import it.polito.applied.asti.clan.repository.PlaceRepository;
+import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.User;
+import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TicketServiceImpl implements TicketService{
 
 	@Autowired
-	private PlaceRepository placeRepo;
+	private PoiRepository poiRepo;
 	
 	@Autowired
 	private TicketRepository ticketRepo;
 	
 	@Override
-	public void generateTickets(TicketDTO ticketDTO) throws BadRequestException {
-		if(!placeRepo.isValid(ticketDTO.getPlacesId()))
+	public void operatorGenerateTickets(TicketRequest ticketRequest, String operatorId) throws BadRequestException {
+		if(!poiRepo.isValid(ticketRequest.getPlacesId()))
 			throw new BadRequestException("Place id non validi");
+		
+		Date start = ticketRequest.getStartDate();
+		Date end;
+		if(start==null)
+			start = new Date();
+	
+		Date startForValidation;
+		Calendar c = Calendar.getInstance();
+		c.setTime(start);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		startForValidation = c.getTime();
+		c.setTime(start);
+		c.set(Calendar.HOUR_OF_DAY,23);
+		c.set(Calendar.MINUTE,59);
+		c.set(Calendar.SECOND, 59);
+		end = c.getTime();
+		
+		
+		if(!ticketRepo.isValid(ticketRequest.getTicketNumbers(),startForValidation, end))
+			throw new BadRequestException("Ticket già prenotati per le date selezionate");
+		
+		List<Ticket> tickets = new ArrayList<Ticket>();
+		for(String n : ticketRequest.getTicketNumbers()){
+			Ticket t = new Ticket();
+			t.setOperatorId(operatorId);
+			t.setPlaces(ticketRequest.getPlacesId());
+			t.setTicketNumber(n);
+			t.setValidityStartDate(start);
+			t.setValidityEndDate(end);
+			tickets.add(t);
+		}
+		
+		ticketRepo.save(tickets);
+			
 	}
 
 	@Override
-	public List<Place> validPlaceTicket(String ticketNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> accessiblePlaces(String ticketNumber) {
+		List<Ticket> list = ticketRepo.findByTicketNumber(ticketNumber);
+		
+		Ticket t = list.get(0);
+		if(t!=null)
+			return t.getPlaces();
+		else
+			return new ArrayList<String>();
 	}
 
 }

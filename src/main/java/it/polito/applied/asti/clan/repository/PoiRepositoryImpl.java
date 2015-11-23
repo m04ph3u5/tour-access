@@ -1,6 +1,6 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.Place;
+import it.polito.applied.asti.clan.pojo.Poi;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-public class PlaceRepositoryImpl implements CustomPlaceRepository{
+public class PoiRepositoryImpl implements CustomPoiRepository{
 
 	@Autowired
 	private MongoOperations mongoOp;
@@ -18,8 +18,8 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 	public boolean isValid(List<String> placesId) {
 		int numPlaces = placesId.size();
 		Query q = new Query();
-		q.addCriteria(Criteria.where("id").in(placesId));
-		long tot = mongoOp.count(q, Place.class);
+		q.addCriteria(Criteria.where("idPoi").in(placesId));
+		long tot = mongoOp.count(q, Poi.class);
 		System.out.println("FOUNDED: "+tot);
 		if(tot==numPlaces)
 			return true;

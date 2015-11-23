@@ -7,15 +7,23 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Ticket {
+@CompoundIndexes(value = 
+{
+    @CompoundIndex (name = "TicketNumber_EndDate", def = "{'ticketNumber': 1, 'validityEndDate': -1}", unique = true)
+}
+)public class Ticket {
 
 	@Id
 	private String id;
 	@NotNull
 	@Digits(fraction = 0, integer = 10)
+	@Indexed
 	private String ticketNumber;
 	
 	private String operatorId;

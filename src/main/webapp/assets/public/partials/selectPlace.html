@@ -1,0 +1,40 @@
+<div style="margin-top:70px;" class="row text-center">
+	<div class="col-sm-offset-1 col-sm-10">
+		<h3>Seleziona i siti da visitare</h3>
+		<div class="singleRowPlaces boxPlaces">
+			<div class="row">
+				<div class="col-sm-3" data-ng-repeat="p in selectPlace.places">
+					<div class="boxFakeDraft selectable" data-ng-class="{'selectedBox' : p.selected}">
+						<b>{{p.name}}</b>
+						<img data-ng-src="{{p.imageId}}" style="width: 75%">
+						<div class="textJustify" style="margin: 5px; margin-top:8px; height: 80px;">
+							<p><b>Orari:</b> {{p.timetable}}</p>
+						</div>
+						<div data-ng-hide="p.selected" class="btn btn-primary" data-ng-click="selectPlace.addToSelected(p)">
+							<span class="glyphicon glyphicon-plus"></span> Aggiungi al biglietto</div>
+						<div data-ng-show="p.selected" class="btn btn-danger" data-ng-click="selectPlace.removeToSelected(p)">
+							<span class="glyphicon glyphicon-remove"></span> Rimuovi dal biglietto</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<h3 data-ng-show="selectPlace.selected.length>0">Scelti</h3>
+		<div class="row">
+			<div id="tagBox" class="col-sm-12 tags-wrapper">
+				<div id="tagsList" class="tags-cloud">
+					<div data-ng-repeat="p in selectPlace.selected" class="tag">
+						<span class="tagName">{{p.name}}</span>
+						<span style="cursor:pointer;" data-ng-click="selectPlace.removeToSelected(p)">&nbsp;<b class="glyphicon glyphicon-remove"></b></span>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class="col-sm-offset-2 col-sm-10  pull-right" data-ng-show="selectPlace.selected.length>0" style="margin-bottom:50px;">
+				<div class="col-sm-4 col-sm-offset-6">
+					<label>Biglietti da acquistare: </label><input style="width: 50px; margin-left: 5px;" type="number" data-ng-model="selectPlace.numFullTicket" min="0">
+				</div>
+				<div data-ng-click="selectPlace.toInfo()"  class="col-sm-2 btn btn-success"><span class="glyphicon glyphicon-ok"></span> Procedi</div>
+			</div>
+	</div>
+</div>

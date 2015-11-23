@@ -20,7 +20,7 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 	self.login = function(){
 		userService.login(self.username, self.password).then(
 				function(data){
-					$state.go("operatorDashboard");
+					$state.go("logged.selectPlace");
 				},
 				function(reason){
 					self.showError = true;

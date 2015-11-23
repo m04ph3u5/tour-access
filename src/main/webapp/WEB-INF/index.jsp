@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/assets/public/js/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css">
 <link rel="stylesheet" href="/assets/public/css/custom-style.css">
 <link rel="stylesheet" href="/assets/public/css/secondaryCss.css">
-<link rel="stylesheet" href="/assets/public/js/vendor/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
+<link rel="stylesheet" href="/assets/public/js/vendor/jquery-ui/themes/redmond/jquery-ui.min.css">
 <link rel="stylesheet" href="/assets/public/css/validation-form.css">
 <link rel="stylesheet" href="/assets/public/js/vendor/ngDialog/css/ngDialog.min.css">
 <link rel="stylesheet" href="/assets/public/js/vendor/ng-tags-input/ng-tags-input.min.css">
@@ -46,6 +46,7 @@
 	<script
 		src="/assets/public/js/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/assets/public/js/vendor/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/assets/public/js/vendor/jquery-ui/ui/i18n/datepicker-it.js"></script>
 	<script src="/assets/public/js/vendor/angular/angular.min.js"></script>
 	<script src="/assets/public/js/support/angular-locale_it-it.js"></script>
 	<script src="/assets/public/js/vendor/angular-ui-date/src/date.js"></script>
@@ -84,8 +85,10 @@
 	<script src="/assets/public/js/router.js"></script>
 	<!-- CONTROLLERS -->
 	<script src="/assets/public/js/controller/loginController.js"></script>
-	<script src="/assets/public/js/controller/operatorController.js"></script>
+	<script src="/assets/public/js/controller/selectPlaceController.js"></script>
 	<script src="/assets/public/js/controller/navbarController.js"></script>
+	<script src="/assets/public/js/controller/infoController.js"></script>
+	<script src="/assets/public/js/controller/associateController.js"></script>
 	<!-- SERVICES -->
 	<script src="/assets/public/js/service/userService.js"></script>
 	<script src="/assets/public/js/service/apiService.js"></script>	
