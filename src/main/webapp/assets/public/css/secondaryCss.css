@@ -456,3 +456,10 @@ span.clickable:hover {
  	box-shadow: 3px 3px 4px #000; 
  	opacity : 0.7;
 }
+
+.container-focus {
+}
+
+.container-focus:focus {
+	outline : 0;
+}

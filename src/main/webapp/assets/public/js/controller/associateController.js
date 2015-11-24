@@ -61,4 +61,58 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 			self.t="";
 		}
 	}
+	
+	self.keyPress = function(event){
+		console.log(event);
+		switch(event.key){
+		case "0": {
+			self.t+=event.key;
+			break;
+		}
+		case "1": {
+			self.t+=event.key;
+			break;
+		}
+		case "2": {
+			self.t+=event.key;
+			break;
+		}
+		case "3": {
+			self.t+=event.key;
+			break;
+		}
+		case "4": {
+			self.t+=event.key;
+			break;
+		}
+		case "5": {
+			self.t+=event.key;
+			break;
+		}
+		case "6": {
+			self.t+=event.key;
+			break;
+		}
+		case "7": {
+			self.t+=event.key;
+			break;
+		}
+		case "8": {
+			self.t+=event.key;
+			break;
+		}
+		case "9": {
+			self.t+=event.key;
+			break;
+		}
+		case "Enter" : {
+			if(self.t.length==10)
+				self.addTicket();
+			break;
+		}
+		default: {
+			self.t="";
+		}
+		}
+	}
 }]);
