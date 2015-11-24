@@ -64,8 +64,13 @@ public class TicketServiceImpl implements TicketService{
 		end = c.getTime();
 		
 		
-		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation, end))
-			throw new BadRequestException("Ticket gia'  prenotati per le date selezionate");
+		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation, end)){
+			if(ticketRequestDTO.getTicketsNumber().size()==1)
+				throw new BadRequestException("Ticket gia' prenotato per la data selezionata");
+			else
+				throw new BadRequestException("Ticket gia' prenotati per la data selezionata");
+		}
+			
 		
 		TicketRequest ticketRequest = new TicketRequest(ticketRequestDTO, operatorId);
 		ticketRequest = ticketRequestRepo.save(ticketRequest);

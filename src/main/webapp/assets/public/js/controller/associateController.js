@@ -23,41 +23,53 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 	self.addTicket = function(){
 		buffer.splice(0, buffer.length);
 		if(self.t.length==10){
-			self.tickets.push(angular.copy(self.t));
-			self.t="";
-			self.validateTicket++;
-
-			if(self.validateTicket>(self.numTicket)){
-				self.validateTicket--;
-				self.validation = false;
-				self.load = true;
-				
-				var ticketRequest = {};
-				ticketRequest.ticketsNumber = self.tickets;
-				ticketRequest.placesId = new Array();
-				if(self.places){
-					for(var i=0; i<self.places.length; i++){
-						ticketRequest.placesId.push(self.places[i].id);
-					}
+			var founded=false;
+			for(var i=0; i<self.tickets.length;i++){
+				if(self.tickets[i]==self.t){
+					founded=true;
+					break;
 				}
-				ticketRequest.info = self.info;
-				ticketRequest.startDate = self.date;
-				
-				apiService.orderTicket(ticketRequest).then(
-						function(response){
-							self.load = false;
-							operatorService.reset();
-						},
-						function(reason){
-							self.error=true;
-							self.load = false;
-							self.validation = false;
-							console.log("Impossibile acquistare i biglietti selezionati");
-							console.log(reason);
-							operatorService.reset();
-							self.errorMessage = reason.data.message;
+			}
+
+			if(!founded){
+				self.tickets.push(angular.copy(self.t));
+				self.validateTicket++;
+				self.t="";
+
+				if(self.validateTicket>(self.numTicket)){
+					self.validateTicket--;
+					self.validation = false;
+					self.load = true;
+					
+					var ticketRequest = {};
+					ticketRequest.ticketsNumber = self.tickets;
+					ticketRequest.placesId = new Array();
+					if(self.places){
+						for(var i=0; i<self.places.length; i++){
+							ticketRequest.placesId.push(self.places[i].id);
 						}
-				);
+					}
+					ticketRequest.info = self.info;
+					ticketRequest.startDate = self.date;
+					
+					apiService.orderTicket(ticketRequest).then(
+							function(response){
+								self.load = false;
+								operatorService.reset();
+							},
+							function(reason){
+								self.error=true;
+								self.load = false;
+								self.validation = false;
+								console.log("Impossibile acquistare i biglietti selezionati");
+								console.log(reason);
+								operatorService.reset();
+								self.errorMessage = reason.data.message;
+							}
+					);
+				}
+			}else{
+				self.t="";
 			}
 		
 		}else{
@@ -120,7 +132,6 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 //	}
 	
 	
-	var buffer = new Array();
 	self.keyPress = function(event){
 		event.preventDefault();
 		console.log("KEYPRESS");
@@ -154,7 +165,7 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 		n=(10*(codeRead[2]-96))+(codeRead[3]-96);
 		self.t+=n-48;
 		
-		
+		console.log(self.t);
 		if(validateTicket())
 			self.addTicket();
 		else{
