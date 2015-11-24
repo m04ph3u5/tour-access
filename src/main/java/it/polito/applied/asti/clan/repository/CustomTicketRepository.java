@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface CustomTicketRepository {
-	public boolean isValid(List<String> ticketNumbers, Date start, Date end);
+	public boolean isValid(String[] ticketNumbers, Date start, Date end);
 	public Ticket findByTicketNumberNow(String ticketNumber);
 
 }

@@ -64,14 +64,15 @@ public class TicketServiceImpl implements TicketService{
 		end = c.getTime();
 		
 		
-		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber(),startForValidation, end))
-			throw new BadRequestException("Ticket gi√† prenotati per le date selezionate");
+		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation, end))
+			throw new BadRequestException("Ticket gia'† prenotati per le date selezionate");
 		
 		TicketRequest ticketRequest = new TicketRequest(ticketRequestDTO, operatorId);
 		ticketRequest = ticketRequestRepo.save(ticketRequest);
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		for(String n : ticketRequest.getTicketNumbers()){
+			System.out.println("Prova "+n);
 			Ticket t = new Ticket();
 			t.setTicketRequestId(ticketRequest.getId());
 			t.setPlaces(ticketRequest.getPlacesId());

@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.pojo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 
@@ -10,7 +11,7 @@ public class TicketRequest {
 	@Id
 	private String id;
 	private String operatorId;
-	private List<String> ticketNumbers;
+	private Set<String> ticketNumbers;
 	private List<String> placesId;
 	private Date requestDate;
 	private boolean isGroup;
@@ -38,10 +39,10 @@ public class TicketRequest {
 		}		
 	}
 	
-	public List<String> getTicketNumbers() {
+	public Set<String> getTicketNumbers() {
 		return ticketNumbers;
 	}
-	public void setTicketNumbers(List<String> ticketNumbers) {
+	public void setTicketNumbers(Set<String> ticketNumbers) {
 		this.ticketNumbers = ticketNumbers;
 	}
 	public List<String> getPlacesId() {

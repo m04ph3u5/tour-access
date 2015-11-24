@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.pojo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +11,7 @@ public class TicketRequestDTO {
 	@NotNull
 	private List<String> placesId;
 	@NotNull
-	private List<String> ticketsNumber;
+	private Set<String> ticketsNumber;
 	private Date startDate;
 	@NotNull
 	private InfoTicketRequest info;
@@ -21,10 +22,10 @@ public class TicketRequestDTO {
 	public void setPlacesId(List<String> placesId) {
 		this.placesId = placesId;
 	}
-	public List<String> getTicketsNumber() {
+	public Set<String> getTicketsNumber() {
 		return ticketsNumber;
 	}
-	public void setTicketsNumber(List<String> ticketsNumber) {
+	public void setTicketsNumber(Set<String> ticketsNumber) {
 		this.ticketsNumber = ticketsNumber;
 	}
 	public Date getStartDate() {
