@@ -3,7 +3,6 @@ package it.polito.applied.asti.clan.repository;
 import it.polito.applied.asti.clan.pojo.Ticket;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -16,7 +15,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	private MongoOperations mongoOp;
 	
 	@Override
-	public boolean isValid(List<String> ticketNumbers, Date start, Date end) {
+	public boolean isValid(String[] ticketNumbers, Date start, Date end) {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("ticketNumber").in(ticketNumbers)
 				.andOperator(Criteria.where("validityEndDate").gte(start)));

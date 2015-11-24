@@ -20,7 +20,8 @@
 			<div class="btn btn-primary" data-ui-sref="logged.selectPlace">Torna alla Home</div>
 		</div>
 		<div data-ng-show="associate.error">
-			<h3 style="color: red;">Si è verificato un errore. Si prega di riprovare.</h3>
+			<h3 style="color: red;">Si e' verificato un errore. Si prega di riprovare.</h3>
+			<h5>{{associate.errorMessage}}</h5>
 			<div class="btn btn-danger" data-ui-sref="logged.selectPlace">Torna alla Home</div>
 		</div>
 	</div>
