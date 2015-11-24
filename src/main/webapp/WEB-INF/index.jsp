@@ -33,11 +33,9 @@
 <base href="/">
 
 <body data-ng-cloak>
-<div  class="">
 	
 	<div data-ui-view></div>
 
-</div>
 	<!-- VENDOR SCRIPT -->
 	
 	<script

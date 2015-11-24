@@ -7,7 +7,10 @@ angular.module('asti.application')
 			templateUrl: 'assets/public/partials/login.html',
 			url : '/',
 			controller : 'loginCtrl',
-			controllerAs : 'login'
+			controllerAs : 'login',
+			data : {
+				pageTitle : 'Asti - Login operatore'
+			}
 		})
 		.state('logged',{
 			templateUrl: 'assets/public/partials/operator-logged.html',
@@ -21,6 +24,9 @@ angular.module('asti.application')
 					controller : 'selectPlaceCtrl',
 					controllerAs : 'selectPlace'
 				}
+			},
+			data : {
+				pageTitle : 'Asti - Punti di interesse'
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
@@ -31,6 +37,9 @@ angular.module('asti.application')
 					controller : 'infoCtrl',
 					controllerAs : 'info'
 				}
+			},
+			data : {
+				pageTitle : 'Asti - Info acquirenti'
 			}
 		})
 		.state('logged.selectPlace.associateTicket',{
@@ -41,6 +50,9 @@ angular.module('asti.application')
 					controller : 'associateCtrl',
 					controllerAs : 'associate'
 				}
+			},
+			data : {
+				pageTitle : 'Asti - Validazione ticket'
 			}
 		})
 		
