@@ -4,9 +4,9 @@
 	<div style="margin: 20px;">
 		<h3>Appoggia la tessera sul lettore</h3>
 		<form>
-			<input type="text" autofocus data-ng-model="login.username">
+			<input style="visibility: hidden;" type="text" autofocus data-ng-model="login.username">
 			<br>
-			<input style="margin-top:10px;" type="submit" data-ng-click="login.postUsername()" 
+			<input style="margin-top:10px; visibility: hidden;" type="submit" data-ng-click="login.postUsername()" 
 				class="btn btn-primary" value="Avanti">
 		</form>
 	</div>

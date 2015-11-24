@@ -26,7 +26,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	@Indexed
 	private String ticketNumber;
 	
-	private String operatorId;
+	private String ticketRequestId;
 	private Date validityStartDate;
 	private Date validityEndDate;
 	
@@ -40,11 +40,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
 	}
-	public String getOperatorId() {
-		return operatorId;
+	
+	public String getTicketRequestId() {
+		return ticketRequestId;
 	}
-	public void setOperatorId(String operatorId) {
-		this.operatorId = operatorId;
+	public void setTicketRequestId(String ticketRequestId) {
+		this.ticketRequestId = ticketRequestId;
 	}
 	public Date getValidityStartDate() {
 		return validityStartDate;

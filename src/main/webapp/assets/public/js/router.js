@@ -31,28 +31,6 @@ angular.module('asti.application')
 					controller : 'infoCtrl',
 					controllerAs : 'info'
 				}
-			},
-			params : {
-				places : null,
-				numTicket : null,
-			},
-			resolve : {
-				places : function($stateParams, $q) {
-					var deferred = $q.defer();
-					if($stateParams.places && $stateParams.places.length>0)
-						deferred.resolve($stateParams.places);
-					else
-						deferred.reject();
-					
-                    return deferred.promise;
-                },
-                numTicket : function($stateParams, $q) {
-                	var deferred = $q.defer();
-					if($stateParams.numTicket && $stateParams.numTicket>0)
-						deferred.resolve($stateParams.numTicket);
-					else
-						deferred.reject();
-                    return deferred.promise;                }
 			}
 		})
 		.state('logged.selectPlace.associateTicket',{
@@ -63,38 +41,6 @@ angular.module('asti.application')
 					controller : 'associateCtrl',
 					controllerAs : 'associate'
 				}
-			},
-			params : {
-				places : null,
-				numTicket : null,
-				info : null
-			},
-			resolve : {
-				places : function($stateParams, $q) {
-					var deferred = $q.defer();
-					if($stateParams.places && $stateParams.places.length>0)
-						deferred.resolve($stateParams.places);
-					else
-						deferred.reject();
-					
-                    return deferred.promise;
-                },
-                numTicket : function($stateParams, $q) {
-                	var deferred = $q.defer();
-					if($stateParams.numTicket && $stateParams.numTicket>0)
-						deferred.resolve($stateParams.numTicket);
-					else
-						deferred.reject();
-                    return deferred.promise;                
-                },
-                info : function($stateParams, $q) {
-                	var deferred = $q.defer();
-					if($stateParams.info)
-						deferred.resolve($stateParams.info);
-					else
-						deferred.reject();
-                    return deferred.promise;                
-                }
 			}
 		})
 		

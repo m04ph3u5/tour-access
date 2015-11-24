@@ -6,6 +6,7 @@ import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.TicketService;
@@ -65,12 +66,11 @@ public class ApiRestController {
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/tickets", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void postTickets(@RequestBody @Valid TicketRequest ticketRequest, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException {
+	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException {
 		if(result.hasErrors())
 			throw new BadRequestException();
 		
-		System.out.println(ticketRequest.getInfo());
-		ticketService.operatorGenerateTickets(ticketRequest, u.getId());
+		ticketService.operatorGenerateTickets(ticketRequestDTO, u.getId());
 	}
 	
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")

@@ -5,10 +5,10 @@
 		<div style="margin: 20px;">
 			<h3 data-ng-show="associate.numTicket==1">Appoggia il biglietto al lettore</h3>
 			<h3 data-ng-show="associate.numTicket>1">Appoggia il biglietto {{associate.validateTicket}} di {{associate.numTicket}} al lettore</h3>
-			<form>
-				<input type="text" autofocus data-ng-model="associate.t">
+			<form class="form-inline">
+				<input style="visibility: hidden;" type="text" autofocus data-ng-model="associate.t">
 				<br>
-				<input style="margin-top:10px;" type="submit" data-ng-click="associate.addTicket()" 
+				<input style="margin-top:10px; visibility: hidden;" type="submit" data-ng-click="associate.addTicket()" 
 						class="btn btn-primary" value="Avanti">
 			</form>
 			</div>
@@ -17,7 +17,7 @@
 	</div>
 	<div data-ng-hide="associate.validation" class="col-sm-offset-1 col-sm-10">
 		<h3 data-ng-show="associate.load">Acquisto in corso...</h3>
-		<div data-ng-hide="associate.load">
+		<div data-ng-show="!associate.load && !associate.error">
 			<h3>Acquisto effettuato</h3>
 			<div class="btn btn-primary" data-ui-sref="logged.selectPlace">Torna alla Home</div>
 		</div>

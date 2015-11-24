@@ -92,6 +92,7 @@
 	<!-- SERVICES -->
 	<script src="/assets/public/js/service/userService.js"></script>
 	<script src="/assets/public/js/service/apiService.js"></script>	
+	<script src="/assets/public/js/service/operatorService.js"></script>	
 		
 </body>
 </html>

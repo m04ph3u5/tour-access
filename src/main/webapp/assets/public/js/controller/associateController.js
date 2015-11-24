@@ -1,11 +1,16 @@
-angular.module('asti.application').controller('associateCtrl', ['places', 'numTicket', 'info', '$state', 'apiService',
-              function associateCtrl(places, numTicket, info, $state, apiService){
+angular.module('asti.application').controller('associateCtrl', ['$state', 'apiService', 'operatorService',
+              function associateCtrl($state, apiService, operatorService){
 	
 	var self = this;
 	
-	self.places = places;
-	self.numTicket = numTicket;
-	self.info = info;
+	self.places = operatorService.getPlaces();
+	self.numTicket = operatorService.getNumTickets();
+	self.info = operatorService.getInfo();
+	self.date = operatorService.getDate();
+	
+	if(!self.places || !self.numTicket || !self.info || !self.date)
+		$state.go("logged.selectPlace");
+	
 	self.t = "";
 	self.tickets = new Array();
 	self.validation = true;
@@ -26,24 +31,28 @@ angular.module('asti.application').controller('associateCtrl', ['places', 'numTi
 				self.load = true;
 				
 				var ticketRequest = {};
-				ticketRequest.ticketNumbers = self.tickets;
+				ticketRequest.ticketsNumber = self.tickets;
 				ticketRequest.placesId = new Array();
-				if(self.selected){
-					for(var i=0; i<self.selected.length; i++){
-						ticketRequest.placesId.push(self.selected[i].id);
+				if(self.places){
+					for(var i=0; i<self.places.length; i++){
+						ticketRequest.placesId.push(self.places[i].id);
 					}
 				}
-				ticketRequest.info = info;
+				ticketRequest.info = self.info;
+				ticketRequest.startDate = self.date;
 				
 				apiService.orderTicket(ticketRequest).then(
 						function(response){
 							self.load = false;
+							operatorService.reset();
 						},
 						function(reason){
 							self.error=true;
 							self.load = false;
+							self.validation = false;
 							console.log("Impossibile acquistare i biglietti selezionati");
 							console.log(reason);
+							operatorService.reset();
 						}
 				);
 			}

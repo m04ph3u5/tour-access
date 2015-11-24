@@ -5,8 +5,8 @@ public class InfoTicketRequest {
 	private String gender;
 	private String age;
 	
-	private boolean withChildren;
-	private boolean withElderly;
+	private Boolean withChildren;
+	private Boolean withElderly;
 	
 	
 	public String getGender() {
@@ -21,16 +21,16 @@ public class InfoTicketRequest {
 	public void setAge(String age) {
 		this.age = age;
 	}
-	public boolean isWithChildren() {
+	public Boolean isWithChildren() {
 		return withChildren;
 	}
-	public void setWithChildren(boolean withChildren) {
+	public void setWithChildren(Boolean withChildren) {
 		this.withChildren = withChildren;
 	}
-	public boolean isWithElderly() {
+	public Boolean isWithElderly() {
 		return withElderly;
 	}
-	public void setWithElderly(boolean withElderly) {
+	public void setWithElderly(Boolean withElderly) {
 		this.withElderly = withElderly;
 	}
 	
