@@ -6,6 +6,8 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 	self.showError = false;
 	self.username="";
 	self.password;
+	
+	/*ADDDD*/
 
 	self.postUsername = function(){
 		userService.getNameFromUsername(self.username).then(
