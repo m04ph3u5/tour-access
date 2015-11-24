@@ -7,7 +7,6 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 	self.username="";
 	self.password;
 	
-	/*ADDDD*/
 
 	self.postUsername = function(){
 		userService.getNameFromUsername(self.username).then(
@@ -15,9 +14,13 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 					console.log(data);
 					self.usernameInserted = true;
 					self.name = data.name;
+					self.showError = false;
+					
 				},
 				function(reason){
 					self.showError = true;
+					self.username = "";
+					buffer.splice(0, buffer.length);
 				}
 		);
 	}
@@ -92,6 +95,7 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 	self.keyPress = function(event){
 		event.preventDefault();
 		console.log("KEYPRESS");
+		console.log(event);
 		if(event.keyCode!=13){
 			buffer.push(event.keyCode);
 		}else{
@@ -100,6 +104,8 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 	}
 	
 	var validateUsername = function(){
+		console.log("validate username ...");
+		console.log(self.username);
 		var regex = /^[0-9]{10}$/;
 		return regex.test(self.username);
 	}	
@@ -121,6 +127,7 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 		}
 		n=(10*(codeRead[2]-96))+(codeRead[3]-96);
 		self.username+=n-48;
+		
 		
 		
 		if(validateUsername())
