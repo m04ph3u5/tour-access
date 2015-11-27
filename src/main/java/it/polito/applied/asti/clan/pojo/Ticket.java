@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @CompoundIndexes(value = 
 {
-    @CompoundIndex (name = "TicketNumber_EndDate", def = "{'ticketNumber': 1, 'validityEndDate': -1}", unique = true)
+    @CompoundIndex (name = "idTicket_EndDate", def = "{'idTicket': 1, 'endDate': -1}", unique = true)
 }
 )public class Ticket {
 
@@ -24,46 +24,74 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	@NotNull
 	@Digits(fraction = 0, integer = 10)
 	@Indexed
-	private String ticketNumber;
-	
+	private String idTicket; //(numero su 10 cifre): identificativo univoco numerico integrato nel biglietto stesso;
+	private int role; //identificativo del ruolo associato al biglietto;
 	private String ticketRequestId;
-	private Date validityStartDate;
-	private Date validityEndDate;
 	
+	private Date emissionDate; //definisce data e ora di emissione del biglietto;
+	private Date startDate; //definisce data e ora del primo accesso (all'emissione del biglietto potrebbe corrispondere a emissionDate oppure essere messo a null);
+	private Date endDate; //definisce data e ora della scadenza del biglietto (biglietto non più valido per l'accesso). Inizialmente contiene la scadenza del biglietto emesso (da definire);
+	
+	private String status; //(6 caratteri alfanumerici): identificativo dello stato associato al biglietto;
+	private int duration; //potremmo recuperarla dal ruolo (da decidere se poter customizzare la durata dei vari biglietti in fase di acquisto,scorrelandola dal ruolo).
 	@NotNull
-	private List<String> places;
+	private List<String> sites; //lista degli identificativi dei siti a cui è consentito l'accesso nell'intervallo di tempo specificato;
 	
 	
-	public String getTicketNumber() {
-		return ticketNumber;
+	public Date getEmissionDate() {
+		return emissionDate;
 	}
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
+	public void setEmissionDate(Date emissionDate) {
+		this.emissionDate = emissionDate;
+	}
+	public int getRole() {
+		return role;
+	}
+	public void setRole(int role) {
+		this.role = role;
+	}
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 	
+	public String getIdTicket() {
+		return idTicket;
+	}
+	public void setIdTicket(String idTicket) {
+		this.idTicket = idTicket;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getTicketRequestId() {
 		return ticketRequestId;
 	}
 	public void setTicketRequestId(String ticketRequestId) {
 		this.ticketRequestId = ticketRequestId;
 	}
-	public Date getValidityStartDate() {
-		return validityStartDate;
+	public Date getStartDate() {
+		return startDate;
 	}
-	public void setValidityStartDate(Date validityStartDate) {
-		this.validityStartDate = validityStartDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
-	public Date getValidityEndDate() {
-		return validityEndDate;
+	public Date getEndDate() {
+		return endDate;
 	}
-	public void setValidityEndDate(Date validityEndDate) {
-		this.validityEndDate = validityEndDate;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
-	public List<String> getPlaces() {
-		return places;
+	public List<String> getSites() {
+		return sites;
 	}
-	public void setPlaces(List<String> places) {
-		this.places = places;
+	public void setSites(List<String> sites) {
+		this.sites = sites;
 	}
 	public String getId() {
 		return id;

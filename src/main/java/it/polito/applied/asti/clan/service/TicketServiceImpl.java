@@ -80,11 +80,22 @@ public class TicketServiceImpl implements TicketService{
 			System.out.println("Prova "+n);
 			Ticket t = new Ticket();
 			t.setTicketRequestId(ticketRequest.getId());
-			t.setPlaces(ticketRequest.getPlacesId());
-			t.setTicketNumber(n);
-			t.setValidityStartDate(start);
-			t.setValidityEndDate(end);
+			t.setSites(ticketRequest.getPlacesId());
+			t.setIdTicket(n);
+			t.setStartDate(start);  //TODO decidere se va bene
+			t.setEmissionDate(new Date());
+			t.setEndDate(end);
+			
+			//TODO da decidere come e quando settare la duration
+			
+			//TODO controllare il tipo di ruolo, per semplificare ipotizzo che DAILY_VISITOR valga 1 e setto a prescindere questo valore come role.
+			//Dovrei in realtà capire dal TicketRequestDTO che tipo di ruolo deve assumere il biglietto, interrogare il db per controllare che esista
+			//e prendere il codice giusto.
+			t.setRole(1);
+			t.setStatus("RELEASED");
+			
 			tickets.add(t);
+			
 		}
 		
 		ticketRepo.save(tickets);
@@ -92,14 +103,21 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public List<String> accessiblePlaces(String ticketNumber) {
-		List<Ticket> list = ticketRepo.findByTicketNumber(ticketNumber);
+	public List<String> accessiblePlaces(String idTicket) {
+		List<Ticket> list = ticketRepo.findByIdTicket(idTicket);
 		
 		Ticket t = list.get(0);
 		if(t!=null)
-			return t.getPlaces();
+			return t.getSites();
 		else
 			return new ArrayList<String>();
+	}
+
+	@Override
+	public List<Ticket> getValidTickets() {
+		List<Ticket> tickets = new ArrayList<Ticket>();
+		tickets = ticketRepo.getValidTickets();
+		return tickets;
 	}
 
 }

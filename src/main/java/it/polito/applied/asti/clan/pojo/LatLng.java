@@ -16,6 +16,8 @@ public class LatLng {
 	public void setLng(double lng) {
 		this.lng = lng;
 	}
-	
+	public String getLatLng(){
+		return ""+lat+", "+lng;
+	}
 	
 }

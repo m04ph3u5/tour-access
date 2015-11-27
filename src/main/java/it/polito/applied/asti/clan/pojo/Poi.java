@@ -3,6 +3,7 @@ package it.polito.applied.asti.clan.pojo;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -10,6 +11,9 @@ public class Poi {
 
 	@Id
 	private String idPoi;
+	
+	@Indexed(unique = true)
+	private String idSite; //id di 6 cifre esadecimali che serve per costruire gli oggetti Site da condividere con il controllo accessi
 	private String name;
 	
 	private int type;
@@ -28,6 +32,7 @@ public class Poi {
 	
 	private double rating;
 	private LatLng latLng;
+	private String address;
 	private String timetable;
 	private String title;
 	private String longDescription;
@@ -36,12 +41,34 @@ public class Poi {
 	private Resource audio;
 	private Resource drone;
 	private Pano pano;
+	private boolean ticketable;
+	
+	public String getIdSite(){
+		return idSite;
+		
+	}
+	public void setIdSite(String idSite){
+		this.idSite = idSite;
+	}
+	
+	public boolean getTicketable(){
+		return ticketable;
+	}
+	public void setTicketable(boolean t){
+		this.ticketable = t;
+	}
 	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public int getType() {
 		return type;

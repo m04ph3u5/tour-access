@@ -8,5 +8,6 @@ import java.util.List;
 public interface CustomTicketRepository {
 	public boolean isValid(String[] ticketNumbers, Date start, Date end);
 	public Ticket findByTicketNumberNow(String ticketNumber);
+	public List<Ticket> getValidTickets();
 
 }

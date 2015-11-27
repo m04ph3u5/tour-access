@@ -5,7 +5,7 @@ import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
-import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.repository.PoiRepository;
@@ -80,6 +80,14 @@ public class ApiRestController extends BaseController{
 		if(ticketNumber==null || ticketNumber.isEmpty())
 			throw new BadRequestException();
 		return ticketService.accessiblePlaces(ticketNumber);
+	}
+	
+	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/tickets", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Ticket> getValidTickets() throws BadRequestException {
+		
+		return ticketService.getValidTickets();
 	}
 
 }
