@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.controller;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
@@ -47,6 +48,14 @@ public class ApiRestController extends BaseController{
 		if(username==null || username.equals(""))
 			throw new BadRequestException();
 		return userService.getNameByUserName(username);
+	}
+	
+	@RequestMapping(value="/v1/login", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void valdateCredentials(@RequestBody Credential credential) throws BadRequestException{
+		boolean u = userService.validateCredential(credential);
+		if(!u)
+			throw new BadRequestException();
 	}
 	
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")

@@ -14,38 +14,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 @Component("restServicesEntryPoint")
-public class AuthenticationEntryPointRest extends LoginUrlAuthenticationEntryPoint{
-
-	public AuthenticationEntryPointRest()
-	{
-		super("/login");
-	}
+public class AuthenticationEntryPointRest extends BasicAuthenticationEntryPoint{
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
 			throws IOException, ServletException
 	{
 		String path = request.getRequestURI().substring(request.getContextPath().length());
-		
+		System.out.println("COMMENCE: "+path);
 		if (path.startsWith("/assets") || path.startsWith("/api")) {
 			ErrorInfo e = new ErrorInfo();
 			e.setStatusCode(HttpStatus.UNAUTHORIZED.toString());
 			e.setMessage("Devi essere loggato per accedere a questa risorsa");
-
+			response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
+		    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
 			String json = JacksonUtil.toJSON(e);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			response.getWriter().println(json);
 		} else{
 		    response.sendRedirect("/#"+path);
 		}
-		
-	
-
-		
 	}
+	
+	@Override
+    public void afterPropertiesSet() throws Exception {
+		setRealmName("AstiMusei");
+        super.afterPropertiesSet();
+    }
 }

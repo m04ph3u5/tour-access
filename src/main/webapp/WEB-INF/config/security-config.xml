@@ -31,14 +31,23 @@
 		</authentication-provider>
 	</authentication-manager>
 	
+<!-- 	<http use-expressions="true" entry-point-ref="restServicesEntryPoint"> -->
+<!--  	   <intercept-url pattern="/**"/> -->
+<!-- 		<form-login -->
+<!-- 			login-processing-url="/apiLogin" -->
+<!-- 			default-target-url="/" -->
+<!-- 			authentication-success-handler-ref="authenticationSuccessHandler" -->
+<!-- 			authentication-failure-handler-ref="authenticationFailureHandler"/> -->
+<!-- 		<logout logout-url="/apiLogout"/>	 -->
+<!-- 	</http> -->
+
 	<http use-expressions="true" entry-point-ref="restServicesEntryPoint">
- 	   <intercept-url pattern="/**"/>
-		<form-login
-			login-processing-url="/apiLogin"
-			default-target-url="/"
-			authentication-success-handler-ref="authenticationSuccessHandler"
-			authentication-failure-handler-ref="authenticationFailureHandler"/>
-		<logout logout-url="/apiLogout"/>	
+ 	   	<intercept-url pattern="/" access="permitAll"/>
+ 	   	<intercept-url pattern="/api/v1/name" access="permitAll"/>
+ 	   	<intercept-url pattern="/api/v1/login" access="permitAll"/>
+ 	   	<intercept-url pattern="/assets/**" access="permitAll"/>
+ 	   	<intercept-url pattern="/**" access="isAuthenticated()"/>
+	   	<http-basic/>
 	</http>
 
 <!-- 	<http use-expressions="true"  entry-point-ref="restServicesEntryPoint"> -->
