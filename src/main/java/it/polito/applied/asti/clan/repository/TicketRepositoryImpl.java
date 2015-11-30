@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 public class TicketRepositoryImpl implements CustomTicketRepository{
 
@@ -16,10 +17,14 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	private MongoOperations mongoOp;
 	
 	@Override
-	public boolean isValid(String[] ticketNumbers, Date start, Date end) {
+	public boolean isValid(String[] ticketNumbers, Date start) {
 		Query q = new Query();
-		q.addCriteria(Criteria.where("idTicket").in(ticketNumbers)
-				.andOperator(Criteria.where("endDate").gte(start)));
+		Criteria c2 = new Criteria();
+		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").gte("RELEASED")) );
+		
+		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
+				.andOperator(c2));
+			
 		
 		long tot = mongoOp.count(q, Ticket.class);
 		if(tot==0)
@@ -46,6 +51,32 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				andOperator(Criteria.where("endDate").gte(d)));
 		q.fields().exclude("id");
 		return mongoOp.find(q, Ticket.class);
+	}
+
+	@Override
+	public void setStartDate(String ticketNumber, Date d) {
+		
+		Ticket myTicket;
+		boolean doUpdate = false;
+		Query q = new Query();
+		q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
+		List<Ticket> tList = mongoOp.find(q, Ticket.class);
+		if(tList!=null && tList.size()>0){
+			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
+			if(myTicket.getStartDate() == null || myTicket.getStartDate() == myTicket.getEmissionDate()){
+				doUpdate = true;
+			}
+		}
+			
+		
+		if(doUpdate){
+			Update u = new Update();
+			u.set("startDate", d);
+			q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
+			//TODO aggiungere controllo su startDate (può succedere che ci siano più biglietti con stesso ticketNumber nel db nel caso di riutilizzo dei ticket)
+			mongoOp.findAndModify(q, u, Ticket.class);
+		}
+		
 	}
 
 }

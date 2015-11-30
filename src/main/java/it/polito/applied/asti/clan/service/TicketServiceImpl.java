@@ -1,10 +1,12 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 
@@ -24,6 +26,9 @@ public class TicketServiceImpl implements TicketService{
 	
 	@Autowired
 	private TicketRepository ticketRepo;
+	
+	@Autowired
+	private ReadRepository readRepo;
 	
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
@@ -64,7 +69,7 @@ public class TicketServiceImpl implements TicketService{
 		end = c.getTime();
 		
 		
-		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation, end)){
+		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation)){
 			if(ticketRequestDTO.getTicketsNumber().size()==1)
 				throw new BadRequestException("Ticket gia' prenotato per la data selezionata");
 			else
@@ -118,6 +123,17 @@ public class TicketServiceImpl implements TicketService{
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		tickets = ticketRepo.getValidTickets();
 		return tickets;
+	}
+
+	@Override
+	public void savePassingAttempt(Read read) {
+		//salvo la lettura nel db così come mi arriva + orario sul server
+		readRepo.save(read);
+		//TODO modifica startDate e endDate del biglietto se il passaggio è stato accettato ed il biglietto era ancora inutilizzato
+		if(read.isAccepted()){
+			ticketRepo.setStartDate(read.getTicketNumber(), read.getDate());
+		}
+		
 	}
 
 }

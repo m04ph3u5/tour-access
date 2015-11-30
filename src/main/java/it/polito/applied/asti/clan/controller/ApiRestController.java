@@ -6,6 +6,7 @@ import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
+import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
@@ -14,6 +15,7 @@ import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -99,4 +101,13 @@ public class ApiRestController extends BaseController{
 		return ticketService.getValidTickets();
 	}
 
+	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/ticket", method=RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {
+		 if(result.hasErrors())
+			throw new BadRequestException();
+		 read.setDateOnServer(new Date());
+		 ticketService.savePassingAttempt(read);
+	}
 }

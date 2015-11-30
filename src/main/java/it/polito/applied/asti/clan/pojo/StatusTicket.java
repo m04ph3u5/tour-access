@@ -1,10 +1,16 @@
 package it.polito.applied.asti.clan.pojo;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class StatusTicket {
 
+	@Id
 	private String idStatus;
 	private String code;
 	private String description;
+	
 	
 	public String getIdStatus() {
 		return idStatus;
