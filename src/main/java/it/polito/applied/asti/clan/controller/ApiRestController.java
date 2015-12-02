@@ -6,6 +6,7 @@ import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
+import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
@@ -14,6 +15,7 @@ import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -52,7 +54,7 @@ public class ApiRestController extends BaseController{
 	
 	@RequestMapping(value="/v1/login", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void valdateCredentials(@RequestBody Credential credential) throws BadRequestException{
+	public void validateCredentials(@RequestBody Credential credential) throws BadRequestException{
 		boolean u = userService.validateCredential(credential);
 		if(!u)
 			throw new BadRequestException();
@@ -85,10 +87,18 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<String> accessiblePlaces(@RequestParam(value="ticketNumber", required=true) String ticketNumber) throws BadRequestException {
+	public List<String> accessiblePlaces(@RequestParam(value="ticketNumber", required=true) String ticketNumber ) throws BadRequestException {
 		if(ticketNumber==null || ticketNumber.isEmpty())
 			throw new BadRequestException();
 		return ticketService.accessiblePlaces(ticketNumber);
+	}
+	
+	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/places", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Poi> getAllPlaces() throws BadRequestException {
+		
+		return ticketService.getAllPlaces();
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
@@ -99,4 +109,13 @@ public class ApiRestController extends BaseController{
 		return ticketService.getValidTickets();
 	}
 
+	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/ticket", method=RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {
+		 if(result.hasErrors())
+			throw new BadRequestException();
+		 read.setDateOnServer(new Date());
+		 ticketService.savePassingAttempt(read);
+	}
 }

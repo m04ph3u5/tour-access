@@ -15,7 +15,16 @@ public class TicketRequestDTO {
 	private Date startDate;
 	@NotNull
 	private InfoTicketRequest info;
+	private String tipology;
 	
+	
+	
+	public String getTipology() {
+		return tipology;
+	}
+	public void setTipology(String tipology) {
+		this.tipology = tipology;
+	}
 	public List<String> getPlacesId() {
 		return placesId;
 	}

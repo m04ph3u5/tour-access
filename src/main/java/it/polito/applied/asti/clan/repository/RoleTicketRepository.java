@@ -7,6 +7,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface RoleTicketRepository extends MongoRepository<RoleTicket, String>, CustomStatusRepository{
+public interface RoleTicketRepository extends MongoRepository<RoleTicket, String>, CustomStatusTicketRepository{
 	public List<RoleTicket> findAll();
 }

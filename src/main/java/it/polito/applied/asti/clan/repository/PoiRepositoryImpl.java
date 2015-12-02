@@ -27,4 +27,22 @@ public class PoiRepositoryImpl implements CustomPoiRepository{
 			return false;
 	}
 
+	@Override
+	public List<Poi> findAllPlaceCustom() {
+		Query q = new Query();
+		
+		q.fields().exclude("idPoi");
+		q.fields().exclude("imageId");
+		q.fields().exclude("markerImg");
+		q.fields().exclude("rating");
+		q.fields().exclude("title");
+		q.fields().exclude("longDescription");
+		q.fields().exclude("gallery");
+		q.fields().exclude("hotspotList");
+		q.fields().exclude("audio");
+		q.fields().exclude("pano");
+		
+		return mongoOp.find(q, Poi.class);
+	}
+
 }

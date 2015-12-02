@@ -1,7 +1,12 @@
 package it.polito.applied.asti.clan.pojo;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class RoleTicket {
 
+	@Id
 	private int idRole;  //(numero su 1 byte): identificativo univoco del ruolo;
 	private String code; //identificativo human readable
 	private String description; //descrizione più dettagliata del ruolo
@@ -14,7 +19,12 @@ public class RoleTicket {
 		this.description = description;
 		this.antiPassBack = antiPassBack;
 	}
-	
+
+	public void setIdRole(int idRole) {
+		this.idRole = idRole;
+	}
+
+
 	public int getIdRole() {
 		return idRole;
 	}

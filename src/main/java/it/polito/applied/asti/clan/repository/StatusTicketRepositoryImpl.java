@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-public class StatusRepositoryImpl implements CustomStatusRepository{
+public class StatusTicketRepositoryImpl implements CustomStatusTicketRepository{
 
 	@Autowired
 	private MongoOperations mongoOp;
