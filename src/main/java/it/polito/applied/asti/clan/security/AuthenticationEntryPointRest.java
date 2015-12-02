@@ -30,7 +30,7 @@ public class AuthenticationEntryPointRest extends BasicAuthenticationEntryPoint{
 			ErrorInfo e = new ErrorInfo();
 			e.setStatusCode(HttpStatus.UNAUTHORIZED.toString());
 			e.setMessage("Devi essere loggato per accedere a questa risorsa");
-			response.addHeader("WWW-Authenticate", "Basic realm=\"" + getRealmName() + "\"");
+			response.addHeader("WWW-Authenticate", "xBasic realm=\"" + getRealmName() + "\"");
 		    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
 			String json = JacksonUtil.toJSON(e);

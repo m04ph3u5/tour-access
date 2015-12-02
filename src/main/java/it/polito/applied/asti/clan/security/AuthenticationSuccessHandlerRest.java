@@ -24,10 +24,10 @@ public class AuthenticationSuccessHandlerRest extends SavedRequestAwareAuthentic
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws ServletException, IOException
 	{
-		request.getSession().invalidate();
+//		request.getSession().invalidate();
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpStatus.OK.value());
-        request.getSession().setMaxInactiveInterval(maxTimeInterval);
+//        request.getSession().setMaxInactiveInterval(maxTimeInterval);
 		response.getWriter().println("{\"success\":\"true\"}");
 	}
 }

@@ -5,7 +5,7 @@ angular.module('asti.application').factory('userService', ['$http', '$q', '$cook
 
 	var encodedCredential = $cookies.get('asti.encoded');
 	if(encodedCredential){
-		$http.defaults.headers.common['Authorization'] = 'Basic ' + encodedCredential;
+		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 	}
 	
 	var isLogged = function(){
@@ -19,13 +19,13 @@ angular.module('asti.application').factory('userService', ['$http', '$q', '$cook
 		var log = $q.defer()
 		$cookies.remove('asti.encoded');
 		encodedCredential = null;
-		$http.defaults.headers.common['Authorization'] = 'Basic ' + encodedCredential;
+		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 		apiService.validateCredential(encodedCredential).then(
 				function(data){
 					log.reject();
 				},
 				function(reason){
-					$http.defaults.headers.common['Authorization'] = 'notLogged';
+					$http.defaults.headers.common['Authorization'] = undefined;
 					log.resolve();
 				}
 		);
@@ -42,7 +42,7 @@ angular.module('asti.application').factory('userService', ['$http', '$q', '$cook
 				function(data){
 					encodedCredential = Base64.encode(credential.username+":"+credential.password);
 					$cookies.put('asti.encoded',encodedCredential);
-					$http.defaults.headers.common['Authorization'] = 'Basic ' + encodedCredential;
+					$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 					log.resolve();
 				},
 				function(reason){

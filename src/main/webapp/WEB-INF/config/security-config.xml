@@ -45,10 +45,16 @@
  	   	<intercept-url pattern="/" access="permitAll"/>
  	   	<intercept-url pattern="/api/v1/name" access="permitAll"/>
  	   	<intercept-url pattern="/api/v1/login" access="permitAll"/>
- 	   	<intercept-url pattern="/assets/**" access="permitAll"/>
+ 	   	<intercept-url pattern="/assets/public/**" access="permitAll"/>
+ 	   	<intercept-url pattern="/assets/mobile/**" access="hasRole('ROLE_APP')"/>
  	   	<intercept-url pattern="/**" access="isAuthenticated()"/>
-	   	<http-basic/>
+		<custom-filter ref="customBasicFilter" position="BASIC_AUTH_FILTER"></custom-filter>
 	</http>
+	
+	<beans:bean id="customBasicFilter" class="it.polito.applied.asti.clan.security.CustomAuthenticationFilter"> 
+  		<beans:constructor-arg name="authenticationManager" ref="authenticationManager"/>
+  		<beans:constructor-arg name="authenticationEntryPoint" ref="restServicesEntryPoint" />
+	</beans:bean>
 
 <!-- 	<http use-expressions="true"  entry-point-ref="restServicesEntryPoint"> -->
 <!-- 		<intercept-url pattern="/" access="permitAll" requires-channel="https"/> -->
