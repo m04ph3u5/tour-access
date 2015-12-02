@@ -8,8 +8,9 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 	self.numTicket = operatorService.getNumTickets();
 	self.info = operatorService.getInfo();
 	self.date = operatorService.getDate();
+	self.ticketTipology = operatorService.getTicketTipology();
 	
-	if(!self.places || !self.numTicket || !self.info || !self.date)
+	if(!self.places || !self.numTicket || !self.info || !self.date || !self.ticketTipology)
 		$state.go("logged.selectPlace");
 	
 	self.t = "";
@@ -51,6 +52,7 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 					}
 					ticketRequest.info = self.info;
 					ticketRequest.startDate = self.date;
+					ticketRequest.tipology = self.ticketTipology;
 					
 					apiService.orderTicket(ticketRequest).then(
 							function(response){

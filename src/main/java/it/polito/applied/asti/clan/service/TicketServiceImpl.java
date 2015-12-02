@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
@@ -96,7 +97,7 @@ public class TicketServiceImpl implements TicketService{
 			//TODO controllare il tipo di ruolo, per semplificare ipotizzo che DAILY_VISITOR valga 1 e setto a prescindere questo valore come role.
 			//Dovrei in realtà capire dal TicketRequestDTO che tipo di ruolo deve assumere il biglietto, interrogare il db per controllare che esista
 			//e prendere il codice giusto.
-			t.setRole(1);
+			t.setRole(ticketRequest.getTipology());
 			t.setStatus("RELEASED");
 			
 			tickets.add(t);
@@ -127,13 +128,19 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void savePassingAttempt(Read read) {
-		//salvo la lettura nel db così come mi arriva + orario sul server
+		//salvo la lettura nel db (così come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
 		//TODO modifica startDate e endDate del biglietto se il passaggio è stato accettato ed il biglietto era ancora inutilizzato
 		if(read.isAccepted()){
 			ticketRepo.setStartDate(read.getTicketNumber(), read.getDate());
 		}
 		
+	}
+
+	@Override
+	public List<Poi> getAllPlaces() {
+		// TODO Auto-generated method stub
+		return poiRepo.findAllPlaceCustom();
 	}
 
 }

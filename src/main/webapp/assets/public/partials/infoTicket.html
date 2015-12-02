@@ -5,9 +5,25 @@
 			<h3 data-ng-show="info.numTicket>1">Data validità biglietti</h3>
 			<form class="form-inline">
 				<div class="form-group">
-					<input ui-date="info.dateOptions" class="form-control" 
+					<label for="startVal">A partire da</label>
+					<input id="startVal" ui-date="info.dateOptions" class="form-control" 
 						data-ng-model="info.ticketDate" placeholder="dd/mm/yyyy"></input>
 				</div>
+				
+			</form>
+			<form class="form-inline" style="margin-top:10px;">
+				<div class="form-group">
+					<label for="tipology">Tipologia biglietto</label>
+					<select id="tipology" data-ng-model="info.ticketTipology" >
+						<option selected value="Daily_Visitor">Giornaliero</option>
+						<option value="Weekly_Visitor">Settimanale</option>
+						<option value="DAILIY_VIP_VISITOR">Giornaliero VIP</option>
+						<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
+						<option value="Service">Servizio</option>
+						<option value="Supervisor">Supervisore</option>
+					</select>
+				</div>
+				
 			</form>
 		</div>
 		<div class="row" style="margin-top: 30px;">

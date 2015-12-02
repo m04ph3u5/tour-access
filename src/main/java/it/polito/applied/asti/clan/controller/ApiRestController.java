@@ -54,7 +54,7 @@ public class ApiRestController extends BaseController{
 	
 	@RequestMapping(value="/v1/login", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void valdateCredentials(@RequestBody Credential credential) throws BadRequestException{
+	public void validateCredentials(@RequestBody Credential credential) throws BadRequestException{
 		boolean u = userService.validateCredential(credential);
 		if(!u)
 			throw new BadRequestException();
@@ -87,10 +87,18 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<String> accessiblePlaces(@RequestParam(value="ticketNumber", required=true) String ticketNumber) throws BadRequestException {
+	public List<String> accessiblePlaces(@RequestParam(value="ticketNumber", required=true) String ticketNumber ) throws BadRequestException {
 		if(ticketNumber==null || ticketNumber.isEmpty())
 			throw new BadRequestException();
 		return ticketService.accessiblePlaces(ticketNumber);
+	}
+	
+	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/places", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Poi> getAllPlaces() throws BadRequestException {
+		
+		return ticketService.getAllPlaces();
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")

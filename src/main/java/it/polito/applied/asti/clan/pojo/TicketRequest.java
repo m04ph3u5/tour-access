@@ -16,6 +16,7 @@ public class TicketRequest {
 	private Date requestDate;
 	private boolean isGroup;
 	private InfoTicketRequest info;
+	private String tipology;
 	
 	public TicketRequest(){
 		
@@ -27,6 +28,17 @@ public class TicketRequest {
 		this.placesId = dto.getPlacesId();
 		this.requestDate = new Date();
 		this.info = dto.getInfo();
+		this.tipology = dto.getTipology();
+		if(dto.getTipology().equals("")){
+			
+		}else if(dto.getTipology().equals("")){
+			
+		}else if(dto.getTipology().equals("")){
+			
+		}else if(dto.getTipology().equals("")){
+			
+		}
+		
 		if(this.ticketNumbers!=null && this.ticketNumbers.size()==1){
 			this.isGroup=false;
 			this.info.setWithChildren(null);
@@ -39,6 +51,14 @@ public class TicketRequest {
 		}		
 	}
 	
+	public String getTipology() {
+		return tipology;
+	}
+
+	public void setRole(String t) {
+		this.tipology = t;
+	}
+
 	public Set<String> getTicketNumbers() {
 		return ticketNumbers;
 	}

@@ -25,7 +25,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	@Digits(fraction = 0, integer = 10)
 	@Indexed
 	private String idTicket; //(numero su 10 cifre): identificativo univoco numerico integrato nel biglietto stesso;
-	private int role; //identificativo del ruolo associato al biglietto;
+	private String role; //identificativo del ruolo associato al biglietto;
 	private String ticketRequestId;
 	
 	private Date emissionDate; //definisce data e ora di emissione del biglietto;
@@ -44,10 +44,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	public void setEmissionDate(Date emissionDate) {
 		this.emissionDate = emissionDate;
 	}
-	public int getRole() {
+	public String getRole() {
 		return role;
 	}
-	public void setRole(int role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	public int getDuration() {

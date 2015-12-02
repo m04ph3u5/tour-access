@@ -8,10 +8,15 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		info = {};
 	
 	self.ticketDate = operatorService.getDate();
+	self.ticketTipology = operatorService.getTicketTipology();
+	if(self.ticketTipology == null){
+		operatorService.setTicketTipology="Daily_Visitor";
+		self.ticketTipology = "Daily_Visitor";
+	}
 	if(!self.ticketDate)
 		self.ticketDate = new Date();
 
-
+	
 
 	self.places = operatorService.getPlaces();
 	self.numTicket = operatorService.getNumTickets();
@@ -59,9 +64,12 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 			info.withChildren = self.withChildren;
 			info.withElderly = self.withElderly;
 		}
+		operatorService.setTip(self.ticketTipology);
+		console.log(self.ticketTipology);
 		console.log(info);
 		operatorService.setInfo(info);
 		operatorService.setDate(self.ticketDate);
+		
 		$state.go("logged.selectPlace.associateTicket");
 	}
 	

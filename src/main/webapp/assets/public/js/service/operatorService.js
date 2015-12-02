@@ -5,6 +5,7 @@ angular.module('asti.application').factory('operatorService', [
     var numTickets = null;
     var info = null;
     var date = null;
+    var ticketTipology = null;
 	
     var getPlaces = function(){
     	return places;
@@ -40,11 +41,20 @@ angular.module('asti.application').factory('operatorService', [
     	date = d;
     }
     
+    var getTicketTipology = function(){
+    	return ticketTipology;
+    }
+    
+    var setTicketTipology = function(t){
+    	ticketTipology = t;
+    }
+    
     var reset = function(){
     	places = null;
     	numTickets = null;
     	info = null;
     	date = null;
+    	ticketTipology = null;
     }
     
 	return {
@@ -56,7 +66,10 @@ angular.module('asti.application').factory('operatorService', [
 		setInfo : setInfo,
 		getDate : getDate,
 		setDate : setDate,
-		reset : reset
+		reset : reset,
+		setTip : setTicketTipology,
+		getTicketTipology : getTicketTipology
+		
 	}
 
 }]);
