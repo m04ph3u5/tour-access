@@ -17,8 +17,7 @@ public class Comment {
 	private String author;
 	private float rating;
 	private Date realdate;
-	private String date;
-	private String time;
+	
 	
 	public String getIdPath() {
 		return idPath;
@@ -61,18 +60,6 @@ public class Comment {
 	}
 	public void setRealdate(Date realdate) {
 		this.realdate = realdate;
-	}
-	public String getDate() {
-		return date;
-	}
-	public void setDate(String date) {
-		this.date = date;
-	}
-	public String getTime() {
-		return time;
-	}
-	public void setTime(String time) {
-		this.time = time;
 	}
 	public String getId() {
 		return id;

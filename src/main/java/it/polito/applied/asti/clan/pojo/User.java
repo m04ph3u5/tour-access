@@ -24,7 +24,7 @@ public class User implements UserDetails{
 	private String id;
 	
 	@Indexed
-	@Digits(fraction = 0, integer = 10)
+//	@Digits(fraction = 0, integer = 10)
 	private String username;
 	private String password;
 	
