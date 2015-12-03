@@ -13,7 +13,16 @@ public class Version {
 	@Indexed(unique=true)
 	private int version;
 	private Date date;
+	private String description;
 	
+	
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getVersion() {
 		return version;
 	}

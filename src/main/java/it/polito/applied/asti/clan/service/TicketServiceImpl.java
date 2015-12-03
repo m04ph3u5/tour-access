@@ -64,6 +64,7 @@ public class TicketServiceImpl implements TicketService{
 		c.set(Calendar.SECOND, 0);
 		startForValidation = c.getTime();
 		c.setTime(start);
+		c.add(Calendar.YEAR, 1);
 		c.set(Calendar.HOUR_OF_DAY,23);
 		c.set(Calendar.MINUTE,59);
 		c.set(Calendar.SECOND, 59);
@@ -132,7 +133,7 @@ public class TicketServiceImpl implements TicketService{
 		readRepo.save(read);
 		//TODO modifica startDate e endDate del biglietto se il passaggio è stato accettato ed il biglietto era ancora inutilizzato
 		if(read.isAccepted()){
-			ticketRepo.setStartDate(read.getTicketNumber(), read.getDate());
+			ticketRepo.passingAccepted(read.getTicketNumber(), read.getDate());
 		}
 		
 	}

@@ -1,27 +1,29 @@
 <div style="margin-top:70px;" class="row">
 	<div class="col-xs-offset-1 col-xs-10 text-center">
 		<div class="row">
-			<h3 data-ng-show="info.numTicket==1">Data validità biglietto</h3>
-			<h3 data-ng-show="info.numTicket>1">Data validità biglietti</h3>
-			<form class="form-inline">
-				<div class="form-group">
-					<label for="startVal">A partire da</label>
-					<input id="startVal" ui-date="info.dateOptions" class="form-control" 
-						data-ng-model="info.ticketDate" placeholder="dd/mm/yyyy"></input>
-				</div>
+<!-- 			<h3 data-ng-show="info.numTicket==1">Data validità biglietto</h3> -->
+<!-- 			<h3 data-ng-show="info.numTicket>1">Data validità biglietti</h3> -->
+<!-- 			<form class="form-inline"> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label for="startVal">A partire da</label> -->
+<!-- 					<input id="startVal" ui-date="info.dateOptions" class="form-control"  -->
+<!-- 						data-ng-model="info.ticketDate" placeholder="dd/mm/yyyy"></input> -->
+<!-- 				</div> -->
 				
-			</form>
+<!-- 			</form> -->
 			<form class="form-inline" style="margin-top:10px;">
 				<div class="form-group">
-					<label for="tipology">Tipologia biglietto</label>
+					<label data-ng-show="info.numTicket==1" for="tipology">Tipologia biglietto</label>
+					<label data-ng-show="info.numTicket>1" for="tipology">Tipologia biglietti</label>
 					<select id="tipology" data-ng-model="info.ticketTipology" >
-						<option selected value="Daily_Visitor">Giornaliero</option>
-						<option value="Weekly_Visitor">Settimanale</option>
+						<option selected value="DAILY_VISITOR">Giornaliero</option>
+						<option value="WEEKLY_VISITOR">Settimanale</option>
 						<option value="DAILIY_VIP_VISITOR">Giornaliero VIP</option>
 						<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
-						<option value="Service">Servizio</option>
-						<option value="Supervisor">Supervisore</option>
+						<option value="SERVICE">Servizio</option>
+						<option value="SUPERVISOR">Supervisore</option>
 					</select>
+					<span class="glyphicon glyphicon-info-sign tooltips" title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. - Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata.- Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni."></span>
 				</div>
 				
 			</form>

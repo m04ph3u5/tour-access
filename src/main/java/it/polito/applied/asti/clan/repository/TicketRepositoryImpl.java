@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.Ticket;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,28 +55,59 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	}
 
 	@Override
-	public void setStartDate(String ticketNumber, Date d) {
+	public void passingAccepted(String ticketNumber, Date d) {
 		
 		Ticket myTicket;
-		boolean doUpdate = false;
 		Query q = new Query();
 		q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
 		List<Ticket> tList = mongoOp.find(q, Ticket.class);
 		if(tList!=null && tList.size()>0){
 			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
-			if(myTicket.getStartDate() == null || myTicket.getStartDate() == myTicket.getEmissionDate()){
-				doUpdate = true;
+			if(myTicket.getStatus().equals("RELEASED")){
+				Update u = new Update();
+				u.set("startDate", d);
+				
+				Calendar c = Calendar.getInstance();
+				Date endDate;
+				c.setTime(d);
+				
+				if(myTicket.getRole().equals("DAILY_VISITOR")){
+					c.set(Calendar.HOUR_OF_DAY,23);
+					c.set(Calendar.MINUTE,59);
+					c.set(Calendar.SECOND, 59);
+					
+				}
+				else if(myTicket.getRole().equals("WEEKLY_VISITOR")){
+					c.add(Calendar.DAY_OF_MONTH, 7);
+					c.set(Calendar.HOUR_OF_DAY,23);
+					c.set(Calendar.MINUTE,59);
+					c.set(Calendar.SECOND, 59);
+					
+				}
+				
+				else if(myTicket.getRole().equals("DAILY_VIP_VISITOR")){
+					
+					c.set(Calendar.HOUR_OF_DAY,23);
+					c.set(Calendar.MINUTE,59);
+					c.set(Calendar.SECOND, 59);
+					
+				}
+				else if(myTicket.getRole().equals("WEEKLY_VIP_VISITOR")){
+					c.add(Calendar.DAY_OF_MONTH, 7);
+					c.set(Calendar.HOUR_OF_DAY,23);
+					c.set(Calendar.MINUTE,59);
+					c.set(Calendar.SECOND, 59);
+					
+				}
+				
+				
+				endDate = c.getTime();
+				u.set("endDate", endDate);
+				q.addCriteria(Criteria.where("id").is(myTicket.getId()));
+				mongoOp.findAndModify(q, u, Ticket.class);
 			}
 		}
-			
-		
-		if(doUpdate){
-			Update u = new Update();
-			u.set("startDate", d);
-			q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
-			//TODO aggiungere controllo su startDate (può succedere che ci siano più biglietti con stesso ticketNumber nel db nel caso di riutilizzo dei ticket)
-			mongoOp.findAndModify(q, u, Ticket.class);
-		}
+	
 		
 	}
 

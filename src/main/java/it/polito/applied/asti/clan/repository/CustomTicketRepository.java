@@ -9,6 +9,6 @@ public interface CustomTicketRepository {
 	public boolean isValid(String[] ticketNumbers, Date start);
 	public Ticket findByTicketNumberNow(String ticketNumber);
 	public List<Ticket> getValidTickets();
-	public void setStartDate(String ticketNumber, Date d);
+	public void passingAccepted(String ticketNumber, Date d);
 
 }

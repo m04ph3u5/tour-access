@@ -32,6 +32,7 @@ angular.module('asti.application').controller('loginCtrl', ['userService', '$sta
 				},
 				function(reason){
 					self.showError = true;
+					self.password="";
 				}
 		);
 	}
