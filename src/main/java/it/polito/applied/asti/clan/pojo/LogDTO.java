@@ -4,11 +4,15 @@ import java.util.Date;
 
 public class LogDTO {
 
-	private int source;
+	private int source;  //Numero versione
 	private Date timestamp; /*UTC*/
 	private String device_id;
 	private String type;
 	private Args args;
+	
+	public LogDTO(){
+		
+	}
 	
 	public int getSource() {
 		return source;
@@ -41,5 +45,14 @@ public class LogDTO {
 		this.args = args;
 	}
 	
+//	@Override
+//	public String toString(){
+//		String s= "Version: "+source;
+//		s+=" Date: "+timestamp;
+//		s+=" DeviceId: "+device_id;
+//		s+=" Type: "+type;
+//		s+=" UserLocation: "+args.getUser_location();
+//		return s;
+//	}
 	
 }

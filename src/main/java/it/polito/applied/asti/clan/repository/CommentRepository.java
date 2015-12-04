@@ -9,5 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface CommentRepository extends MongoRepository<Comment, String>, CustomCommentRepository{
 
 	public Comment findById(String id);
-	public List<Comment> findByIdPath(String idPath);
+	public List<Comment> findByIdPathOrderByRealdateDesc(int idPath);
 }

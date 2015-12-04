@@ -12,21 +12,21 @@ public class Log {
 	@Id
 	private String id;
 	private String source;
-	private int version;
+	private Integer version;
 	private Date date;
 	private String deviceId;
 	private LogType logType;
 	
 	/*ARGS*/
-	private int idPath;
+	private Integer idPath;
 	private String idPoi;
-	private int audioCurrentPos;
-	private int imageGalleryPos;
-	private int orientation;	// 0-landscape, 1-portrait
+	private Integer audioCurrentPos;
+	private Integer imageGalleryPos;
+	private Integer orientation;	// 0-landscape, 1-portrait
 	private String ticketNumber; /*Numero biglietto*/
-	private int videoCurrentPos;
-	private double[] position;
-	private boolean validPoiTicket;
+	private Integer videoCurrentPos;
+	private Double[] position;
+	private Boolean validPoiTicket;
 	private String idComment;
 	
 	public Log(){
@@ -39,22 +39,24 @@ public class Log {
 		this.date = log.getTimestamp();
 		this.deviceId = log.getDevice_id();
 		assignLogType(log.getType());
-		this.idPath = log.getArgs().getID_PATH();
-		this.idPoi = log.getArgs().getID_POI();
-		this.audioCurrentPos = log.getArgs().getAUDIO_CURRENT_POSITION();
-		this.imageGalleryPos = log.getArgs().getIMAGE_GALLERY_POSITION();
-		this.orientation = log.getArgs().getORIENTATION();
-		this.ticketNumber = log.getArgs().getTICKET_CONTENTS();
-		this.videoCurrentPos = log.getArgs().getVIDEO_CURRENT_POSITION();
-		if(log.getArgs().getUserLocation()!=null && log.getArgs().getUserLocation().contains("|")){
-			String[] pos = log.getArgs().getUserLocation().split(Pattern.quote("|"));
+		this.idPath = log.getArgs().getId_path();
+		this.idPoi = log.getArgs().getId_poi();
+		this.audioCurrentPos = log.getArgs().getAudio_current_position();
+		this.imageGalleryPos = log.getArgs().getImage_gallery_position();
+		this.orientation = log.getArgs().getOrientation();
+		this.ticketNumber = log.getArgs().getTicket_contents();
+		this.videoCurrentPos = log.getArgs().getVideo_current_position();
+		if(log.getArgs().getUser_location()!=null && log.getArgs().getUser_location().contains("|")){
+			String[] pos = log.getArgs().getUser_location().split(Pattern.quote("|"));
 			if(pos.length==2){
-				this.position = new double[2];
+				this.position = new Double[2];
 				this.position[0] = Double.parseDouble(pos[0]);
 				this.position[1] = Double.parseDouble(pos[1]);
 			}
+		}else{
+			System.out.println("POSITION MISS");
 		}
-		this.validPoiTicket = log.getArgs().isValidPoiTicket();				
+		this.validPoiTicket = log.getArgs().isValid_poi_ticket();				
 	}
 	
 	public Log(LogDTO log, String idComment){
@@ -128,10 +130,10 @@ public class Log {
 	public void setVideoCurrentPos(int videoCurrentPos) {
 		this.videoCurrentPos = videoCurrentPos;
 	}
-	public double[] getPosition() {
+	public Double[] getPosition() {
 		return position;
 	}
-	public void setPosition(double[] position) {
+	public void setPosition(Double[] position) {
 		this.position = position;
 	}
 	public boolean isValidPoiTicket() {
