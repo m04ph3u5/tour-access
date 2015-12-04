@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,6 +15,39 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class TicketRepositoryImpl implements CustomTicketRepository{
 
+	/*
+	status.released.id = s00001
+	status.validated.id = s00002
+	status.canceled.id = s00003
+	 */
+	@Value("${status.canceled.id}")
+	private String CANCELED;
+	@Value("${status.validated.id}")
+	private String VALIDATED;
+	@Value("${status.released.id}")
+	private String RELEASED;
+	
+	/*
+	role.dailyVisitor.id = r00001
+	role.weeklyVisitor.id = r00002
+	role.dailyVipVisitor.id = r00003
+	role.weeklyVipVisitor.id = r00004
+	role.service.id = r00005
+	role.supervisor.id = r00006
+	 */
+	@Value("${role.dailyVisitor.id}")
+	private String DAILY_VISITOR;
+	@Value("${role.weeklyVisitor.id}")
+	private String WEEKLY_VISITOR;
+	@Value("${role.dailyVipVisitor.id}")
+	private String DAILY_VIP_VISITOR;
+	@Value("${role.weeklyVipVisitor.id}")
+	private String WEEKLY_VIP_VISITOR;
+	@Value("${role.service.id}")
+	private String SERVICE;
+	@Value("${role.supervisor.id}")
+	private String SUPERVISOR;
+	
 	@Autowired
 	private MongoOperations mongoOp;
 	
@@ -21,7 +55,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public boolean isValid(String[] ticketNumbers, Date start) {
 		Query q = new Query();
 		Criteria c2 = new Criteria();
-		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").gte("RELEASED")) );
+		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").ne(RELEASED)) );
 		
 		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
 				.andOperator(c2));
@@ -48,7 +82,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public List<Ticket> getValidTickets() {
 		Date d = new Date();
 		Query q = new Query();
-		q.addCriteria(Criteria.where("status").ne("CANCELED").
+		q.addCriteria(Criteria.where("status").ne(CANCELED).
 				andOperator(Criteria.where("endDate").gte(d)));
 		q.fields().exclude("id");
 		return mongoOp.find(q, Ticket.class);
@@ -63,7 +97,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		List<Ticket> tList = mongoOp.find(q, Ticket.class);
 		if(tList!=null && tList.size()>0){
 			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
-			if(myTicket.getStatus().equals("RELEASED")){
+			if(myTicket.getStatus().equals(RELEASED)){
 				Update u = new Update();
 				u.set("startDate", d);
 				
@@ -71,13 +105,13 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				Date endDate;
 				c.setTime(d);
 				
-				if(myTicket.getRole().equals("DAILY_VISITOR")){
+				if(myTicket.getRole().equals(DAILY_VISITOR)){
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
 					c.set(Calendar.SECOND, 59);
 					
 				}
-				else if(myTicket.getRole().equals("WEEKLY_VISITOR")){
+				else if(myTicket.getRole().equals(WEEKLY_VISITOR)){
 					c.add(Calendar.DAY_OF_MONTH, 7);
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
@@ -85,14 +119,14 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 					
 				}
 				
-				else if(myTicket.getRole().equals("DAILY_VIP_VISITOR")){
+				else if(myTicket.getRole().equals(DAILY_VIP_VISITOR)){
 					
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
 					c.set(Calendar.SECOND, 59);
 					
 				}
-				else if(myTicket.getRole().equals("WEEKLY_VIP_VISITOR")){
+				else if(myTicket.getRole().equals(WEEKLY_VIP_VISITOR)){
 					c.add(Calendar.DAY_OF_MONTH, 7);
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);

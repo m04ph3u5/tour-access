@@ -17,11 +17,45 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TicketServiceImpl implements TicketService{
 
+	/*
+	status.released.id = s00001
+	status.validated.id = s00002
+	status.canceled.id = s00003
+	 */
+	@Value("${status.canceled.id}")
+	private String CANCELED;
+	@Value("${status.validated.id}")
+	private String VALIDATED;
+	@Value("${status.released.id}")
+	private String RELEASED;
+	
+	/*
+	role.dailyVisitor.id = r00001
+	role.weeklyVisitor.id = r00002
+	role.dailyVipVisitor.id = r00003
+	role.weeklyVipVisitor.id = r00004
+	role.service.id = r00005
+	role.supervisor.id = r00006
+	 */
+	@Value("${role.dailyVisitor.id}")
+	private String DAILY_VISITOR;
+	@Value("${role.weeklyVisitor.id}")
+	private String WEEKLY_VISITOR;
+	@Value("${role.dailyVipVisitor.id}")
+	private String DAILY_VIP_VISITOR;
+	@Value("${role.weeklyVipVisitor.id}")
+	private String WEEKLY_VIP_VISITOR;
+	@Value("${role.service.id}")
+	private String SERVICE;
+	@Value("${role.supervisor.id}")
+	private String SUPERVISOR;
+	
 	@Autowired
 	private PoiRepository poiRepo;
 	
@@ -95,11 +129,36 @@ public class TicketServiceImpl implements TicketService{
 			
 			//TODO da decidere come e quando settare la duration
 			
-			//TODO controllare il tipo di ruolo, per semplificare ipotizzo che DAILY_VISITOR valga 1 e setto a prescindere questo valore come role.
-			//Dovrei in realtà capire dal TicketRequestDTO che tipo di ruolo deve assumere il biglietto, interrogare il db per controllare che esista
-			//e prendere il codice giusto.
+			//setto il ruoloe lo stato del/dei biglietto/i
+			
+			if(ticketRequest.getTipology().equals("DAILY_VISITOR")){
+				t.setRole(DAILY_VISITOR);
+				t.setStatus(RELEASED);
+				
+			}else if(ticketRequest.getTipology().equals("WEEKLY_VISITOR")){
+				t.setRole(WEEKLY_VISITOR);
+				t.setStatus(RELEASED);
+				
+			}else if(ticketRequest.getTipology().equals("DAILY_VIP_VISITOR")){
+				t.setRole(DAILY_VIP_VISITOR);
+				t.setStatus(RELEASED);
+				
+			}else if(ticketRequest.getTipology().equals("WEEKLY_VIP_VISITOR")){
+				t.setRole(WEEKLY_VIP_VISITOR);
+				t.setStatus(RELEASED);
+				
+			}else if(ticketRequest.getTipology().equals("SERVICE")){
+				t.setRole(SERVICE);
+				t.setStatus(VALIDATED);
+				
+			}else if(ticketRequest.getTipology().equals("SUPERVISOR")){
+				t.setRole(SUPERVISOR);
+				t.setStatus(VALIDATED);
+				
+			}else
+				throw new BadRequestException("Tipologia ticket non supportata!");
+			
 			t.setRole(ticketRequest.getTipology());
-			t.setStatus("RELEASED");
 			
 			tickets.add(t);
 			
