@@ -1,43 +1,36 @@
 package it.polito.applied.asti.clan.pojo;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.mapping.Document;
+public class CommentDTO {
 
-@Document
-@CompoundIndexes(value = 
-{
-    @CompoundIndex (name = "idPath_Date", def = "{'idPath': 1, 'realdate': -1}")
-})
-public class Comment {
-
-	@Id
-	private String id;
 	private int idPath;
 	private String idTicket;
 	private String title;
 	private String content;
 	private String author;
 	private float rating;
-	private Date realdate;
+	private String date;
+	private String time;
 	
-	public Comment(){
+	public CommentDTO(){
 		
 	}
 	
-	public Comment(CommentDTO c, Date d){
+	public CommentDTO(Comment c){
 		this.idPath = c.getIdPath();
 		this.idTicket = c.getIdTicket();
 		this.title = c.getTitle();
 		this.content = c.getContent();
 		this.author = c.getAuthor();
 		this.rating = c.getRating();
-		this.realdate = d;
+		if(c.getRealdate()!=null){
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	        this.date = dateFormat.format(c.getRealdate());
+	        dateFormat.applyLocalizedPattern("HH:mm");
+	        this.time = dateFormat.format(c.getRealdate());
+		}
 	}
-	
 	
 	public int getIdPath() {
 		return idPath;
@@ -75,14 +68,17 @@ public class Comment {
 	public void setRating(float rating) {
 		this.rating = rating;
 	}
-	public Date getRealdate() {
-		return realdate;
+	public String getDate() {
+		return date;
 	}
-	public void setRealdate(Date realdate) {
-		this.realdate = realdate;
+	public void setDate(String date) {
+		this.date = date;
 	}
-	public String getId() {
-		return id;
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
 	}
 	
 	

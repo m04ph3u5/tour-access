@@ -2,7 +2,10 @@ package it.polito.applied.asti.clan.controller;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.pojo.CommentsPage;
+import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
+import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
@@ -138,5 +141,34 @@ public class ApiRestController extends BaseController{
 	@ResponseStatus(value = HttpStatus.OK)
 	public Response checkTicket(@RequestBody TicketNumber t) throws BadRequestException {
 		return new Response(appService.checkTicket(t.getTicket()));
+	}
+	
+	@PreAuthorize("hasRole('ROLE_APP')")
+	@RequestMapping(value="/v1/comments", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public CommentsPage getComments(@RequestBody CommentsRequest request) throws BadRequestException, NotFoundException {
+		return appService.getComments(request);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_APP')")
+	@RequestMapping(value="/v1/logging", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void postLog(@RequestBody List<LogDTO> logs) throws BadRequestException, NotFoundException {
+		List<LogDTO> logComment=null;
+		for(int i=0; i<logs.size(); i++){
+			LogDTO l = logs.get(i);
+			if(l.getType().equals("comment")){
+				if(logComment==null)
+					logComment = new ArrayList<LogDTO>();
+				logComment.add(logs.remove(i));
+			}
+		}
+		
+		if(logComment!=null){
+			appService.postComment(logComment);
+		}
+		
+		if(logs.size()!=0)
+			appService.postLog(logs);
 	}
 }

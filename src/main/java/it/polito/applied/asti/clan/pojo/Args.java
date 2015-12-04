@@ -2,77 +2,77 @@ package it.polito.applied.asti.clan.pojo;
 
 public class Args {
 	
-	private	int ID_PATH;
-	private	String ID_POI;
-	private int AUDIO_CURRENT_POSITION;
-	private int IMAGE_GALLERY_POSITION;
-	private int ORIENTATION;	// 0-landscape, 1-portrait
-	private String TICKET_CONTENTS; /*Numero biglietto*/
-	private int VIDEO_CURRENT_POSITION;
-	private String UserLocation; // latitute+”|”+longitude
-	private boolean ValidPoiTicket;		
-	private Comment COMMENT;
+	private	int id_path;
+	private	String id_poi;
+	private int audio_current_position;
+	private int image_gallery_position;
+	private int orientation;	// 0-landscape, 1-portrait
+	private String ticket_contents; /*Numero biglietto*/
+	private int video_current_position;
+	private String user_location; // latitute+”|”+longitude
+	private boolean valid_poi_ticket;		
+	private CommentDTO comment;
 	
-	public int getID_PATH() {
-		return ID_PATH;
+	public int getId_path() {
+		return id_path;
 	}
-	public void setID_PATH(int iD_PATH) {
-		ID_PATH = iD_PATH;
+	public void setId_path(int id_path) {
+		this.id_path = id_path;
 	}
-	public String getID_POI() {
-		return ID_POI;
+	public String getId_poi() {
+		return id_poi;
 	}
-	public void setID_POI(String iD_POI) {
-		ID_POI = iD_POI;
+	public void setId_poi(String id_poi) {
+		this.id_poi = id_poi;
 	}
-	public int getAUDIO_CURRENT_POSITION() {
-		return AUDIO_CURRENT_POSITION;
+	public int getAudio_current_position() {
+		return audio_current_position;
 	}
-	public void setAUDIO_CURRENT_POSITION(int aUDIO_CURRENT_POSITION) {
-		AUDIO_CURRENT_POSITION = aUDIO_CURRENT_POSITION;
+	public void setAudio_current_position(int audio_current_position) {
+		this.audio_current_position = audio_current_position;
 	}
-	public int getIMAGE_GALLERY_POSITION() {
-		return IMAGE_GALLERY_POSITION;
+	public int getImage_gallery_position() {
+		return image_gallery_position;
 	}
-	public void setIMAGE_GALLERY_POSITION(int iMAGE_GALLERY_POSITION) {
-		IMAGE_GALLERY_POSITION = iMAGE_GALLERY_POSITION;
+	public void setImage_gallery_position(int image_gallery_position) {
+		this.image_gallery_position = image_gallery_position;
 	}
-	public int getORIENTATION() {
-		return ORIENTATION;
+	public int getOrientation() {
+		return orientation;
 	}
-	public void setORIENTATION(int oRIENTATION) {
-		ORIENTATION = oRIENTATION;
+	public void setOrientation(int orientation) {
+		this.orientation = orientation;
 	}
-	public String getTICKET_CONTENTS() {
-		return TICKET_CONTENTS;
+	public String getTicket_contents() {
+		return ticket_contents;
 	}
-	public void setTICKET_CONTENTS(String tICKET_CONTENTS) {
-		TICKET_CONTENTS = tICKET_CONTENTS;
+	public void setTicket_contents(String ticket_contents) {
+		this.ticket_contents = ticket_contents;
 	}
-	public int getVIDEO_CURRENT_POSITION() {
-		return VIDEO_CURRENT_POSITION;
+	public int getVideo_current_position() {
+		return video_current_position;
 	}
-	public void setVIDEO_CURRENT_POSITION(int vIDEO_CURRENT_POSITION) {
-		VIDEO_CURRENT_POSITION = vIDEO_CURRENT_POSITION;
+	public void setVideo_current_position(int video_current_position) {
+		this.video_current_position = video_current_position;
 	}
-	public String getUserLocation() {
-		return UserLocation;
+	public String getUser_location() {
+		return user_location;
 	}
-	public void setUserLocation(String userLocation) {
-		UserLocation = userLocation;
+	public void setUser_location(String user_location) {
+		this.user_location = user_location;
 	}
-	public boolean isValidPoiTicket() {
-		return ValidPoiTicket;
+	public boolean isValid_poi_ticket() {
+		return valid_poi_ticket;
 	}
-	public void setValidPoiTicket(boolean validPoiTicket) {
-		ValidPoiTicket = validPoiTicket;
+	public void setValid_poi_ticket(boolean valid_poi_ticket) {
+		this.valid_poi_ticket = valid_poi_ticket;
 	}
-	public Comment getCOMMENT() {
-		return COMMENT;
+	public CommentDTO getComment() {
+		return comment;
 	}
-	public void setCOMMENT(Comment cOMMENT) {
-		COMMENT = cOMMENT;
-	}	
-
+	public void setComment(CommentDTO comment) {
+		this.comment = comment;
+	}
+	
 	
 }
