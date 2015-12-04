@@ -7,7 +7,9 @@ import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.Response;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketNumber;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
@@ -129,5 +131,12 @@ public class ApiRestController extends BaseController{
 	@ResponseStatus(value = HttpStatus.OK)
 	public VersionDTO getVersion() throws BadRequestException {
 		return new VersionDTO(appService.getVersion());
+	}
+	
+	@PreAuthorize("hasRole('ROLE_APP')")
+	@RequestMapping(value="/v1/checkTicket", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Response checkTicket(@RequestBody TicketNumber t) throws BadRequestException {
+		return new Response(appService.checkTicket(t.getTicket()));
 	}
 }

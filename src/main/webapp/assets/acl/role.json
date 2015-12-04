@@ -1,0 +1,38 @@
+[
+	{
+		"id" : "r00001",
+		"code" : "DAILY_VISITOR",
+		"description" : "Biglietto giornaliero a cui si applica la politica antiPassBack",
+		"antiPassBack" : true
+	},
+	{
+		"id" : "r00002",
+		"code" : "WEEKLY_VISITOR",
+		"description" : "Biglietto settimanale a cui si applica la politica antiPassBack",
+		"antiPassBack" : true
+	},
+	{
+		"id" : "r00003",
+		"code" : "DAILY_VIP_VISITOR",
+		"description" : "Biglietto giornaliero a cui NON si applica la politica antiPassBack",
+		"antiPassBack" : false
+	},
+	{
+		"id" : "r00004",
+		"code" : "WEEKLY_VIP_VISITOR",
+		"description" : "Biglietto settimanale a cui NON si applica la politica antiPassBack",
+		"antiPassBack" : false
+	},
+	{
+		"id" : "r00005",
+		"code" : "SERVICE",
+		"description" : "Biglietto per il personale di servizio a durata variabile",
+		"antiPassBack" : false
+	},
+	{
+		"id" : "r00006",
+		"code" : "SUPERVISOR",
+		"description" : "Biglietto passpartout",
+		"antiPassBack" : false
+	}
+]

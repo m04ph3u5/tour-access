@@ -1,0 +1,17 @@
+[
+	{
+		"id" : "s00001",
+		"code" : "RELEASED",
+		"description" : "Biglietto venduto ma non ancora utilizzato"	
+	},
+	{
+		"id" : "s00002",
+		"code" : "VALIDATED",
+		"description" : "Biglietto utilizzato per un accesso o biglietto di servizio"
+	},
+	{
+		"id" : "s00003",
+		"code" : "CANCELED",
+		"description" : "Biglietto revocato"
+	}
+]
