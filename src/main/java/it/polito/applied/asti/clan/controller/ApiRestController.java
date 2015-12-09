@@ -20,6 +20,7 @@ import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
+import it.polito.applied.asti.clan.service.UtilAverageTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,6 +54,9 @@ public class ApiRestController extends BaseController{
 	
 	@Autowired
 	private AppService appService;
+	
+	@Autowired
+	private UtilAverageTask util;
 	
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -171,4 +175,11 @@ public class ApiRestController extends BaseController{
 		if(logs.size()!=0)
 			appService.postLog(logs);
 	}
+	
+	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void test(@RequestParam(value="idPath", required=true) Integer idPath){
+		util.queue(idPath);
+	}
+
 }

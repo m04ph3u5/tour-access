@@ -45,6 +45,9 @@
  	   	<intercept-url pattern="/" access="permitAll"/>
  	   	<intercept-url pattern="/api/v1/name" access="permitAll"/>
  	   	<intercept-url pattern="/api/v1/login" access="permitAll"/>
+
+ 	   	<intercept-url pattern="/api/v1/test" access="permitAll"/>
+
  	   	<intercept-url pattern="/assets/public/**" access="permitAll"/>
  	   	<intercept-url pattern="/assets/mobile/**" access="hasRole('ROLE_APP')"/>
  	   	<intercept-url pattern="/**" access="isAuthenticated()"/>
