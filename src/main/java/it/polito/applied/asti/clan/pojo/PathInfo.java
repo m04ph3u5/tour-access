@@ -1,7 +1,5 @@
 package it.polito.applied.asti.clan.pojo;
 
-import java.util.Map;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 
@@ -14,7 +12,6 @@ public class PathInfo {
 	private int idPath;
 	private float avgRating;
 	private int numComments;
-	private Map<Float, Integer> votes;	
 	
 	public int getIdPath() {
 		return idPath;
@@ -36,15 +33,6 @@ public class PathInfo {
 	}
 	public String getId() {
 		return id;
-	}
-	public Map<Float, Integer> getVotes() {
-		return votes;
-	}
-	public void setVotes(Map<Float, Integer> votes) {
-		this.votes = votes;
-	}
-	public void incrementNumComments(){
-		this.numComments++;
 	}
 		
 

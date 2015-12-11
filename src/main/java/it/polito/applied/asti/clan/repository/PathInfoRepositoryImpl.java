@@ -17,10 +17,15 @@ public class PathInfoRepositoryImpl implements CustomPathInfoRepository{
 	private MongoOperations mongoOp;
 
 	@Override
-	public void updatePathsInfo(List<PathInfo> paths) {
-		
+	public void updateAverage(int idPath, float average, int size) {
+		Query q = new Query(); 
+		q.addCriteria(Criteria.where("idPath").is(idPath));
+		Update u = new Update();
+		u.set("avgRating", average);
+		u.set("numComments", size);
+		mongoOp.updateFirst(q, u, PathInfo.class);
 	}
-	
+
 
 
 }

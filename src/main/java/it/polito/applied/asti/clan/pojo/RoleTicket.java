@@ -1,17 +1,16 @@
 package it.polito.applied.asti.clan.pojo;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class RoleTicket {
 
-	@Id
 	private int idRole;  //(numero su 1 byte): identificativo univoco del ruolo;
 	private String code; //identificativo human readable
-	private String description; //descrizione più dettagliata del ruolo
-	private boolean antiPassBack; //): se true, indica che a questo ruolo si applica la politica antiPassBack (ogni volta che viene rilevato  l’ingresso ad un sito, viene inibito, per il giorno corrente, l’ulteriore accesso al sito).
+	private String description; //descrizione piï¿½ dettagliata del ruolo
+	private boolean antiPassBack; //): se true, indica che a questo ruolo si applica la politica antiPassBack (ogni volta che viene rilevato  lï¿½ingresso ad un sito, viene inibito, per il giorno corrente, lï¿½ulteriore accesso al sito).
 	
+	public RoleTicket(){
+		
+	}
 	
 	public RoleTicket(int idRole, String role, String description, boolean antiPassBack){
 		this.idRole = idRole;

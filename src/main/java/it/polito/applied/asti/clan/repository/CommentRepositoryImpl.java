@@ -1,7 +1,6 @@
 package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.Comment;
-import it.polito.applied.asti.clan.pojo.CommentBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -16,7 +15,7 @@ public class CommentRepositoryImpl implements CustomCommentRepository{
 	private MongoOperations mongoOp;
 	
 	@Override
-	public CommentBundle setComment(Comment c) {
+	public Comment setComment(Comment c) {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("idPath").is(c.getIdPath())
 				.andOperator(Criteria.where("deviceId").is(c.getDeviceId())));
@@ -31,13 +30,10 @@ public class CommentRepositoryImpl implements CustomCommentRepository{
 		u.set("rating", c.getRating());
 		u.set("realdate", c.getRealdate());
 		FindAndModifyOptions options = new FindAndModifyOptions();
-		options.isUpsert();
-		Comment comment = mongoOp.findAndModify(q, u, options, Comment.class);
-		if(comment==null){
-			return new CommentBundle(mongoOp.findOne(q, Comment.class),true);
-		}
-		else
-			return new CommentBundle(comment,false);
+		options.upsert(true);
+		options.returnNew(true);
+		return mongoOp.findAndModify(q, u, options, Comment.class);
+		
 	}
 
 }

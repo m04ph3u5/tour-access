@@ -8,9 +8,12 @@ import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiToAC;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Response;
+import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
@@ -42,22 +45,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ApiRestController extends BaseController{
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private PoiRepository placeRepo;
-	
+
 	@Autowired
 	private TicketService ticketService;
-	
+
 	@Autowired
 	private AppService appService;
-	
-	@Autowired
-	private UtilAverageTask util;
-	
+
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public Name getNameOfUser(@RequestParam(value = "username", required=false) String username) throws BadRequestException, NotFoundException{
@@ -65,7 +65,7 @@ public class ApiRestController extends BaseController{
 			throw new BadRequestException();
 		return userService.getNameByUserName(username);
 	}
-	
+
 	@RequestMapping(value="/v1/login", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void validateCredentials(@RequestBody Credential credential) throws BadRequestException{
@@ -73,7 +73,7 @@ public class ApiRestController extends BaseController{
 		if(!u)
 			throw new BadRequestException();
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/poiToSell", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -87,17 +87,17 @@ public class ApiRestController extends BaseController{
 		}
 		return poiToSell;
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/tickets", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException {
 		if(result.hasErrors())
 			throw new BadRequestException();
-		
+
 		ticketService.operatorGenerateTickets(ticketRequestDTO, u.getId());
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -106,54 +106,75 @@ public class ApiRestController extends BaseController{
 			throw new BadRequestException();
 		return ticketService.accessiblePlaces(ticketNumber);
 	}
-	
-	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+
+	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
 	@RequestMapping(value="/v1/places", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Poi> getAllPlaces() throws BadRequestException {
-		
-		return ticketService.getAllPlaces();
+	public List<PoiToAC> getAllPlaces() throws BadRequestException {
+
+		List<Poi> poi =  ticketService.getAllPlaces();
+		List<PoiToAC> poiToAC = new ArrayList<PoiToAC>();
+		for(Poi p : poi){
+			poiToAC.add(new PoiToAC(p));
+		}
+		return poiToAC;
 	}
-	
-	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+
+	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
 	@RequestMapping(value="/v1/tickets", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Ticket> getValidTickets() throws BadRequestException {
-		
+
 		return ticketService.getValidTickets();
 	}
 
-	//@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/roles", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<RoleTicket> getRoles() throws BadRequestException {
+
+		return ticketService.getRoles();
+	}
+
+	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	@RequestMapping(value="/v1/states", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<StatusTicket> getStatus() throws BadRequestException {
+
+		return ticketService.getStatus();
+	}
+
+	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
 	@RequestMapping(value="/v1/ticket", method=RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {
-		 if(result.hasErrors())
+		if(result.hasErrors())
 			throw new BadRequestException();
-		 read.setDateOnServer(new Date());
-		 ticketService.savePassingAttempt(read);
+		read.setDateOnServer(new Date());
+		ticketService.savePassingAttempt(read);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/version", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public VersionDTO getVersion() throws BadRequestException {
 		return new VersionDTO(appService.getVersion());
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/checkTicket", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public Response checkTicket(@RequestBody TicketNumber t) throws BadRequestException {
 		return new Response(appService.checkTicket(t.getTicket()));
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/comments", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public CommentsPage getComments(@RequestBody CommentsRequest request) throws BadRequestException, NotFoundException {
 		return appService.getComments(request);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/logging", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -165,21 +186,15 @@ public class ApiRestController extends BaseController{
 				if(logComment==null)
 					logComment = new ArrayList<LogDTO>();
 				logComment.add(logs.remove(i));
+				i--;
 			}
 		}
-		
+
 		if(logComment!=null){
 			appService.postComment(logComment);
 		}
-		
+
 		if(logs.size()!=0)
 			appService.postLog(logs);
 	}
-	
-	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void test(@RequestParam(value="idPath", required=true) Integer idPath){
-		util.queue(idPath);
-	}
-
 }

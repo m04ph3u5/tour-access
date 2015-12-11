@@ -14,12 +14,12 @@
 	<context:component-scan base-package="it.polito.applied.asti.clan.service" />
 	
 		
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="${taskExec.corePoolSize}" />
-		<property name="maxPoolSize" value="${taskExec.maxPoolSize}" />
-		<property name="queueCapacity" value="${taskExec.queueCapacity}" />
-	</bean>
+<!-- 	<bean id="taskExecutor" -->
+<!-- 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
+<!-- 		<property name="corePoolSize" value="${taskExec.corePoolSize}" /> -->
+<!-- 		<property name="maxPoolSize" value="${taskExec.maxPoolSize}" /> -->
+<!-- 		<property name="queueCapacity" value="${taskExec.queueCapacity}" /> -->
+<!-- 	</bean> -->
 	
 
 </beans>

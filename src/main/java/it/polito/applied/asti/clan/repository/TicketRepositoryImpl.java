@@ -36,17 +36,17 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	role.supervisor.id = r00006
 	 */
 	@Value("${role.dailyVisitor.id}")
-	private String DAILY_VISITOR;
+	private int DAILY_VISITOR;
 	@Value("${role.weeklyVisitor.id}")
-	private String WEEKLY_VISITOR;
+	private int WEEKLY_VISITOR;
 	@Value("${role.dailyVipVisitor.id}")
-	private String DAILY_VIP_VISITOR;
+	private int DAILY_VIP_VISITOR;
 	@Value("${role.weeklyVipVisitor.id}")
-	private String WEEKLY_VIP_VISITOR;
+	private int WEEKLY_VIP_VISITOR;
 	@Value("${role.service.id}")
-	private String SERVICE;
+	private int SERVICE;
 	@Value("${role.supervisor.id}")
-	private String SUPERVISOR;
+	private int SUPERVISOR;
 	
 	@Autowired
 	private MongoOperations mongoOp;
@@ -96,7 +96,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
 		List<Ticket> tList = mongoOp.find(q, Ticket.class);
 		if(tList!=null && tList.size()>0){
-			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
+			myTicket = tList.get(0); //in prima posizione c'ï¿½ sicuramente quello piï¿½ recente
 			if(myTicket.getStatus().equals(RELEASED)){
 				Update u = new Update();
 				u.set("startDate", d);
@@ -105,13 +105,13 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				Date endDate;
 				c.setTime(d);
 				
-				if(myTicket.getRole().equals(DAILY_VISITOR)){
+				if(myTicket.getRole()==DAILY_VISITOR){
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
 					c.set(Calendar.SECOND, 59);
 					
 				}
-				else if(myTicket.getRole().equals(WEEKLY_VISITOR)){
+				else if(myTicket.getRole()==WEEKLY_VISITOR){
 					c.add(Calendar.DAY_OF_MONTH, 7);
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
@@ -119,14 +119,14 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 					
 				}
 				
-				else if(myTicket.getRole().equals(DAILY_VIP_VISITOR)){
+				else if(myTicket.getRole()==DAILY_VIP_VISITOR){
 					
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);
 					c.set(Calendar.SECOND, 59);
 					
 				}
-				else if(myTicket.getRole().equals(WEEKLY_VIP_VISITOR)){
+				else if(myTicket.getRole()==WEEKLY_VIP_VISITOR){
 					c.add(Calendar.DAY_OF_MONTH, 7);
 					c.set(Calendar.HOUR_OF_DAY,23);
 					c.set(Calendar.MINUTE,59);

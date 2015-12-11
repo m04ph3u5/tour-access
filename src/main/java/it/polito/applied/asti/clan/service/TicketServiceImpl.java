@@ -3,6 +3,8 @@ package it.polito.applied.asti.clan.service;
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
@@ -36,25 +38,25 @@ public class TicketServiceImpl implements TicketService{
 	private String RELEASED;
 	
 	/*
-	role.dailyVisitor.id = r00001
-	role.weeklyVisitor.id = r00002
-	role.dailyVipVisitor.id = r00003
-	role.weeklyVipVisitor.id = r00004
-	role.service.id = r00005
-	role.supervisor.id = r00006
+	role.dailyVisitor.id = 1
+	role.weeklyVisitor.id = 2
+	role.dailyVipVisitor.id = 3
+	role.weeklyVipVisitor.id = 4
+	role.service.id = 5
+	role.supervisor.id = 6
 	 */
 	@Value("${role.dailyVisitor.id}")
-	private String DAILY_VISITOR;
+	private int DAILY_VISITOR;
 	@Value("${role.weeklyVisitor.id}")
-	private String WEEKLY_VISITOR;
+	private int WEEKLY_VISITOR;
 	@Value("${role.dailyVipVisitor.id}")
-	private String DAILY_VIP_VISITOR;
+	private int DAILY_VIP_VISITOR;
 	@Value("${role.weeklyVipVisitor.id}")
-	private String WEEKLY_VIP_VISITOR;
+	private int WEEKLY_VIP_VISITOR;
 	@Value("${role.service.id}")
-	private String SERVICE;
+	private int SERVICE;
 	@Value("${role.supervisor.id}")
-	private String SUPERVISOR;
+	private int SUPERVISOR;
 	
 	@Autowired
 	private PoiRepository poiRepo;
@@ -151,15 +153,14 @@ public class TicketServiceImpl implements TicketService{
 				t.setRole(SERVICE);
 				t.setStatus(VALIDATED);
 				
-			}else if(ticketRequest.getTipology().equals("SUPERVISOR")){
-				t.setRole(SUPERVISOR);
-				t.setStatus(VALIDATED);
-				
+//			}else if(ticketRequest.getTipology().equals("SUPERVISOR")){
+//				t.setRole(SUPERVISOR);
+//				t.setStatus(VALIDATED);
+//				
+//			}
 			}else
 				throw new BadRequestException("Tipologia ticket non supportata!");
-			
-			t.setRole(ticketRequest.getTipology());
-			
+						
 			tickets.add(t);
 			
 		}
@@ -188,9 +189,9 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void savePassingAttempt(Read read) {
-		//salvo la lettura nel db (così come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
+		//salvo la lettura nel db (cosï¿½ come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
-		//TODO modifica startDate e endDate del biglietto se il passaggio è stato accettato ed il biglietto era ancora inutilizzato
+		//TODO modifica startDate e endDate del biglietto se il passaggio ï¿½ stato accettato ed il biglietto era ancora inutilizzato
 		if(read.isAccepted()){
 			ticketRepo.passingAccepted(read.getTicketNumber(), read.getDate());
 		}
@@ -201,6 +202,47 @@ public class TicketServiceImpl implements TicketService{
 	public List<Poi> getAllPlaces() {
 		// TODO Auto-generated method stub
 		return poiRepo.findAllPlaceCustom();
+	}
+
+	@Override
+	public List<RoleTicket> getRoles() throws BadRequestException {
+		List<RoleTicket> roles = new ArrayList<RoleTicket>();
+		
+		RoleTicket r1 = new RoleTicket(DAILY_VISITOR, "DAILY_VISITOR","" ,true);
+		roles.add(r1);
+		
+		RoleTicket r2 = new RoleTicket(WEEKLY_VISITOR, "WEEKLY_VISITOR","" ,true);
+		roles.add(r2);
+		
+		RoleTicket r3 = new RoleTicket(DAILY_VIP_VISITOR, "DAILY_VIP_VISITOR","" ,false);
+		roles.add(r3);
+		
+		RoleTicket r4 = new RoleTicket(WEEKLY_VIP_VISITOR, "WEEKLY_VIP_VISITOR","" ,false);
+		roles.add(r4);
+		
+		RoleTicket r5 = new RoleTicket(SERVICE, "SERVICE","" ,false);
+		roles.add(r5);
+		
+		RoleTicket r6 = new RoleTicket(SUPERVISOR, "SUPERVISOR","" ,false);
+		roles.add(r6);
+		
+		return roles;
+	}
+
+	@Override
+	public List<StatusTicket> getStatus() {
+		List<StatusTicket> status = new ArrayList<StatusTicket>();
+		
+		StatusTicket s1 = new StatusTicket(RELEASED,"RELEASED","");
+		status.add(s1);
+		
+		StatusTicket s2 = new StatusTicket(VALIDATED,"VALIDATED","");
+		status.add(s2);
+		
+		StatusTicket s3 = new StatusTicket(CANCELED,"CANCELED","");
+		status.add(s3);
+		
+		return status;
 	}
 
 }

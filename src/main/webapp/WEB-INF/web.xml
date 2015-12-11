@@ -96,7 +96,7 @@
 		<param-value>
 			/WEB-INF/config/security-config.xml
 			/WEB-INF/config/mongo-config.xml
-			/WEB-INF/config/common-servlet-config.xml
+<!-- 			/WEB-INF/config/common-servlet-config.xml -->
 		</param-value>
 	</context-param>
 

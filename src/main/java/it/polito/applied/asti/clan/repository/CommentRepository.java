@@ -10,4 +10,5 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Cus
 
 	public Comment findById(String id);
 	public List<Comment> findByIdPathOrderByRealdateDesc(int idPath);
+	public List<Comment> findByIdPath(int idPath);
 }

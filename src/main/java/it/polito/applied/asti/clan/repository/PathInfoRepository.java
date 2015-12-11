@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PathInfoRepository extends MongoRepository<PathInfo, String>, CustomPathInfoRepository{
 
-	public PathInfo findByIdPath(int idPath); 
+	public PathInfo findByIdPath(int idPath);
 
 }

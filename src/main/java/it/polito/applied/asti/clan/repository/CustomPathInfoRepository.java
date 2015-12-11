@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CustomPathInfoRepository {
 
-	public void updatePathsInfo(List<PathInfo> paths);
-	
+	public void updateAverage(int idPath, float average, int size); 
+
 }
