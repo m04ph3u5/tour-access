@@ -1,4 +1,4 @@
-package it.polito.applied.asti.clan.controller;
+package it.polito.applied.asti.clan.webController;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

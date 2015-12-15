@@ -21,11 +21,11 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	
 	<mongo:mapping-converter id="converter" />
  
-	<bean name="gridFsTemplate"
-		class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
-		<constructor-arg ref="mongoDbFactory" />
-		<constructor-arg ref="converter" />
-	</bean>
+<!-- 	<bean name="gridFsTemplate" -->
+<!-- 		class="org.springframework.data.mongodb.gridfs.GridFsTemplate"> -->
+<!-- 		<constructor-arg ref="mongoDbFactory" /> -->
+<!-- 		<constructor-arg ref="converter" /> -->
+<!-- 	</bean> -->
 
 	<mongo:repositories base-package="it.polito.applied.asti.clan.repository"/>
 

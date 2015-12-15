@@ -17,7 +17,7 @@
 <!-- 	</mvc:annotation-driven> -->
 
 	<mvc:annotation-driven></mvc:annotation-driven>
-	<context:component-scan base-package="it.polito.applied.asti.clan.controller" />
+	<context:component-scan base-package="it.polito.applied.asti.clan.webController" />
 
 
 <!-- 	<mvc:default-servlet-handler/>  -->

@@ -25,16 +25,19 @@
         type='text/css'>
     <link href="/assets/public/js/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-<title data-ng-bind="$state.current.data.pageTitle">Asti</title>    
+<title data-ng-bind="$state.current.data.pageTitle">AstiMusei</title>    
 
 
 </head>
 
 <base href="/">
 
-<body data-ng-cloak>
-	
-	<div data-ui-view></div>
+<body style="background-color:#34495e" data-ng-cloak>
+	<div class="text-center">
+		<h1 style="margin-top: 150px; color:white;">AstiMusei</h1>
+		<h4 style="color:white;">Coming soon...</h4>
+	</div>
+<!-- 	<div data-ui-view></div> -->
 
 	<!-- VENDOR SCRIPT -->
 	

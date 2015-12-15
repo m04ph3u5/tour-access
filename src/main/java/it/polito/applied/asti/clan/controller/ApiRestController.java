@@ -23,7 +23,6 @@ import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
-import it.polito.applied.asti.clan.service.UtilAverageTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,7 +106,7 @@ public class ApiRestController extends BaseController{
 		return ticketService.accessiblePlaces(ticketNumber);
 	}
 
-	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	//preauthorize in security config
 	@RequestMapping(value="/v1/places", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<PoiToAC> getAllPlaces() throws BadRequestException {
@@ -120,7 +119,7 @@ public class ApiRestController extends BaseController{
 		return poiToAC;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	//preauthorize in security config
 	@RequestMapping(value="/v1/tickets", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Ticket> getValidTickets() throws BadRequestException {
@@ -128,7 +127,7 @@ public class ApiRestController extends BaseController{
 		return ticketService.getValidTickets();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	//preauthorize in security config
 	@RequestMapping(value="/v1/roles", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<RoleTicket> getRoles() throws BadRequestException {
@@ -136,7 +135,7 @@ public class ApiRestController extends BaseController{
 		return ticketService.getRoles();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	//preauthorize in security config
 	@RequestMapping(value="/v1/states", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<StatusTicket> getStatus() throws BadRequestException {
@@ -144,7 +143,7 @@ public class ApiRestController extends BaseController{
 		return ticketService.getStatus();
 	}
 
-	@PreAuthorize("hasRole('ROLE_ACCESSCONTROL')")
+	//preauthorize in security config
 	@RequestMapping(value="/v1/ticket", method=RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {

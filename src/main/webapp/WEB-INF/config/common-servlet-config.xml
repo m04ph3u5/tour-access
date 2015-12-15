@@ -11,7 +11,7 @@
 
 	<context:property-placeholder location="/WEB-INF/config/application.properties" />
 
-	<context:component-scan base-package="it.polito.applied.asti.clan.service" />
+<!-- 	<context:component-scan base-package="it.polito.applied.asti.clan.service" /> -->
 	
 		
 <!-- 	<bean id="taskExecutor" -->
@@ -20,6 +20,10 @@
 <!-- 		<property name="maxPoolSize" value="${taskExec.maxPoolSize}" /> -->
 <!-- 		<property name="queueCapacity" value="${taskExec.queueCapacity}" /> -->
 <!-- 	</bean> -->
+
+<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+		p:order="0" />
+
 	
 
 </beans>
