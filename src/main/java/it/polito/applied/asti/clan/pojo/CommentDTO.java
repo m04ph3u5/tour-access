@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 
 public class CommentDTO {
 
-	private int idPath;
-	private String idTicket;
 	private String title;
 	private String content;
 	private String author;
@@ -18,8 +16,6 @@ public class CommentDTO {
 	}
 	
 	public CommentDTO(Comment c){
-		this.idPath = c.getIdPath();
-		this.idTicket = c.getIdTicket();
 		this.title = c.getTitle();
 		this.content = c.getContent();
 		this.author = c.getAuthor();
@@ -32,18 +28,7 @@ public class CommentDTO {
 		}
 	}
 	
-	public int getIdPath() {
-		return idPath;
-	}
-	public void setIdPath(int idPath) {
-		this.idPath = idPath;
-	}
-	public String getIdTicket() {
-		return idTicket;
-	}
-	public void setIdTicket(String idTicket) {
-		this.idTicket = idTicket;
-	}
+
 	public String getTitle() {
 		return title;
 	}

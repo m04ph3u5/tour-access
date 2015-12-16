@@ -39,24 +39,26 @@ public class Log {
 		this.date = log.getTimestamp();
 		this.deviceId = log.getDevice_id();
 		assignLogType(log.getType());
-		this.idPath = log.getArgs().getId_path();
-		this.idPoi = log.getArgs().getId_poi();
-		this.audioCurrentPos = log.getArgs().getAudio_current_position();
-		this.imageGalleryPos = log.getArgs().getImage_gallery_position();
-		this.orientation = log.getArgs().getOrientation();
-		this.ticketNumber = log.getArgs().getTicket_contents();
-		this.videoCurrentPos = log.getArgs().getVideo_current_position();
-		if(log.getArgs().getUser_location()!=null && log.getArgs().getUser_location().contains("|")){
-			String[] pos = log.getArgs().getUser_location().split(Pattern.quote("|"));
-			if(pos.length==2){
-				this.position = new Double[2];
-				this.position[0] = Double.parseDouble(pos[0]);
-				this.position[1] = Double.parseDouble(pos[1]);
+		if(log.getArgs()!=null){
+			this.idPath = log.getArgs().getId_path();
+			this.idPoi = log.getArgs().getId_poi();
+			this.audioCurrentPos = log.getArgs().getAudio_current_position();
+			this.imageGalleryPos = log.getArgs().getImage_gallery_position();
+			this.orientation = log.getArgs().getOrientation();
+			this.ticketNumber = log.getArgs().getTicket_contents();
+			this.videoCurrentPos = log.getArgs().getVideo_current_position();
+			if(log.getArgs().getUser_location()!=null && log.getArgs().getUser_location().contains("|")){
+				String[] pos = log.getArgs().getUser_location().split(Pattern.quote("|"));
+				if(pos.length==2){
+					this.position = new Double[2];
+					this.position[0] = Double.parseDouble(pos[0]);
+					this.position[1] = Double.parseDouble(pos[1]);
+				}
+			}else{
+				System.out.println("POSITION MISS");
 			}
-		}else{
-			System.out.println("POSITION MISS");
+			this.validPoiTicket = log.getArgs().isValid_poi_ticket();
 		}
-		this.validPoiTicket = log.getArgs().isValid_poi_ticket();				
 	}
 	
 	public Log(LogDTO log, String idComment){

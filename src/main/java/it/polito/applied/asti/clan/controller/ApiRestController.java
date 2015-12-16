@@ -170,7 +170,7 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/comments", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public CommentsPage getComments(@RequestBody CommentsRequest request) throws BadRequestException, NotFoundException {
+	public CommentsPage getComments(@RequestBody CommentsRequest request) throws BadRequestException {
 		return appService.getComments(request);
 	}
 

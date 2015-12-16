@@ -32,9 +32,9 @@ public class Comment {
 		
 	}
 	
-	public Comment(CommentDTO c, Date d, String deviceId){
-		this.idPath = c.getIdPath();
-		this.idTicket = c.getIdTicket();
+	public Comment(CommentDTO c, Date d, String deviceId, int idPath, String idTicket){
+		this.idPath = idPath;
+		this.idTicket = idTicket;
 		this.title = c.getTitle();
 		this.content = c.getContent();
 		this.author = c.getAuthor();
