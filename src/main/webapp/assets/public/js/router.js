@@ -3,6 +3,15 @@ angular.module('asti.application')
 	         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 	
 		$stateProvider
+		.state('index',{
+			templateUrl: 'assets/public/partials/indexPartials.html',
+			url : '/',
+			controller : 'indexCtrl',
+			controllerAs : 'index',
+			data : {
+				pageTitle : 'Asti - Home'
+			}
+		})
 		.state('login',{
 			templateUrl: 'assets/public/partials/login.html',
 			url : '/',

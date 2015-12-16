@@ -42,18 +42,18 @@
 <!-- 	</http> -->
 
 	<http use-expressions="true" entry-point-ref="restServicesEntryPoint">
- 	   	<intercept-url pattern="/" access="permitAll" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/name" access="permitAll" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/login" access="permitAll" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/places" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/tickets" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/roles" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/states" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="https"/>
- 	   	<intercept-url pattern="/api/v1/ticket" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="https"/>
+ 	   	<intercept-url pattern="/" access="permitAll" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/name" access="permitAll" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/login" access="permitAll" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/places" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/tickets" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/roles" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/states" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="http"/>
+ 	   	<intercept-url pattern="/api/v1/ticket" access="hasRole('ROLE_ACCESSCONTROL') and hasIpAddress('10.8.0.5')" requires-channel="http"/>
 
- 	   	<intercept-url pattern="/assets/public/**" access="permitAll" requires-channel="https"/>
- 	   	<intercept-url pattern="/assets/mobile/**" access="hasRole('ROLE_APP')" requires-channel="https"/>
- 	   	<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="https"/>
+ 	   	<intercept-url pattern="/assets/public/**" access="permitAll" requires-channel="http"/>
+ 	   	<intercept-url pattern="/assets/mobile/**" access="hasRole('ROLE_APP')" requires-channel="http"/>
+ 	   	<intercept-url pattern="/**" access="isAuthenticated()" requires-channel="http"/>
 		<custom-filter ref="customBasicFilter" position="BASIC_AUTH_FILTER"></custom-filter>
 	</http>
 	
