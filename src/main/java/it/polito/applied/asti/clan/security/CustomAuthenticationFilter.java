@@ -1,7 +1,5 @@
 package it.polito.applied.asti.clan.security;
 
-import it.polito.applied.asti.clan.pojo.User;
-
 import java.io.IOException;
 
 import javax.servlet.FilterChain;

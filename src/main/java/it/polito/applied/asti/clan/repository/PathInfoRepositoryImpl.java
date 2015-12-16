@@ -2,9 +2,6 @@ package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.PathInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,7 +20,7 @@ public class PathInfoRepositoryImpl implements CustomPathInfoRepository{
 		Update u = new Update();
 		u.set("avgRating", average);
 		u.set("numComments", size);
-		mongoOp.updateFirst(q, u, PathInfo.class);
+		mongoOp.upsert(q, u, PathInfo.class);
 	}
 
 

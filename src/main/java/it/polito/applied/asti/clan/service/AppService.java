@@ -1,13 +1,12 @@
 package it.polito.applied.asti.clan.service;
 
-import java.util.List;
-
 import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.VersionZip;
+
+import java.util.List;
 
 public interface AppService {
 
@@ -15,7 +14,7 @@ public interface AppService {
 
 	public boolean checkTicket(String ticket);
 
-	public CommentsPage getComments(CommentsRequest request) throws NotFoundException, BadRequestException;
+	public CommentsPage getComments(CommentsRequest request) throws BadRequestException;
 
 	public void postComment(List<LogDTO> logComment) throws BadRequestException;
 

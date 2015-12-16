@@ -2,7 +2,9 @@ package it.polito.applied.asti.clan.pojo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document
 public class PathInfo {
 	
 	@Id

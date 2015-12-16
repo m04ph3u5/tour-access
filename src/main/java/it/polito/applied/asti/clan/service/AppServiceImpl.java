@@ -1,7 +1,6 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Comment;
 import it.polito.applied.asti.clan.pojo.CommentDTO;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
@@ -78,14 +77,19 @@ public class AppServiceImpl implements AppService{
 	}
 
 	@Override
-	public CommentsPage getComments(CommentsRequest request) throws NotFoundException, BadRequestException {
+	public CommentsPage getComments(CommentsRequest request) throws BadRequestException {
 		PathInfo info = pathInfoRepo.findByIdPath(request.getIdPath());
-		if(info==null)
-			throw new NotFoundException();
-		
 		CommentsPage page = new CommentsPage();
+
+		if(info==null){
+			page.setNumComments(0);
+			page.setAvgRating(0);
+			page.setListOfComments(new ArrayList<CommentDTO>());
+			return page;
+		}
 		page.setNumComments(info.getNumComments());
-		page.setAvgRating(info.getAvgRating());
+		float rating = roundAvg(info.getAvgRating());
+		page.setAvgRating(rating);
 		
 		int	numTotPage = page.getNumComments()/DIM_PAGE;
 		if((page.getNumComments()%DIM_PAGE)!=0)
@@ -113,6 +117,8 @@ public class AppServiceImpl implements AppService{
 		return page;
 	}
 
+
+
 	@Override
 	public void postComment(List<LogDTO> logComment) throws BadRequestException {
 		List<Comment> comments = new ArrayList<Comment>();
@@ -121,7 +127,7 @@ public class AppServiceImpl implements AppService{
 			if(dto.getArgs()==null || dto.getArgs().getComment()==null)
 				throw new BadRequestException();
 			
-			Comment c = new Comment(dto.getArgs().getComment(), dto.getTimestamp(), dto.getDevice_id());
+			Comment c = new Comment(dto.getArgs().getComment(), dto.getTimestamp(), dto.getDevice_id(), dto.getArgs().getId_path(), dto.getArgs().getTicket_contents());
 			c = commentRepo.setComment(c);
 			comments.add(c);
 			avgTask.queue(c.getIdPath());
@@ -145,6 +151,20 @@ public class AppServiceImpl implements AppService{
 			logs.add(new Log(logsDTO.get(i)));
 		}
 		logRepo.save(logs);
+	}
+	
+	private float roundAvg(float avgRating) {
+		int intPart = (int)avgRating;
+		float floatPart = avgRating - intPart;
+		
+		if(floatPart<0.25)
+			floatPart = 0;
+		else if(floatPart>=0.25 && floatPart<0.75)
+			floatPart = 0.5f;
+		else
+			floatPart = 1;
+		
+		return intPart+floatPart;
 	}
 
 }

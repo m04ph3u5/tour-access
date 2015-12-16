@@ -22,7 +22,8 @@ public class UtilAverageTaskImpl implements UtilAverageTask{
 	/*Valore utilizzato per il calcolo della  media di un path.
 	 * Corrisponde al quantile della distribuzione normale per ottenere un'affidabilità dell'80%*/
 	private final double ZETA_ALFA = 0.845;
-	
+
+//	private final double ZETA_ALFA = 0.525;   50% affidabilità
 	/*Numero di possibili voti diversi che arriveranno dall'app mobile
 	 * 0.5 - 1 - 1.5 - 2 - 2.5 - 3 - 3.5 - 4 - 4.5 - 5*/
 	private final int K = 10;
