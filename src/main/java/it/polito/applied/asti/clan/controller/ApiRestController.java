@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.controller;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
@@ -23,6 +24,7 @@ import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
+import it.polito.applied.asti.clan.service.UtilPostToAclTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 public class ApiRestController extends BaseController{
@@ -56,6 +60,7 @@ public class ApiRestController extends BaseController{
 
 	@Autowired
 	private AppService appService;
+	
 
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -87,15 +92,15 @@ public class ApiRestController extends BaseController{
 		return poiToSell;
 	}
 
-	@PreAuthorize("hasRole('ROLE_OPERATOR')")
-	@RequestMapping(value="/v1/tickets", method=RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException {
-		if(result.hasErrors())
-			throw new BadRequestException();
-
-		ticketService.operatorGenerateTickets(ticketRequestDTO, u.getId());
-	}
+////	@PreAuthorize("hasRole('ROLE_OPERATOR')")
+//	@RequestMapping(value="/v1/buyTickets", method=RequestMethod.POST)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException, ServiceUnaivalableException {
+//		if(result.hasErrors())
+//			throw new BadRequestException();
+//
+//		ticketService.operatorGenerateTickets(ticketRequestDTO, "1236549870");
+//	}
 
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
@@ -172,6 +177,21 @@ public class ApiRestController extends BaseController{
 	@ResponseStatus(value = HttpStatus.OK)
 	public CommentsPage getComments(@RequestBody CommentsRequest request) throws BadRequestException {
 		return appService.getComments(request);
+	}
+	
+	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void test() throws BadRequestException, JSONException {
+	      Date d = new Date();
+	      Ticket t = new Ticket();
+	      t.setIdTicket("1234567890");
+	      t.setRole(1);
+	      t.setEmissionDate(d);
+	      t.setStartDate(d);
+	      t.setEndDate(d);
+	      List<String> sites = new ArrayList<String>();
+	      sites.add("000001");
+	      t.setStatus("s00002");
 	}
 
 	@PreAuthorize("hasRole('ROLE_APP')")

@@ -66,7 +66,7 @@ hr {
 }
 a:hover,
 a:focus {
-  color: #d9534f;
+  color: #67b4ca;
   text-decoration: none;
   outline: none;
 }
@@ -296,7 +296,7 @@ body > section {
   color: #bdc3c7;
 }
 .wet-asphalt a:not(.btn):hover {
-  color: #d9534f;
+  color: #ffffff;
 }
 .midnight-blue {
   background-color: #2c3e50;
@@ -838,7 +838,7 @@ ul.tag-cloud li {
   border: 0;
 }
 .modal#loginForm {
-  width: 600px;
+  width: 800px;
   margin-left: -300px;
 }
 .modal .modal-header {
@@ -892,7 +892,7 @@ ul.tag-cloud li {
   margin: 0;
   padding: 0;
 }
-.registration-form {
+.login-form {
   border: 0;
   background-color: #fff;
   padding: 20px;
@@ -908,6 +908,7 @@ ul.tag-cloud li {
 #bottom .media-heading {
   display: block;
   font-weight: 400;
+    
 }
 .row > div {
   margin-bottom: 10px;
@@ -978,7 +979,7 @@ ul.rss li::before {
   color: #bdc3c7;
 }
 #footer a:hover {
-  color: #d9534f;
+  color: #ffffff;
 }
 #footer ul {
   list-style: none;
@@ -1103,18 +1104,23 @@ ul.faq li > div h3 {
 }
 #error {
   text-align: center;
-  margin-top: 150px;
-  margin-bottom: 150px;
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 
 .space{
     padding-top: 20px;
 }
 
-.bottom{
-    vertical-align: bottom;
-}
 
 .t-white{
     color:white;
+}
+
+#contact-page{
+    padding-bottom: 150px;
+}
+
+#login{
+     padding-bottom: 150px;
 }

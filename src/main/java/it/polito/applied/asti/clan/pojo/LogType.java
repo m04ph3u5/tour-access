@@ -7,5 +7,5 @@ public enum LogType {
 	OpenVideo, CloseVideo, DirectionRequest,
 	OpenGalleryItem, CloseGalleryItem,
 	CheckTicketFEC, CheckTicket,
-	DeletePath, Comment
+	DeletePath, Comment, Photo
 }

@@ -25,7 +25,7 @@ public class AuthenticationEntryPointRest extends BasicAuthenticationEntryPoint{
 	{
 		String path = request.getRequestURI().substring(request.getContextPath().length());
 		System.out.println("COMMENCE: "+path);
-		if (path.startsWith("/assets") || path.startsWith("/api")) {
+		if(path.startsWith("/assets") || path.startsWith("/api")) {
 			ErrorInfo e = new ErrorInfo();
 			e.setStatusCode(HttpStatus.UNAUTHORIZED.toString());
 			e.setMessage("Devi essere loggato per accedere a questa risorsa");
@@ -35,9 +35,13 @@ public class AuthenticationEntryPointRest extends BasicAuthenticationEntryPoint{
 			String json = JacksonUtil.toJSON(e);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.getWriter().println(json);
-		} else{
-		    response.sendRedirect("/#"+path);
-		}
+		}else if(path.startsWith("/operator/") || path.equals("/operator")){
+		    response.sendRedirect("/operator");
+		}else if(path.startsWith("/supervisor/") || path.equals("/supervisor")){
+		    response.sendRedirect("/supervisor");
+		}else
+		    response.sendRedirect("/404");
+			
 	}
 	
 	@Override

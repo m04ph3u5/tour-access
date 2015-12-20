@@ -201,6 +201,8 @@ public class Log {
 			this.logType = LogType.DeletePath;
 		else if(type.equals("comment"))
 			this.logType = LogType.Comment;
+		else if(type.equals("Photo"))
+			this.logType = LogType.Photo;
 
 	}
 }

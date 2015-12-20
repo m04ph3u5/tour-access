@@ -10,5 +10,7 @@ public interface CustomTicketRepository {
 	public Ticket findByTicketNumberNow(String ticketNumber);
 	public List<Ticket> getValidTickets();
 	public void passingAccepted(String ticketNumber, Date d);
+	public void removeLastTickets(List<Ticket> tickets);
+	public void toReleased(List<Ticket> tickets);
 
 }

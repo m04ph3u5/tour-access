@@ -4,6 +4,7 @@ import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ErrorInfo;
 import it.polito.applied.asti.clan.exception.ForbiddenException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,6 +38,16 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("403");
+		/*DA INSERIRE URL*/
+		return error;
+	}
+	
+	@ExceptionHandler(ServiceUnaivalableException.class)
+	@ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+	public ErrorInfo handleServiceUnaivalableException(ServiceUnaivalableException e){
+		ErrorInfo error = new ErrorInfo();
+		error.setMessage(e.getMessage());
+		error.setStatusCode("503");
 		/*DA INSERIRE URL*/
 		return error;
 	}
@@ -120,12 +131,12 @@ public abstract class BaseController {
 		return error;
 	}
 	
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public ErrorInfo handleGenericException(Exception e){
-		ErrorInfo error = new ErrorInfo();
-		error.setStatusCode("400");
-		System.out.println("generic exception: "+e.getClass()+" "+e.getMessage());
-		return error;
-	}
+//	@ExceptionHandler(Exception.class)
+//	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//	public ErrorInfo handleGenericException(Exception e){
+//		ErrorInfo error = new ErrorInfo();
+//		error.setStatusCode("400");
+//		System.out.println("generic exception: "+e.getClass()+" "+e.getMessage());
+//		return error;
+//	}
 }

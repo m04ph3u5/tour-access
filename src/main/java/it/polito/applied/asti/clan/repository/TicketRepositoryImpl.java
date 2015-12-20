@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.Ticket;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	private String VALIDATED;
 	@Value("${status.released.id}")
 	private String RELEASED;
+	@Value("${status.pending.id}")
+	private String PENDING;
 	
 	/*
 	role.dailyVisitor.id = r00001
@@ -55,7 +58,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public boolean isValid(String[] ticketNumbers, Date start) {
 		Query q = new Query();
 		Criteria c2 = new Criteria();
-		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").ne(RELEASED)) );
+		
+		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").ne(PENDING)), (Criteria.where("status").ne(CANCELED)));
 		
 		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
 				.andOperator(c2));
@@ -85,6 +89,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		q.addCriteria(Criteria.where("status").ne(CANCELED).
 				andOperator(Criteria.where("endDate").gte(d)));
 		q.fields().exclude("id");
+		q.fields().exclude("ticketRequestId");
 		return mongoOp.find(q, Ticket.class);
 	}
 
@@ -143,6 +148,30 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		}
 	
 		
+	}
+
+	@Override
+	public void removeLastTickets(List<Ticket> tickets) {
+		List<String> ids = new ArrayList<String>();
+		for(Ticket t : tickets)
+			ids.add(t.getIdTicket());
+		Query q = new Query();
+		q.addCriteria(Criteria.where("idTicket").in(ids)
+				.andOperator(Criteria.where("status").is(PENDING)));
+		mongoOp.remove(q, Ticket.class);
+	}
+
+	@Override
+	public void toReleased(List<Ticket> tickets) {
+		List<String> ids = new ArrayList<String>();
+		for(Ticket t : tickets)
+			ids.add(t.getIdTicket());
+		Query q = new Query();
+		q.addCriteria(Criteria.where("idTicket").in(ids)
+				.andOperator(Criteria.where("status").is(PENDING)));
+		Update u = new Update();
+		u.set("status", RELEASED);
+		mongoOp.updateMulti(q, u, Ticket.class);
 	}
 
 }

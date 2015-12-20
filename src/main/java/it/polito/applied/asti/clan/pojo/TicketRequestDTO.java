@@ -12,7 +12,6 @@ public class TicketRequestDTO {
 	private List<String> placesId;
 	@NotNull
 	private Set<String> ticketsNumber;
-	private Date startDate;
 	@NotNull
 	private InfoTicketRequest info;
 	private String tipology;
@@ -37,12 +36,7 @@ public class TicketRequestDTO {
 	public void setTicketsNumber(Set<String> ticketsNumber) {
 		this.ticketsNumber = ticketsNumber;
 	}
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+	
 	public InfoTicketRequest getInfo() {
 		return info;
 	}

@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
@@ -13,11 +14,13 @@ import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,7 +39,8 @@ public class TicketServiceImpl implements TicketService{
 	private String VALIDATED;
 	@Value("${status.released.id}")
 	private String RELEASED;
-	
+	@Value("${status.pending.id}")
+	private String PENDING;
 	/*
 	role.dailyVisitor.id = 1
 	role.weeklyVisitor.id = 2
@@ -70,28 +74,19 @@ public class TicketServiceImpl implements TicketService{
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
 	
+	@Autowired
+	private UtilPostToAclTask postToAcl;
+	
 	@Override
-	public void operatorGenerateTickets(TicketRequestDTO ticketRequestDTO, String operatorId) throws BadRequestException {
-		if(!poiRepo.isValid(ticketRequestDTO.getPlacesId()))
-			throw new BadRequestException("Place id non validi");
+	public void operatorGenerateTickets(TicketRequestDTO ticketRequestDTO, String operatorId) throws BadRequestException, ServiceUnaivalableException {
+//		if(!poiRepo.isValid(ticketRequestDTO.getPlacesId()))
+//			throw new BadRequestException("Place id non validi");
 		
-		Date start = ticketRequestDTO.getStartDate();
 		Date end;
 		Calendar c = Calendar.getInstance();
 		
-		if(start==null)
-			start = new Date();
-		else{
-			Date today = new Date();
-			c.setTime(today);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			today = c.getTime();
-			
-			if(start.before(today))
-				throw new BadRequestException();
-		}
+		Date start = new Date();
+		
 			
 		Date startForValidation;
 		c.setTime(start);
@@ -126,7 +121,7 @@ public class TicketServiceImpl implements TicketService{
 			t.setSites(ticketRequest.getPlacesId());
 			t.setIdTicket(n);
 			t.setStartDate(start);  //TODO decidere se va bene
-			t.setEmissionDate(new Date());
+			t.setEmissionDate(start);
 			t.setEndDate(end);
 			
 			//TODO da decidere come e quando settare la duration
@@ -135,23 +130,23 @@ public class TicketServiceImpl implements TicketService{
 			
 			if(ticketRequest.getTipology().equals("DAILY_VISITOR")){
 				t.setRole(DAILY_VISITOR);
-				t.setStatus(RELEASED);
+				t.setStatus(PENDING);
 				
 			}else if(ticketRequest.getTipology().equals("WEEKLY_VISITOR")){
 				t.setRole(WEEKLY_VISITOR);
-				t.setStatus(RELEASED);
+				t.setStatus(PENDING);
 				
 			}else if(ticketRequest.getTipology().equals("DAILY_VIP_VISITOR")){
 				t.setRole(DAILY_VIP_VISITOR);
-				t.setStatus(RELEASED);
+				t.setStatus(PENDING);
 				
 			}else if(ticketRequest.getTipology().equals("WEEKLY_VIP_VISITOR")){
 				t.setRole(WEEKLY_VIP_VISITOR);
-				t.setStatus(RELEASED);
+				t.setStatus(PENDING);
 				
-			}else if(ticketRequest.getTipology().equals("SERVICE")){
-				t.setRole(SERVICE);
-				t.setStatus(VALIDATED);
+//			}else if(ticketRequest.getTipology().equals("SERVICE")){
+//				t.setRole(SERVICE);
+//				t.setStatus(VALIDATED);
 				
 //			}else if(ticketRequest.getTipology().equals("SUPERVISOR")){
 //				t.setRole(SUPERVISOR);
@@ -166,7 +161,13 @@ public class TicketServiceImpl implements TicketService{
 		}
 		
 		ticketRepo.save(tickets);
-			
+		try {
+			postToAcl.sendTicketsToAcl(tickets);
+		} catch (JSONException | IOException e) {
+//			ticketRepo.removeLastTickets(tickets);
+			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+		}
+		ticketRepo.toReleased(tickets);	
 	}
 
 	@Override

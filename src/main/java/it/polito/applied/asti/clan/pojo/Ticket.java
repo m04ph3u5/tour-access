@@ -95,7 +95,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 	}
 	public String getId() {
 		return id;
-	}
-	
-	
+	}	
 }

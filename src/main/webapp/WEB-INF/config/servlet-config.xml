@@ -36,11 +36,14 @@
 <!-- 	</mvc:interceptors> -->
 
 <!-- 	<mvc:view-controller path="/" view-name="/index.html"/> -->
-
+<!-- 	<mvc:resources location="/template/" mapping="/template/**"  -->
+<!-- 			cache-period="0"/> -->
+			
+			
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/"/>
-        <property name="suffix" value=".jsp"/>
+<!--         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> -->
+        <property name="prefix" value=""/>
+        <property name="suffix" value=""/>
     </bean>
 
     
