@@ -12,4 +12,5 @@ import org.json.JSONException;
 public interface UtilPostToAclTask {
 
 	public void sendTicketsToAcl(List<Ticket> tickets) throws JSONException, BadRequestException, MalformedURLException, IOException;
+	public void ping() throws BadRequestException, MalformedURLException, IOException;
 }

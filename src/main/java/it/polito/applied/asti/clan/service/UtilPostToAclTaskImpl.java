@@ -8,19 +8,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 
-
-	private final String URLTOSEND="http://10.8.0.6:8080/api/v1/sendTicket";
+	@Value("${url.sendTicket}")
+	private String URLTOSEND;
+	@Value("${url.ping}")
+	private String URLTOPING;
 
 	
 	public void sendTicketsToAcl(List<Ticket> tickets) throws JSONException, BadRequestException, IOException{
@@ -50,7 +55,7 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		obj.put("duration", t.getDuration());
 		
 		URL url = new URL(URLTOSEND);
-		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection httpCon = (HttpsURLConnection) url.openConnection();
 		httpCon.setDoOutput(true);
 		httpCon.setRequestMethod("PUT");
 		httpCon.setRequestProperty("Accept", "application/json");
@@ -68,7 +73,38 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 			sb.append(temp).append(" ");
 		}
 		String result = sb.toString();
+		int response = httpCon.getResponseCode();
+		if(response!=200 && response!=201)
+			throw new BadRequestException();
+
 		System.out.println(result);
 		in.close();
 	}
+
+
+	@Override
+	public void ping() throws BadRequestException, MalformedURLException,
+			IOException {
+		URL url = new URL(URLTOPING);
+		HttpsURLConnection httpCon = (HttpsURLConnection) url.openConnection();
+		httpCon.setRequestMethod("GET");
+		httpCon.setConnectTimeout(5000);
+		
+		InputStream res = httpCon.getInputStream();
+		BufferedReader in = new BufferedReader(new InputStreamReader(res));
+		String temp = null;
+		StringBuilder sb = new StringBuilder();
+		while((temp = in.readLine()) != null){
+			sb.append(temp).append(" ");
+		}
+		String result = sb.toString();
+		int response = httpCon.getResponseCode();
+		if(response!=200)
+			throw new BadRequestException(result);
+
+		System.out.println(result);
+		in.close();
+	}
+	
+	 
 }

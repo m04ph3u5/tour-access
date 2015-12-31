@@ -175,12 +175,14 @@ div.dark_rounded #pp_full_res .pp_inline,div.dark_square #pp_full_res .pp_inline
 .pp_fade,.pp_gallery li.default a img{display:none}
 
 
-@media only screen and (min-device-width:320px) and (max-device-width: 768px) {
- *[class~=pp_pic_holder] { width: 100% !important; left: 0px !important; }  
-        *[class~=pp_hoverContainer] { width: 90% !important; height: 180px !important;  }  
-        *[class~=pp_fade] { width: 389px !important;  } 
-        *[class~=pp_hoverContainer] { height: 190px !important;  }   
-        *[class~=pp_right] { height: 220px !important;  }   
-        *[class~=pp_content]  { height: 100% !important; width: 320px !important; }  
-        #fullResImage { height: 100% !important; width: 320px !important; }  
+/* adapted photo full res 100% width mobile */
+
+@media only screen and (min-device-width:240px) and (max-device-width: 768px) {
+	*[class~=pp_pic_holder] { width: 100% !important; left: 0px !important; }  
+        *[class~=pp_hoverContainer] { width: 100% !important; height: auto !important;  }         
+        *[class~=pp_hoverContainer] { height: 490px !important;  }   
+        *[class~=pp_right] {width: 100%; height: 90%; !important;  }   
+        *[class~=pp_content]  { height: 100% !important; width: 100% !important; }  
+        #pp_full_res { width: 100%; padding: 0;padding-right:10px;}
+        #fullResImage { height: auto !important; width: 100% !important; }  
 }

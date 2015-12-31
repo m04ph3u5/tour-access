@@ -2,6 +2,9 @@ package it.polito.applied.asti.clan.pojo;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -11,12 +14,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Read {
 
+	@Id
 	private String id;
+	@NotNull
 	private String idSite;
-	private String ticketNumber;
-	private boolean accepted;
-	private Date date;
-	private String reason; //null if accepted=true
+	@NotNull
+	private String idTicket;
+	@NotNull
+	private Boolean isAccepted;
+	private Date dtaTransit;
+	private String desError; //null if accepted=true
 	
 	private Date dateOnServer;
 	
@@ -47,30 +54,40 @@ public class Read {
 	public void setIdSite(String idSite) {
 		this.idSite = idSite;
 	}
-	public String getTicketNumber() {
-		return ticketNumber;
+
+	public String getIdTicket() {
+		return idTicket;
 	}
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
+
+	public void setIdTicket(String idTicket) {
+		this.idTicket = idTicket;
 	}
-	public boolean isAccepted() {
-		return accepted;
+
+	public Boolean getIsAccepted() {
+		return isAccepted;
 	}
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
+
+	public void setIsAccepted(Boolean isAccepted) {
+		this.isAccepted = isAccepted;
 	}
-	public Date getDate() {
-		return date;
+
+	public Date getDtaTransit() {
+		return dtaTransit;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setDtaTransit(Date dtaTransit) {
+		this.dtaTransit = dtaTransit;
 	}
-	public String getReason() {
-		return reason;
+
+	public String getDesError() {
+		return desError;
 	}
-	public void setReason(String reason) {
-		this.reason = reason;
+
+	public void setDesError(String desError) {
+		this.desError = desError;
 	}
+
+	
 	
 	
 }

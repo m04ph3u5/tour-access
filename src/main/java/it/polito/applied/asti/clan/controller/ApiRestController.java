@@ -92,16 +92,24 @@ public class ApiRestController extends BaseController{
 		return poiToSell;
 	}
 
-////	@PreAuthorize("hasRole('ROLE_OPERATOR')")
-//	@RequestMapping(value="/v1/buyTickets", method=RequestMethod.POST)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException, ServiceUnaivalableException {
-//		if(result.hasErrors())
-//			throw new BadRequestException();
-//
-//		ticketService.operatorGenerateTickets(ticketRequestDTO, "1236549870");
-//	}
+	@PreAuthorize("hasRole('ROLE_OPERATOR')")
+	@RequestMapping(value="/v1/buyTickets", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException, ServiceUnaivalableException {
+		if(result.hasErrors())
+			throw new BadRequestException();
 
+		ticketService.operatorGenerateTickets(ticketRequestDTO, u.getId());
+	}
+
+	@PreAuthorize("hasRole('ROLE_OPERATOR')")
+	@RequestMapping(value="/v1/pingService", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void pingService() throws ServiceUnaivalableException {
+		
+		ticketService.pingService();
+	}
+	
 	@PreAuthorize("hasRole('ROLE_OPERATOR')")
 	@RequestMapping(value="/v1/accessiblePlaces", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -151,11 +159,14 @@ public class ApiRestController extends BaseController{
 	//preauthorize in security config
 	@RequestMapping(value="/v1/ticket", method=RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {
+	public TicketNumber passingAttempt(@RequestBody @Valid Read read, BindingResult result) throws BadRequestException {
 		if(result.hasErrors())
 			throw new BadRequestException();
 		read.setDateOnServer(new Date());
 		ticketService.savePassingAttempt(read);
+		TicketNumber t = new TicketNumber();
+		t.setTicket(read.getIdTicket());
+		return t;
 	}
 
 	@PreAuthorize("hasRole('ROLE_APP')")
@@ -179,20 +190,6 @@ public class ApiRestController extends BaseController{
 		return appService.getComments(request);
 	}
 	
-	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void test() throws BadRequestException, JSONException {
-	      Date d = new Date();
-	      Ticket t = new Ticket();
-	      t.setIdTicket("1234567890");
-	      t.setRole(1);
-	      t.setEmissionDate(d);
-	      t.setStartDate(d);
-	      t.setEndDate(d);
-	      List<String> sites = new ArrayList<String>();
-	      sites.add("000001");
-	      t.setStatus("s00002");
-	}
 
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/logging", method=RequestMethod.POST)

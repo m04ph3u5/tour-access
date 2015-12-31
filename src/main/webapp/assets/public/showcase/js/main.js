@@ -1,21 +1,15 @@
 jQuery(function($) {
   
-       /*  
      //controllo biglietto
-        //var url= window.location;
-        var url= "ciao?mam23";    
+        var url= window.location.href;
         {
-            var n = url.indexOf("?");
+            var n = url.indexOf("?c=");
             if(n!=-1){
-            var biglietto= url.substr(n+1,n+5);           
-              $("html, body").animate({
-            scrollTop: $("#app-description").offset().top -40});             
-               
+              window.location.assign("https://www.astimusei.it/app#download"); 
             }
             
         };
     
-    */
     
     
 	//#main-slider

@@ -193,8 +193,8 @@ public class TicketServiceImpl implements TicketService{
 		//salvo la lettura nel db (cos� come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
 		//TODO modifica startDate e endDate del biglietto se il passaggio � stato accettato ed il biglietto era ancora inutilizzato
-		if(read.isAccepted()){
-			ticketRepo.passingAccepted(read.getTicketNumber(), read.getDate());
+		if(read.getIsAccepted()){
+			ticketRepo.passingAccepted(read.getIdTicket(), read.getDtaTransit());
 		}
 		
 	}
@@ -244,6 +244,15 @@ public class TicketServiceImpl implements TicketService{
 		status.add(s3);
 		
 		return status;
+	}
+
+	@Override
+	public void pingService() throws ServiceUnaivalableException {
+		try {
+			postToAcl.ping();
+		} catch (BadRequestException | IOException e) {
+			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
+		}
 	}
 
 }

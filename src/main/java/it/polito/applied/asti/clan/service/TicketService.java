@@ -20,4 +20,5 @@ public interface TicketService {
 	public List<Poi> getAllPlaces();
 	public List<RoleTicket> getRoles() throws BadRequestException;
 	public List<StatusTicket> getStatus();
+	public void pingService() throws ServiceUnaivalableException;
 }
