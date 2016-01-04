@@ -10,8 +10,6 @@ angular.module('asti.application')
 		})
 		.state('notLogged.login',{
 			url : '/operator',
-			controller : 'loginOperatorCtrl',
-			controllerAs : 'login',
 			views : {
 				"header" : {
 					templateUrl : "assets/public/partials/header.html",
@@ -23,7 +21,7 @@ angular.module('asti.application')
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Operatore'
+				pageTitle : 'AstiMusei - Operatore'
 			}
 		})
 		.state('logged',{
@@ -31,20 +29,25 @@ angular.module('asti.application')
 			abstract: true
 		})
 		.state('logged.selectPlace',{
-			url : '/places',
+			url : '/operator/places',
 			views : {
-				"body" : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbar.html",
+					controller : 'navbarCtrl',
+					controllerAs : 'navbar'
+				},
+				"body@logged" : {
 					templateUrl : "assets/public/partials/selectPlace.html",
 					controller : 'selectPlaceCtrl',
 					controllerAs : 'selectPlace'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Punti di interesse'
+				pageTitle : 'AstiMusei - Punti di interesse'
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
-			url : '/info',
+			url : '/operator/info',
 			views : {
 				"body@logged" : {
 					templateUrl : "assets/public/partials/infoTicket.html", 
@@ -53,11 +56,11 @@ angular.module('asti.application')
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Info acquirenti'
+				pageTitle : 'AstiMusei - Info acquirenti'
 			}
 		})
 		.state('logged.selectPlace.associateTicket',{
-			url : '/validate',
+			url : '/operator/validate',
 			views : {
 				"body@logged" : {
 					templateUrl : "assets/public/partials/associateTicket.html", 
@@ -66,7 +69,7 @@ angular.module('asti.application')
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Validazione ticket'
+				pageTitle : 'AstiMusei - Validazione ticket'
 			}
 		})
 		

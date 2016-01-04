@@ -1,4 +1,4 @@
-angular.module('asti.application')
+angular.module('asti.supervisor')
 	.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider',
 	         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 	
@@ -9,9 +9,7 @@ angular.module('asti.application')
 			abstract: true
 		})
 		.state('notLogged.login',{
-			url : '/operator',
-			controller : 'loginCtrl',
-			controllerAs : 'login',
+			url : '/supervisor',
 			views : {
 				"header" : {
 					templateUrl : "assets/public/partials/header.html",

@@ -2,12 +2,17 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
               function navbarCtrl(userService, $state, operatorService){
 	
 	var self = this;
-	
+	self.name = "";
+	userService.getName().then(
+			function(data){
+				self.name = data;
+			}
+	);
 	self.logout = function(){
 		userService.logout().then(
 				function(data){
 					operatorService.reset();
-					$state.go("login");
+					$state.go("notLogged.login");
 				},
 				function(reason){
 					self.showError = true;

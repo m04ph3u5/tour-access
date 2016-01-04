@@ -1,5 +1,5 @@
 <!doctype html>
-<html data-ng-app="asti.application">
+<html data-ng-app="asti.supervisor">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,13 @@
     <link href='https://fonts.googleapis.com/css?family=Coustard' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet'
         type='text/css'>
-    <link href="assets/public/showcase/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/public/showcase/css/font-awesome.min.css" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="/assets/public/showcase/images/ico/ico_16.ico">
+    <link rel="ico_144" sizes="144x144" href="/assets/public/showcase/images/ico/ico_144.png">
+    <link rel="ico_114" sizes="114x114" href="/assets/public/showcase/images/ico/ico_114.png">
+    <link rel="ico_72" sizes="72x72" href="/assets/public/showcase/images/ico/ico_72.png">
+    <link rel="ico_57" href="/assets/public/showcase/images/ico/ico_57.png">
 
 <title data-ng-bind="$state.current.data.pageTitle">AstiMusei</title>    
 
@@ -59,11 +65,11 @@
 	<script src="/assets/public/js/appSupervisor.js"></script>
 	<script src="/assets/public/js/routerSupervisor.js"></script>
 	<!-- CONTROLLERS -->
-	<script src="/assets/public/js/controller/loginController.js"></script>
+	<script src="/assets/public/js/controller/loginSupervisorController.js"></script>
 	
 	<!-- SERVICES -->
-	<script src="/assets/public/js/service/userService.js"></script>
-	<script src="/assets/public/js/service/apiService.js"></script>	
+	<script src="/assets/public/js/service/supervisor/userService.js"></script>
+	<script src="/assets/public/js/service/supervisor/apiService.js"></script>	
 		
 </body>
 </html>

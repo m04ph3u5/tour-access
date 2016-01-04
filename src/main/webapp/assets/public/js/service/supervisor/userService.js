@@ -1,4 +1,4 @@
-angular.module('asti.application').factory('userService', ['$http', '$q', '$cookies', 'apiService',
+angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cookies', 'apiService',
                                                             function userService($http, $q, $cookies, apiService){
 
 

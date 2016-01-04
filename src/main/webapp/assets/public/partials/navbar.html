@@ -1,36 +1,34 @@
-<div class="container-fluid marginXSBottom">
-	<!-- Brand and toggle get grouped for better mobile display -->
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed"
-			data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		 <a data-ui-sref="operatorDashboard" href="">
-		 	<span class="titleNav"><b><i>Asti</i></b></span>
-		 </a>
-		
-	</div>
-
-	<!-- Collect the nav links, forms, and other content for toggling -->
-	<div class="collapse navbar-collapse"
+<header class="navbar navbar-inverse navbar-fixed-top wet-asphalt"
+	role="banner">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="operator"><img
+				src="assets/public/showcase/images/logo_asti.png" width="50px"
+				alt="logo"> <span class="navbar-title">AstiMusei </span></a>
+		</div>
+		<div class="collapse navbar-collapse"
 		id="bs-example-navbar-collapse-1">
 		
-		
-		<ul class="nav navbar-nav">
-		</ul>
-
 		<ul class="nav navbar-nav navbar-right">
 					
 			<li class="dropdown">
-				<a tooltip="Impostazioni" href="#" class="dropdown-toggle"
-				data-toggle="dropdown" role="button" aria-expanded="false"><span
-					class="glyphicon glyphicon-cog"><span class="caret"></span></a>
+				<a href="#" class="dropdown-toggle"
+				data-toggle="dropdown" role="button" aria-expanded="false">
+					<span class="tooltips" title="Servizio attivo"><img style="width: 20px;" src="/assets/public/img/ico/green_ball.ico"></span>
+					<span class="tooltips" title="Servizio momentaneamente non disponibile"><img style="width: 20px;" src="/assets/public/img/ico/red_ball.ico"></span>
+					<span>{{navbar.name}}</span>
+					<span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
+					<li><a>Cambia la password</a></li>
 					<li><a href="" data-ng-click="navbar.logout()">Log Out</a></li>
 				</ul></li>
 		</ul>
 	</div>
-</div>
+	</div>
+</header>

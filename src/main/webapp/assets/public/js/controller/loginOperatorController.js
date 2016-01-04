@@ -38,59 +38,7 @@ angular.module('asti.application').controller('loginOperatorCtrl', ['userService
 	}
 	
 	
-//	self.keyPress = function(event){
-//		console.log(event);
-//		switch(event.key){
-//		case "0": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "1": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "2": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "3": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "4": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "5": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "6": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "7": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "8": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "9": {
-//			self.username+=event.key;
-//			break;
-//		}
-//		case "Enter" : {
-//			if(self.username.length==10)
-//				self.postUsername();
-//			break;
-//		}
-//		default: {
-//			self.username="";
-//		}
-//		}
-//	}
+
 	
 	var buffer = new Array();
 	self.keyPress = function(event){

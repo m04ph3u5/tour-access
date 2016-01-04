@@ -43,10 +43,22 @@ public class WebController {
 	    return "/template/indexOperator.html";
 	}
 	
+	@RequestMapping(value="/operator/**",method=RequestMethod.GET)
+	public String operatorApp() {
+		System.out.println("operator");
+	    return "/template/indexOperator.html";
+	}
+	
 	@RequestMapping(value="/supervisor",method=RequestMethod.GET)
 	public String supervisor() {
 		System.out.println("supervisor");
-	    return "/template/supervisor.html";
+	    return "/template/indexSupervisor.html";
+	}
+	
+	@RequestMapping(value="/supervisor/**",method=RequestMethod.GET)
+	public String supervisorApp() {
+		System.out.println("supervisor");
+	    return "/template/indexSupervisor.html";
 	}
 
 	

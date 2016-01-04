@@ -1,2 +1,2 @@
-angular.module('asti.application', ['ui.router', 'permission',
+angular.module('asti.supervisor', ['ui.router', 'permission',
                                     'ui.date', 'ngCookies']);
