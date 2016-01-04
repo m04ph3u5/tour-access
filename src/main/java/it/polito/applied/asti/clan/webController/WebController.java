@@ -37,11 +37,11 @@ public class WebController {
 	    return "/template/index.html";
 	}
 	
-//	@RequestMapping(value="/operator",method=RequestMethod.GET)
-//	public String operator() {
-//		System.out.println("operator");
-//	    return "/template/indexOperator.html";
-//	}
+	@RequestMapping(value="/operator",method=RequestMethod.GET)
+	public String operator() {
+		System.out.println("operator");
+	    return "/template/indexOperator.html";
+	}
 //	
 //	@RequestMapping(value="/supervisor",method=RequestMethod.GET)
 //	public String supervisor() {
