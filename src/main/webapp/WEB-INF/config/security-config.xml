@@ -48,7 +48,7 @@
  	   	<intercept-url pattern="/contatti" access="permitAll" requires-channel="http"/>
  	   	<intercept-url pattern="/app" access="permitAll" requires-channel="http"/>
  	   	<intercept-url pattern="/progetto" access="permitAll" requires-channel="http"/>
-<!--  	   	<intercept-url pattern="/operator" access="permitAll" requires-channel="http"/> -->
+ 	   	<intercept-url pattern="/operator" access="permitAll" requires-channel="http"/>
 <!--  	   	<intercept-url pattern="/supervisor" access="permitAll" requires-channel="http"/> -->
  	   	<intercept-url pattern="/404" access="permitAll" requires-channel="http"/>
  	   	

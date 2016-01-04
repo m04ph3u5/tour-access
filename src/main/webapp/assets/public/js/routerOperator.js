@@ -9,17 +9,16 @@ angular.module('asti.application')
 			abstract: true
 		})
 		.state('notLogged.login',{
-			templateUrl: 'assets/public/partials/login.html',
 			url : '/operator',
-			controller : 'loginCtrl',
+			controller : 'loginOperatorCtrl',
 			controllerAs : 'login',
 			views : {
 				"header" : {
 					templateUrl : "assets/public/partials/header.html",
 				},
 				"body" : {
-					templateUrl : "assets/public/partials/login.html",
-					controller : 'loginCtrl',
+					templateUrl : "assets/public/partials/loginOperator.html",
+					controller : 'loginOperatorCtrl',
 					controllerAs : 'login'
 				}
 			},
