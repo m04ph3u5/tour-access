@@ -1,5 +1,5 @@
-angular.module('asti.application').controller('loginCtrl', ['userService', '$state',
-              function loginCtrl(userService, $state){
+angular.module('asti.application').controller('loginOperatorCtrl', ['userService', '$state',
+              function loginOperatorCtrl(userService, $state){
 	
 	var self = this;
 	self.usernameInserted = false;
