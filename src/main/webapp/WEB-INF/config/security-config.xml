@@ -52,7 +52,11 @@
 <!--  	   	<intercept-url pattern="/supervisor" access="permitAll" requires-channel="http"/> -->
  	   	<intercept-url pattern="/404" access="permitAll" requires-channel="http"/>
  	   	
-<!--  	   	<intercept-url pattern="/api/v1/buyTickets" access="permitAll" requires-channel="http"/> 	   	 -->
+<!--  	   	<intercept-url pattern="/api/v1/buyTickets" access="permitAll" requires-channel="http"/>
+ 	   	 -->
+		<intercept-url pattern="/api/v1/statistics/totalTickets" access="permitAll" requires-channel="http"/>
+		<intercept-url pattern="/api/v1/statistics/groups" access="permitAll" requires-channel="http"/>
+		<intercept-url pattern="/api/v1/statistics/singles" access="permitAll" requires-channel="http"/>
  	   	<intercept-url pattern="/api/v1/name" access="permitAll" requires-channel="http"/>
  	   	<intercept-url pattern="/api/v1/login" access="permitAll" requires-channel="http"/>
  	   	<intercept-url pattern="/api/v1/places" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="http"/>

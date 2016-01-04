@@ -12,5 +12,9 @@ public interface CustomTicketRepository {
 	public void passingAccepted(String ticketNumber, Date d);
 	public void removeLastTickets(List<Ticket> tickets);
 	public void toReleased(List<Ticket> tickets);
+	
+	public long totalTickets(Date start, Date end);
+	
+
 
 }

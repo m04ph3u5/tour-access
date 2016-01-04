@@ -174,4 +174,19 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		mongoOp.updateMulti(q, u, Ticket.class);
 	}
 
+	@Override
+	public long totalTickets(Date start, Date end) {
+		Query q = new Query();
+		if(start != null && end != null)
+			q.addCriteria(Criteria.where("emissionDate").gte(start).andOperator(Criteria.where("emissionDate").lte(end)));
+		else if(start == null && end != null)
+			q.addCriteria(Criteria.where("emissionDate").lte(end));
+		else if(start != null && end == null)
+			q.addCriteria(Criteria.where("emissionDate").gte(start));
+		return mongoOp.count(q, Ticket.class);
+		
+	}
+
+	
+
 }

@@ -6,6 +6,7 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
+import it.polito.applied.asti.clan.pojo.GroupAggregateCount;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
@@ -14,6 +15,9 @@ import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Response;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.StatisticsGroupsInfo;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
+import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
@@ -21,10 +25,11 @@ import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.TicketRepository;
+import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
-import it.polito.applied.asti.clan.service.UtilPostToAclTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +37,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,6 +61,12 @@ public class ApiRestController extends BaseController{
 
 	@Autowired
 	private TicketService ticketService;
+	
+	@Autowired
+	private TicketRepository ticketRepo;
+	
+	@Autowired
+	private TicketRequestRepository ticketRequestRepo;
 
 	@Autowired
 	private AppService appService;
@@ -212,5 +222,46 @@ public class ApiRestController extends BaseController{
 
 		if(logs.size()!=0)
 			appService.postLog(logs);
+	}
+	
+	
+	@RequestMapping(value="/v1/statistics/totalTickets", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public StatisticsInfo getNumTotalTicketsInInterval( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+		System.out.println("TEST");
+		
+		System.out.println(ticketRepo.totalTickets(start, end));
+		long totGroup=0, totSingle=0;
+		List<GroupAggregateCount> l = ticketRequestRepo.totalGroupTickets(start, end);
+		for(GroupAggregateCount g : l){
+			System.out.println(g);	
+			if(g.isGroup() == true){
+				totGroup = g.getTot();
+			}else{
+				totSingle = g.getTot();
+			}
+		}
+			
+		
+		StatisticsInfo s = new StatisticsInfo (start, end, ticketRepo.totalTickets(start, end), totGroup,
+				totSingle);
+		return s;
+	}
+	
+	@RequestMapping(value="/v1/statistics/groups", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public StatisticsGroupsInfo getGroupsStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+		System.out.println("GROUPS STATISTICS");
+		StatisticsGroupsInfo stats = new StatisticsGroupsInfo(0, 0);
+		return stats;
+		
+	}
+	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public StatisticsSinglesInfo getSinglessStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+		System.out.println("SINGLES STATISTICS");
+		StatisticsSinglesInfo stats = new StatisticsSinglesInfo("","");
+		return stats;
+		
 	}
 }
