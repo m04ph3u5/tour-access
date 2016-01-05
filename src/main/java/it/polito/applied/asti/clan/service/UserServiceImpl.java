@@ -3,8 +3,11 @@ package it.polito.applied.asti.clan.service;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.Name;
+import it.polito.applied.asti.clan.pojo.Role;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.repository.UserRepository;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,14 +43,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public boolean validateCredential(Credential credential) {
+	public boolean validateCredential(Credential credential, boolean isSupervisor) {
 		User u = userRepo.findByUsername(credential.getUsername());
 		if(u==null)
 			return false;
-		
-		if(passwordEncoder.matches(credential.getPassword(), u.getPassword()))
-			return true;
-		else
+		List<Role> roles = u.getRoles();
+		if((isSupervisor && roles.contains("ROLE_SUPERVISOR")) || (!isSupervisor && roles.contains("ROLE_OPERATOR"))){
+			if(passwordEncoder.matches(credential.getPassword(), u.getPassword()))
+				return true;
+			else
+				return false;
+		}else
 			return false;
 	}
 

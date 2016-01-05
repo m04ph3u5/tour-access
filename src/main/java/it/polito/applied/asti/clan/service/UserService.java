@@ -8,6 +8,6 @@ public interface UserService {
 
 	public Name getNameByUserName(String username) throws NotFoundException;
 
-	public boolean validateCredential(Credential credential);
+	public boolean validateCredential(Credential credential, boolean isSupervisor);
 
 }

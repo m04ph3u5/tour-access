@@ -4,7 +4,7 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 
 	var validateCredential = function(credential){
 		var p = $q.defer();
-		$http.post('/api/v1/login', credential).then(
+		$http.post('/api/v1/loginOperator', credential).then(
 				function(response){
 					p.resolve(response.data);
 				},

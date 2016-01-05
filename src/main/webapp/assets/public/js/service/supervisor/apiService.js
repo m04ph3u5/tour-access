@@ -4,7 +4,7 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 
 	var validateCredential = function(credential){
 		var p = $q.defer();
-		$http.post('/api/v1/login', credential).then(
+		$http.post('/api/v1/loginSupervisor', credential).then(
 				function(response){
 					p.resolve(response.data);
 				},

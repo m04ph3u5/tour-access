@@ -2,7 +2,9 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
                                                             function userService($http, $q, $cookies, apiService){
 
 
-
+    var username = null;
+    var name = $cookies.get('asti.name');
+    console.log(name);
 	var encodedCredential = $cookies.get('asti.encoded');
 	if(encodedCredential){
 		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
@@ -18,6 +20,7 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 	var logout = function(){
 		var log = $q.defer()
 		$cookies.remove('asti.encoded');
+		$cookies.remove('asti.name');
 		encodedCredential = null;
 		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 		apiService.validateCredential(encodedCredential).then(
@@ -25,6 +28,7 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 					log.reject();
 				},
 				function(reason){
+					name = null;
 					$http.defaults.headers.common['Authorization'] = undefined;
 					log.resolve();
 				}
@@ -38,6 +42,8 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 				username : email,
 				password : password
 		}
+		username = email;
+		
 		apiService.validateCredential(credential).then(
 				function(data){
 					encodedCredential = Base64.encode(credential.username+":"+credential.password);
@@ -57,13 +63,35 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 		var u=encodeURIComponent(username);
 		$http.get('/api/v1/name?username='+u).then(
 				function(response){
-
-					p.resolve(response.data);
+					name = response.data;
+					$cookies.put('asti.name',name);
+					p.resolve(name);
 				},
 				function(reason){
 					p.reject(reason);
 				}
 		);
+		return p.promise;
+	}
+	
+	var getName = function(){
+		var p = $q.defer();
+		if(name){
+			p.resolve(name);
+		}
+		else{
+			var u=encodeURIComponent(username);
+			$http.get('/api/v1/name?username='+u).then(
+					function(response){
+						name = response.data.name;
+						$cookies.put('asti.name',name);
+						p.resolve(name);
+					},
+					function(reason){
+						p.reject(reason);
+					}
+			);
+		}
 		return p.promise;
 	}
 
@@ -206,7 +234,8 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 		login: login,
 		logout: logout,
 		getNameFromUsername : getNameFromUsername,
-		isLogged: isLogged
+		isLogged: isLogged,
+		getName : getName
 	}
 
 }]);

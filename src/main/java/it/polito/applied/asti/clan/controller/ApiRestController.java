@@ -80,10 +80,18 @@ public class ApiRestController extends BaseController{
 		return userService.getNameByUserName(username);
 	}
 
-	@RequestMapping(value="/v1/login", method=RequestMethod.POST)
+	@RequestMapping(value="/v1/loginOperator", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void validateCredentials(@RequestBody Credential credential) throws BadRequestException{
-		boolean u = userService.validateCredential(credential);
+	public void validateCredentialsOperator(@RequestBody Credential credential) throws BadRequestException{
+		boolean u = userService.validateCredential(credential, false);
+		if(!u)
+			throw new BadRequestException();
+	}
+	
+	@RequestMapping(value="/v1/loginSupervisor", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void validateCredentialsSupervisor(@RequestBody Credential credential) throws BadRequestException{
+		boolean u = userService.validateCredential(credential, true);
 		if(!u)
 			throw new BadRequestException();
 	}
