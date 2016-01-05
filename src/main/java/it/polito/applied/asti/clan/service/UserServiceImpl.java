@@ -47,8 +47,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		User u = userRepo.findByUsername(credential.getUsername());
 		if(u==null)
 			return false;
-		List<Role> roles = u.getRoles();
-		if((isSupervisor && roles.contains("ROLE_SUPERVISOR")) || (!isSupervisor && roles.contains("ROLE_OPERATOR"))){
+		Role role = u.getRoles().get(0);
+		if(role==null)
+			return false;
+		String r = role.getAuthority();
+		if((isSupervisor && r.equals("ROLE_SUPERVISOR")) || (!isSupervisor && r.equals("ROLE_OPERATOR"))){
+			System.out.println("IN IF");
 			if(passwordEncoder.matches(credential.getPassword(), u.getPassword()))
 				return true;
 			else

@@ -17,11 +17,15 @@ angular.module('asti.supervisor')
 				"body" : {
 					templateUrl : "assets/public/partials/loginSupervisor.html",
 					controller : 'loginSupervisorCtrl',
-					controllerAs : 'loginSupervisor'
+					controllerAs : 'login'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Supervisore'
+				pageTitle : 'Asti - Supervisore',
+				permissions: {
+					only: ['anonymous'],
+					redirectTo: 'logged.statistics'
+				}
 			}
 		})
 		.state('logged',{
@@ -29,10 +33,12 @@ angular.module('asti.supervisor')
 			abstract: true
 		})
 		.state('logged.statistics',{
-			url : '/statistics',
+			url : '/supervisor/statistics',
 			views : {
-				"header" : {
-					templateUrl : "assets/public/partials/header.html",
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
 				},
 				"body" : {
 					templateUrl : "assets/public/partials/statistics.html",
@@ -41,7 +47,11 @@ angular.module('asti.supervisor')
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Soci'
+				pageTitle : 'Asti - Soci',
+				permissions: {
+					only: ['supervisor'],
+					redirectTo: 'notLogged.login'
+				}
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
@@ -78,17 +88,41 @@ angular.module('asti.supervisor')
 	  
 		$locationProvider.html5Mode(true);
 	}])
-	.run(function ($rootScope, $stateParams, $state) {
+	.run(function (Permission, $rootScope, $stateParams, $state, userService, $q) {
 		
 		$rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         
-        $rootScope.$on('$stateChangeError', 
-   			 function(event, toState, toParams, fromState, fromParams, error){
-   		 		event.preventDefault();	
-   		 		console.log("RESOLVE FAILED");
-   		 		$state.go("logged.selectPlace");
-   	 });	
+        
+        Permission.defineRole('anonymous',function(stateParams){
+  		  console.log("check anonymous");
+  		  var deferred = $q.defer();
+  		  userService.isLogged().then(
+  				  function(data){
+  					  deferred.reject();
+  				  },
+  				  function(reason){
+  					  deferred.resolve();
+  				  }
+  		  );
+  		  return deferred.promise;
+
+        });
+        
+        Permission.defineRole('supervisor',function(stateParams){
+    		  console.log("check supervisor");
+    		  var deferred = $q.defer();
+    		  userService.isLogged().then(
+    				  function(data){
+    					  deferred.resolve();
+    				  },
+    				  function(reason){
+    					  deferred.reject();
+    				  }
+    		  );
+    		  return deferred.promise;
+
+    	  });
         
     });                                
 

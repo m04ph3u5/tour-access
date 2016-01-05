@@ -21,12 +21,22 @@ angular.module('asti.application')
 				}
 			},
 			data : {
-				pageTitle : 'AstiMusei - Operatore'
+				pageTitle : 'AstiMusei - Operatore',
+				permissions: {
+					only: ['anonymous'],
+					redirectTo: 'logged.selectPlace'
+				}
 			}
 		})
 		.state('logged',{
 			templateUrl: 'assets/public/partials/operator-logged.html',
-			abstract: true
+			abstract: true,
+			data : {
+				permissions: {
+					only: ['operator'],
+					redirectTo: 'notLogged.login'
+				}
+			}
 		})
 		.state('logged.selectPlace',{
 			url : '/operator/places',
@@ -43,7 +53,7 @@ angular.module('asti.application')
 				}
 			},
 			data : {
-				pageTitle : 'AstiMusei - Punti di interesse'
+				pageTitle : 'AstiMusei - Punti di interesse',
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
@@ -80,7 +90,7 @@ angular.module('asti.application')
 	  
 		$locationProvider.html5Mode(true);
 	}])
-	.run(function ($rootScope, $stateParams, $state) {
+	.run(function (Permission, $rootScope, $stateParams, $state, $q, userService) {
 		
 		$rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
@@ -90,7 +100,37 @@ angular.module('asti.application')
    		 		event.preventDefault();	
    		 		console.log("RESOLVE FAILED");
    		 		$state.go("logged.selectPlace");
-   	 });	
+        });	
+        
+        Permission.defineRole('anonymous',function(stateParams){
+    		  console.log("check anonymous");
+    		  var deferred = $q.defer();
+    		  userService.isLogged().then(
+    				  function(data){
+    					  deferred.reject();
+    				  },
+    				  function(reason){
+    					  deferred.resolve();
+    				  }
+    		  );
+    		  return deferred.promise;
+
+          });
+          
+          Permission.defineRole('operator',function(stateParams){
+      		  console.log("check operator");
+      		  var deferred = $q.defer();
+      		  userService.isLogged().then(
+      				  function(data){
+      					  deferred.resolve();
+      				  },
+      				  function(reason){
+      					  deferred.reject();
+      				  }
+      		  );
+      		  return deferred.promise;
+
+      	  });
         
     });                                
 

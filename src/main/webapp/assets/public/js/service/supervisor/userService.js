@@ -3,24 +3,26 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 
 
     var username = null;
-    var name = $cookies.get('asti.name');
+    var name = $cookies.get('asti.nameSupervisor');
     console.log(name);
-	var encodedCredential = $cookies.get('asti.encoded');
+	var encodedCredential = $cookies.get('asti.supervisor');
 	if(encodedCredential){
 		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 	}
 	
 	var isLogged = function(){
-		if(encodedCredential)
-			return true;
+		var p = $q.defer();
+		if($cookies.get('asti.supervisor'))
+			p.resolve();
 		else
-			return false;
+			p.reject();
+		return p.promise;
 	}
 
 	var logout = function(){
 		var log = $q.defer()
-		$cookies.remove('asti.encoded');
-		$cookies.remove('asti.name');
+		$cookies.remove('asti.supervisor');
+		$cookies.remove('asti.nameSupervisor');
 		encodedCredential = null;
 		$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 		apiService.validateCredential(encodedCredential).then(
@@ -47,7 +49,7 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 		apiService.validateCredential(credential).then(
 				function(data){
 					encodedCredential = Base64.encode(credential.username+":"+credential.password);
-					$cookies.put('asti.encoded',encodedCredential);
+					$cookies.put('asti.supervisor',encodedCredential);
 					$http.defaults.headers.common['Authorization'] = 'xBasic ' + encodedCredential;
 					log.resolve();
 				},
@@ -64,7 +66,7 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 		$http.get('/api/v1/name?username='+u).then(
 				function(response){
 					name = response.data;
-					$cookies.put('asti.name',name);
+					$cookies.put('asti.nameSupervisor',name);
 					p.resolve(name);
 				},
 				function(reason){
@@ -84,7 +86,7 @@ angular.module('asti.supervisor').factory('userService', ['$http', '$q', '$cooki
 			$http.get('/api/v1/name?username='+u).then(
 					function(response){
 						name = response.data.name;
-						$cookies.put('asti.name',name);
+						$cookies.put('asti.nameSupervisor',name);
 						p.resolve(name);
 					},
 					function(reason){
