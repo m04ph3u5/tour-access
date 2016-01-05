@@ -28,17 +28,20 @@ angular.module('asti.supervisor')
 			templateUrl: 'assets/public/partials/operator-logged.html',
 			abstract: true
 		})
-		.state('logged.selectPlace',{
-			url : '/places',
+		.state('logged.statistics',{
+			url : '/statistics',
 			views : {
+				"header" : {
+					templateUrl : "assets/public/partials/header.html",
+				},
 				"body" : {
-					templateUrl : "assets/public/partials/selectPlace.html",
-					controller : 'selectPlaceCtrl',
-					controllerAs : 'selectPlace'
+					templateUrl : "assets/public/partials/statistics.html",
+					controller : 'statisticsCtrl',
+					controllerAs : 'statistics'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Punti di interesse'
+				pageTitle : 'Asti - Soci'
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
