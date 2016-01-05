@@ -28,6 +28,19 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 
+	var checkService = function(){
+		var p = $q.defer();
+		$http.get('/api/v1/pingService').then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		return p.promise;
+	}
+
 	var orderTicket = function(ticketRequest){
 		var p = $q.defer();
 		$http.post('/api/v1/tickets', ticketRequest).then(
@@ -45,7 +58,8 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 	return {
 		validateCredential : validateCredential,
 		getPlacesToSell : getPlacesToSell,
-		orderTicket : orderTicket
+		orderTicket : orderTicket,
+		checkService : checkService
 	}
 
 }]);

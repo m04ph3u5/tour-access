@@ -1,82 +1,82 @@
-<div style="margin-top:70px;" class="row">
-	<div class="col-xs-offset-1 col-xs-10 text-center">
+<div style="margin-top: 70px;">
+	<div style="margin-left: 100px;" class="col-sm-3 boxFakeDraft">
+		<h4 class="text-center">Riepilogo</h4>
+		<br>
+		<h5 class="text-center">Numero biglietti: <b>{{info.numTicket}}</b></h5>
+		<h5 class="text-center">Siti</h5>
+		<div id="tagBox" class="col-sm-12 tags-wrapper">
+			<div id="tagsList" class="tags-cloud">
+				<div data-ng-repeat="p in info.places" class="tag">
+					<span class="tagName">{{p.name}}</span><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-center col-sm-8">
 		<div class="row">
-<!-- 			<h3 data-ng-show="info.numTicket==1">Data validità biglietto</h3> -->
-<!-- 			<h3 data-ng-show="info.numTicket>1">Data validità biglietti</h3> -->
-<!-- 			<form class="form-inline"> -->
-<!-- 				<div class="form-group"> -->
-<!-- 					<label for="startVal">A partire da</label> -->
-<!-- 					<input id="startVal" ui-date="info.dateOptions" class="form-control"  -->
-<!-- 						data-ng-model="info.ticketDate" placeholder="dd/mm/yyyy"></input> -->
-<!-- 				</div> -->
-				
-<!-- 			</form> -->
-			<form class="form-inline" style="margin-top:10px;">
+			<form class="form-inline" style="margin-top: 10px;">
 				<div class="form-group">
-					<label data-ng-show="info.numTicket==1" for="tipology">Tipologia biglietto</label>
-					<label data-ng-show="info.numTicket>1" for="tipology">Tipologia biglietti</label>
-					<select id="tipology" data-ng-model="info.ticketTipology" >
+					<label data-ng-show="info.numTicket==1" for="tipology">Tipologia
+						biglietto</label> <label data-ng-show="info.numTicket>1" for="tipology">Tipologia
+						biglietti</label> <select id="tipology"
+						data-ng-model="info.ticketTipology">
 						<option selected value="DAILY_VISITOR">Giornaliero</option>
 						<option value="WEEKLY_VISITOR">Settimanale</option>
 						<option value="DAILY_VIP_VISITOR">Giornaliero VIP</option>
 						<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
-						<option value="SERVICE">Servizio</option>
-						<option value="SUPERVISOR">Supervisore</option>
-					</select>
-					<span class="glyphicon glyphicon-info-sign tooltips" title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. - Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata.- Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni."></span>
+					</select> <span class="glyphicon glyphicon-info-sign tooltips"
+						title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni. &#013;Settimanale VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una settimana senza limitazioni."></span>
 				</div>
-				
+
 			</form>
 		</div>
 		<div class="row" style="margin-top: 30px;">
 			<div data-ng-show="info.numTicket==1">
 				<h3>Dati acquirente</h3>
-				<div class="col-xs-offset-3 col-xs-3">
+				<div class="col-sm-offset-4 col-sm-2">
 					<form name="myForm" class="form-inline" style="margin-top: 15px;">
-					  <h4>Sesso</h4>
-					  <label>
-					    <input type="radio" ng-model="info.gender" value="male">
-					    Maschio
-					  </label><br>
-					  <label>
-					    <input type="radio" ng-model="info.gender" value="female">
-					    Femmina
-					  </label>
+						<h4>Sesso</h4>
+						<label> <input type="radio" ng-model="info.gender"
+							value="male"> Maschio
+						</label><br> <label> <input type="radio"
+							ng-model="info.gender" value="female"> Femmina
+						</label>
 					</form>
 				</div>
-				<div class="col-xs-3">
+				<div class="col-sm-2">
 					<form name="myForm" class="form-inline" style="margin-top: 15px;">
-					  <h4>Età</h4>
-					  <label>
-					    <input type="radio" data-ng-model="info.age" value="young">
-					    Giovane
-					  </label><br>
-					  <label>
-					    <input type="radio" data-ng-model="info.age" value="middleAge">
-					    Mezza età
-					  </label><br>
-					   <label>
-					    <input type="radio" data-ng-model="info.age" value="elderly">
-					   Anziano
-					  </label>
+						<h4>Età</h4>
+						<label> <input type="radio" data-ng-model="info.age"
+							value="young"> Giovane
+						</label><br> <label> <input type="radio"
+							data-ng-model="info.age" value="middleAge"> Mezza età
+						</label><br> <label> <input type="radio"
+							data-ng-model="info.age" value="elderly"> Anziano
+						</label>
 					</form>
 				</div>
 			</div>
 			<div data-ng-show="info.numTicket>1">
 				<form name="myForm" class="form-inline">
-				  <h3>Composizione gruppo</h3>
-				
-				  <img class="imgPreviewL" data-ng-src="/assets/public/img/bambina.png"><label>Con bambini
-				    <input type="checkbox" data-ng-model="info.withChildren">
-				  </label><br/>
-				  <img class="imgPreviewL" data-ng-src="/assets/public/img/anziani.png"><label>Con anziani
-				    <input type="checkbox" data-ng-model="info.withElderly">
-				   </label><br/>
-				 </form>
+					<h3>Composizione gruppo</h3>
+
+					<img class="imgPreviewL"
+						data-ng-src="/assets/public/img/bambina.png"><label>Con
+						bambini <input type="checkbox" data-ng-model="info.withChildren">
+					</label><br /> <img class="imgPreviewL"
+						data-ng-src="/assets/public/img/anziani.png"><label>Con
+						anziani <input type="checkbox" data-ng-model="info.withElderly">
+					</label><br />
+				</form>
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-offset-8 col-xs-4 pull-left" style="margin-top: 30px;">
-		<div class="btn btn-success" data-ng-click="info.next()"><span class="glyphicon glyphicon-ok"></span> Procedi</div>
+	<div class="row">
+		<div class="col-sm-offset-8 col-sm-4 pull-right"
+			style="margin-top: 30px;">
+			<div class="btn btn-success" data-ng-click="info.next()">
+				<span class="glyphicon glyphicon-ok"></span> Procedi
+			</div>
+		</div>
 	</div>
 </div>

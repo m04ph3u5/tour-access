@@ -1,14 +1,14 @@
-<div style="margin-top:20px;" class="row text-center">
+<div style="margin-top:20px; margin-bottom: 50px;" class="row text-center">
 	<div class="col-sm-offset-1 col-sm-10">
 		<h3>Seleziona i siti da visitare</h3>
 		<div class="singleRowPlaces boxPlaces">
-			<div class="row">
+			<div style="margin-bottom: 10px;" class="row">
 				<div class="col-sm-3" data-ng-repeat="p in selectPlace.places">
 					<div class="boxFakeDraft selectable" data-ng-class="{'selectedBox' : p.selected}">
 						<b>{{p.name}}</b>
 						<img data-ng-src="{{p.imageId}}" style="width: 75%">
 						<div class="textJustify" style="margin: 5px; margin-top:8px; height: 80px;">
-							<p><b>Orari:</b> {{p.timetable}}</p>
+							<p style="color: #000000" class="tooltips" title="{{p.timetable}}"><b>Orari:</b> {{p.timetable | limitTo: 100}} <span data-ng-show="p.timetable.length>100">...</span></p>
 						</div>
 						<div data-ng-hide="p.selected" class="btn btn-primary" data-ng-click="selectPlace.addToSelected(p)">
 							<span class="glyphicon glyphicon-plus"></span> Aggiungi al biglietto</div>
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		<h3 data-ng-show="selectPlace.selected.length>0">Scelti</h3>
+		<h3 style="margin-top: 30px;" data-ng-show="selectPlace.selected.length>0">Scelti</h3>
 		<div class="row">
 			<div id="tagBox" class="col-sm-12 tags-wrapper">
 				<div id="tagsList" class="tags-cloud">

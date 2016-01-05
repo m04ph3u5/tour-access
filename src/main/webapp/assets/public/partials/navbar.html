@@ -20,8 +20,8 @@
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-expanded="false">
-					<span class="tooltips" title="Servizio attivo"><img style="width: 20px;" src="/assets/public/img/ico/green_ball.ico"></span>
-					<span class="tooltips" title="Servizio momentaneamente non disponibile"><img style="width: 20px;" src="/assets/public/img/ico/red_ball.ico"></span>
+					<span data-ng-show="navbar.available" class="tooltips" title="Servizio attivo"><img style="width: 20px;" src="/assets/public/img/ico/green_ball.ico"></span>
+					<span data-ng-hide="navbar.available" class="tooltips" title="Servizio momentaneamente non disponibile"><img style="width: 20px;" src="/assets/public/img/ico/red_ball.ico"></span>
 					<span>{{navbar.name}}</span>
 					<span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">

@@ -47,7 +47,7 @@ angular.module('asti.application')
 			}
 		})
 		.state('logged.selectPlace.infoTicket',{
-			url : '/operator/info',
+			url : '/info',
 			views : {
 				"body@logged" : {
 					templateUrl : "assets/public/partials/infoTicket.html", 
@@ -60,7 +60,7 @@ angular.module('asti.application')
 			}
 		})
 		.state('logged.selectPlace.associateTicket',{
-			url : '/operator/validate',
+			url : '/validate',
 			views : {
 				"body@logged" : {
 					templateUrl : "assets/public/partials/associateTicket.html", 
@@ -75,7 +75,7 @@ angular.module('asti.application')
 		
 		$urlRouterProvider.otherwise(function($injector,$location){
 			var state = $injector.get('$state');
-			state.go('login');
+			state.go('notLogged.login');
 		});
 	  
 		$locationProvider.html5Mode(true);

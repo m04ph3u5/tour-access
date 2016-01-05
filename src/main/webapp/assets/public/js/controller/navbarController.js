@@ -1,8 +1,23 @@
-angular.module('asti.application').controller('navbarCtrl', ['userService', '$state', 'operatorService',
-              function navbarCtrl(userService, $state, operatorService){
-	
+angular.module('asti.application').controller('navbarCtrl', ['userService', '$state', 'operatorService', 'apiService', '$interval', '$scope',
+                                                             function navbarCtrl(userService, $state, operatorService, apiService, $interval, $scope){
+
 	var self = this;
 	self.name = "";
+	self.avialable = true;
+
+	var check = function(){
+		apiService.checkService().then(
+				function(data){
+					self.available = true;
+				},
+				function(reason){
+					self.available = false;
+				}
+		);
+	}
+
+	var timer = $interval(check, 30000);
+
 	userService.getName().then(
 			function(data){
 				self.name = data;
@@ -19,4 +34,10 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
 				}
 		);
 	}
+
+	$scope.$on("$destroy", function() {
+		if (timer) {
+			$interval.cancel(timer);
+		}
+	});
 }]);
