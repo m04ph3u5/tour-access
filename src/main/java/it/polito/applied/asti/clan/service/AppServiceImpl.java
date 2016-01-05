@@ -7,6 +7,7 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Log;
 import it.polito.applied.asti.clan.pojo.LogDTO;
+import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.PathInfo;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.VersionZip;
@@ -17,7 +18,9 @@ import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.repository.VersionZipRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -165,6 +168,13 @@ public class AppServiceImpl implements AppService{
 			floatPart = 1;
 		
 		return intPart+floatPart;
+	}
+
+	@Override
+	public LogSeriesInfo getLogInfo(Date start, Date end) {
+		Map<String, Long> dates = logRepo.getDateSeries(start, end);
+		Map<String, Long> devices = logRepo.getDeviceSeries(start, end);
+		return new LogSeriesInfo(dates, devices);
 	}
 
 }

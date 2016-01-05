@@ -8,6 +8,7 @@ import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.GroupAggregateCount;
 import it.polito.applied.asti.clan.pojo.LogDTO;
+import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiToAC;
@@ -270,6 +271,14 @@ public class ApiRestController extends BaseController{
 		System.out.println("SINGLES STATISTICS");
 		StatisticsSinglesInfo stats = new StatisticsSinglesInfo("","");
 		return stats;
+		
+	}
+	
+	@RequestMapping(value="/v1/statistics/logApp", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public LogSeriesInfo getAppLogInfp( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+		System.out.println("Log APP STATISTICS");
+		return appService.getLogInfo(start, end);
 		
 	}
 }
