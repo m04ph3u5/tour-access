@@ -41,17 +41,41 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 	);
 	
 	self.addToSelected = function(place){
-		if(self.selected.indexOf(place)==-1){
+		var i = -1;
+		for (var j = 0; j<self.selected.length; j++){
+			if(self.selected[j].id == place.id){
+				i=j;
+				break;
+			}
+		}
+		
+		//if(self.selected.indexOf(place)==-1){
+		if(i == -1){
 			self.selected.push(place);
 			place.selected = true;
 		}
 	}
 	
 	self.removeToSelected = function(place){
-		var i = self.selected.indexOf(place);
+		console.log(place);
+		var i = -1;
+		for (var j = 0; j<self.selected.length; j++){
+			if(self.selected[j].id == place.id){
+				i=j;
+				break;
+			}
+		}
+		//var i = self.selected.indexOf(place);
+		console.log(i);
 		if(i!=-1){
 			self.selected.splice(i,1);
 			place.selected = false;
+			for (var j = 0; j<self.places.length; j++){
+				if(self.places[j].id == place.id){
+					self.places[j].selected = false;
+					break;
+				}
+			}
 		}
 	}
 }]);
