@@ -1,0 +1,58 @@
+<div class="container">
+	<h2 style="margin-top: 15px;">Analisi applicazioni mobili</h2>
+	<br>
+	<h4>Info</h4>
+	<div>
+		<form class="form-inline" style="margin-top: 10px;">
+			<div class="form-group">
+				<label for="interval">Intervallo di analisi</label> <select
+					id="interval" data-ng-model="mobile.infoInterval"
+					data-ng-change="mobile.changeIntervalInfo()">
+					<option selected value="week">Settimanale</option>
+					<option value="month">Mensile</option>
+					<option value="three_month">Trimestrale</option>
+					<option value="year">Annuale</option>
+				</select>
+			</div>
+		</form>
+	</div>
+	<br>
+	<h5>Totole accessi {{mobile.info}}: <b>{{mobile.infoData.todayAppAccess}}</b></h5>
+	<h5>Numero dispositvi differenti: <b>{{mobile.infoData.todayDevices}}</b></h5>
+	<h5>Nuove installazioni: <b>{{mobile.infoData.todayAppInstallation}}</b></h5>
+	<br>
+	<h4>Top 10 devices</h4>
+	<div>
+		<canvas id="top10" class="chart chart-bar" width=600 height=300
+			chart-data="mobile.top10data" chart-labels="mobile.top10labels"
+			chart-series="mobile.top10series">
+		</canvas>
+	</div>
+	<div class="row">
+		<br>
+		<hr>
+	</div>
+	<br>
+	<h4>Andamento accesssi</h4>
+	<div>
+		<form class="form-inline" style="margin-top: 10px;">
+			<div class="form-group">
+				<label for="interval">Intervallo di analisi</label> <select
+					id="interval" data-ng-model="mobile.accessInterval"
+					data-ng-change="mobile.changeIntervalAccess()">
+					<option selected value="week">Settimanale</option>
+					<option value="month">Mensile</option>
+					<option value="three_month">Trimestrale</option>
+					<option value="year">Annuale</option>
+				</select>
+			</div>
+		</form>
+	</div>
+	<div>
+		<canvas height="300" width="600" id="line" class="chart chart-line"
+			chart-data="mobile.accessData" chart-labels="mobile.accessLabels"
+			chart-series="mobile.accessSeries"
+			chart-colours="mobile.colors">
+				</canvas>
+	</div>
+</div>

@@ -6,5 +6,8 @@ import java.util.Map;
 public interface CustomLogRepository {
 	Map<String, Long> getDateSeries(Date start, Date end);
 	Map<String, Long> getDeviceSeries(Date start, Date end);
+	long countNumberAccessFromDate(Date date);
+	long countNumberInstallationFromDate(Date date);
+	long distinctDevicesFromDate(Date date);
 
 }

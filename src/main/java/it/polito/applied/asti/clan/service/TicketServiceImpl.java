@@ -255,4 +255,14 @@ public class TicketServiceImpl implements TicketService{
 		}
 	}
 
+	@Override
+	public long getNumberSelledTicket(Date date) {
+		return ticketRepo.countTicketFromDate(date);
+	}
+
+	@Override
+	public long getNumberIngress(Date date) {
+		return readRepo.countIngressFromDate(date);
+	}
+
 }

@@ -177,4 +177,19 @@ public class AppServiceImpl implements AppService{
 		return new LogSeriesInfo(dates, devices);
 	}
 
+	@Override
+	public long getAccess(Date date) {
+		return logRepo.countNumberAccessFromDate(date);
+	}
+
+	@Override
+	public long getInstallation(Date date) {
+		return logRepo.countNumberInstallationFromDate(date);
+	}
+
+	@Override
+	public long getDevices(Date date) {
+		return logRepo.distinctDevicesFromDate(date);
+	}
+
 }

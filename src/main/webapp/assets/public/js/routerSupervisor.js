@@ -21,19 +21,25 @@ angular.module('asti.supervisor')
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Supervisore',
+				pageTitle : 'AstiMusei - Soci',
 				permissions: {
 					only: ['anonymous'],
-					redirectTo: 'logged.statistics'
+					redirectTo: 'logged.dashboard'
 				}
 			}
 		})
 		.state('logged',{
 			templateUrl: 'assets/public/partials/operator-logged.html',
-			abstract: true
+			abstract: true,
+			data : {
+				permissions: {
+					only: ['supervisor'],
+					redirectTo: 'notLogged.login'
+				}
+			}
 		})
-		.state('logged.statistics',{
-			url : '/supervisor/statistics',
+		.state('logged.dashboard',{
+			url : '/supervisor/dashboard',
 			views : {
 				"header@logged" : {
 					templateUrl : "assets/public/partials/navbarSupervisor.html",
@@ -41,45 +47,52 @@ angular.module('asti.supervisor')
 					controllerAs : 'navbar'
 				},
 				"body" : {
-					templateUrl : "assets/public/partials/statistics.html",
-					controller : 'statisticsCtrl',
-					controllerAs : 'statistics'
+					templateUrl : "assets/public/partials/dashboard.html",
+					controller : 'dashboardCtrl',
+					controllerAs : 'dashboard'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Soci',
-				permissions: {
-					only: ['supervisor'],
-					redirectTo: 'notLogged.login'
-				}
+				pageTitle : 'AstiMusei - Soci'
 			}
 		})
-		.state('logged.selectPlace.infoTicket',{
-			url : '/info',
+		.state('logged.tickets',{
+			url : '/supervisor/tickets',
 			views : {
-				"body@logged" : {
-					templateUrl : "assets/public/partials/infoTicket.html", 
-					controller : 'infoCtrl',
-					controllerAs : 'info'
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
+				},
+				"body" : {
+					templateUrl : "assets/public/partials/tickets.html",
+					controller : 'ticketsCtrl',
+					controllerAs : 'tickets'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Info acquirenti'
+				pageTitle : 'AstiMusei - Biglietti'
 			}
 		})
-		.state('logged.selectPlace.associateTicket',{
-			url : '/validate',
+		.state('logged.mobile',{
+			url : '/supervisor/mobile',
 			views : {
-				"body@logged" : {
-					templateUrl : "assets/public/partials/associateTicket.html", 
-					controller : 'associateCtrl',
-					controllerAs : 'associate'
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
+				},
+				"body" : {
+					templateUrl : "assets/public/partials/mobile.html",
+					controller : 'mobileCtrl',
+					controllerAs : 'mobile'
 				}
 			},
 			data : {
-				pageTitle : 'Asti - Validazione ticket'
+				pageTitle : 'AstiMusei - Applicazione mobile'
 			}
 		})
+	
 		
 		$urlRouterProvider.otherwise(function($injector,$location){
 			var state = $injector.get('$state');

@@ -1,0 +1,30 @@
+<div class="container">
+	<h2 style="margin-top: 15px;">Benvenuto {{dashboard.name}}</h2>
+	<h4>{{dashboard.today | date:'short'}}</h4>
+	<br>
+	<h3>Biglietti e ingressi</h3>
+	<h5>Vendite giornaliere: <b>{{dashboard.info.todayTicketSelled}}</b></h5>
+	<h5>Ingressi giornalieri: <b>{{dashboard.info.todayIngress}}</b></h5>
+	<div class="col-sm-11">
+		<div class="pull-right">
+			<div class="btn btn-primary tooltips" title="Vai alla pagina relativa ai dettagli della vendita dei biglietti e agli ingressi nei plessi museali" 
+				data-ui-sref="logged.tickets">Dettagli ></div>
+		</div>
+	</div>
+	
+	<div style="margin-top:10px; margin-bottom:10px;"><br><hr></div>
+	
+	<h3>Applicazione Android</h3>
+	<h5>Totole accessi giornalieri: <b>{{dashboard.info.todayAppAccess}}</b></h5>
+	<h5>Numero dispositvi differenti: <b>{{dashboard.info.todayDevices}}</b></h5>
+	<h5>Nuove installazioni: <b>{{dashboard.info.todayAppInstallation}}</b></h5>
+	<div class="col-sm-11">
+		<div class="pull-right">
+			<div class="btn btn-primary tooltips" title="Vai alla pagina relativa ai dettagli delle attività delle applicazione mobili" 
+				data-ui-sref="logged.mobile">Dettagli ></div>
+		</div>
+	</div>
+	
+	<div style="margin-top:10px; margin-bottom:10px;"><br><hr></div>
+	
+</div>

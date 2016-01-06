@@ -1,15 +1,15 @@
 <div style="margin-top:20px; margin-bottom: 50px;" class="row text-center">
 	<div class="col-sm-offset-1 col-sm-10">
 		<h3>Trend acquisto Ticket</h3>
-		<h5>Venduti: {{statistics.totalTicketSelled}}</h5>
-		<h5>Ingressi: {{statistics.totalIngress}}</h5>
+		<h5>Venduti: {{tickets.totalTicketSelled}}</h5>
+		<h5>Ingressi: {{tickets.totalIngress}}</h5>
 		<div class="row">
 				<form class="form-inline" style="margin-top: 10px;">
 					<div class="form-group">
 						<label  for="interval">Intervallo di analisi</label> 
 						<select id="interval"
-							data-ng-model="statistics.totalInterval"
-							data-ng-change="statistics.changeIntervalTotal()">
+							data-ng-model="tickets.totalInterval"
+							data-ng-change="tickets.changeIntervalTotal()">
 								<option selected value="week">Settimanale</option>
 								<option value="month">Mensile</option>
 								<option value="three_month">Trimestrale</option>
@@ -23,9 +23,9 @@
 			<div style="margin: 10px;" class="row">
 				<h5>Ticket acquistati / ingressi</h5>
 				
-				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="statistics.dataTotal"
-					  chart-labels="statistics.labelsTotal" chart-legend="true" chart-series="statistics.seriesTotal"
-					  chart-click="statistics.onClickTotal" >
+				<canvas height="300" width="600" id="line" class="chart chart-line" chart-data="tickets.dataTotal"
+					  chart-labels="tickets.labelsTotal" chart-series="tickets.seriesTotal"
+					  chart-click="tickets.onClickTotal" chart-colours="tickets.colors" >
 				</canvas> 
 				
 			</div>
@@ -40,8 +40,8 @@
 					<div class="form-group">
 						<label  for="interval">Intervallo di analisi</label> 
 						<select id="interval"
-							data-ng-model="statistics.groupInterval"
-							data-ng-change="statistics.changeIntervalGroup()">
+							data-ng-model="tickets.groupInterval"
+							data-ng-change="tickets.changeIntervalGroup()">
 								<option selected value="week">Settimanale</option>
 								<option value="month">Mensile</option>
 								<option value="three_month">Trimestrale</option>
@@ -55,9 +55,9 @@
 			<div style="margin: 10px;" class="row">
 				<h5>Ticket di gruppo </h5>
 				
-				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="statistics.dataGroup"
-					  chart-labels="statistics.labelsGroup" chart-legend="true" chart-series="statistics.seriesGroup"
-					  chart-click="statistics.onClickGroup" >
+				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="tickets.dataGroup"
+					  chart-labels="tickets.labelsGroup" chart-legend="true" chart-series="tickets.seriesGroup"
+					  chart-click="tickets.onClickGroup" >
 				</canvas>
 			</div>
 		</div>
@@ -71,8 +71,8 @@
 					<div class="form-group">
 						<label  for="interval">Intervallo di analisi</label> 
 						<select id="interval"
-							data-ng-model="statistics.singleInterval"
-							data-ng-change="statistics.changeIntervalSingle()">
+							data-ng-model="tickets.singleInterval"
+							data-ng-change="tickets.changeIntervalSingle()">
 								<option selected value="week">Settimanale</option>
 								<option value="month">Mensile</option>
 								<option value="three_month">Trimestrale</option>
@@ -86,9 +86,9 @@
 			<div style="margin: 10px;" class="row">
 				<h5>Ticket singoli</h5>
 				
-				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="statistics.dataSingle"
-					  chart-labels="statistics.labelsSingle" chart-legend="true" chart-series="statistics.seriesSingle"
-					  chart-click="statistics.onClickSingle" >
+				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="tickets.dataSingle"
+					  chart-labels="tickets.labelsSingle" chart-legend="true" chart-series="tickets.seriesSingle"
+					  chart-click="tickets.onClickSingle" >
 				</canvas>
 			</div>
 		</div>

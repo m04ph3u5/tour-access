@@ -15,37 +15,34 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
-	var getPlacesToSell = function(){
+	var dashboardInfo = function(date){
 		var p = $q.defer();
-		$http.get('/api/v1/poiToSell').then(
-				function(response){
-					p.resolve(response.data);
-				},
-				function(reason){
-					p.reject(reason);
-				}
-		);
-		return p.promise;
-	}
-
-	var orderTicket = function(ticketRequest){
-		var p = $q.defer();
-		$http.post('/api/v1/tickets', ticketRequest).then(
-				function(response){
-					p.resolve(response.data);
-				},
-				function(reason){
-					p.reject(reason);
-				}
-		);
+		if(!date){
+			$http.get('/api/v1/statistics/dashboardInfo').then(
+					function(response){
+						p.resolve(response.data);
+					},
+					function(reason){
+						p.reject(reason);
+					}
+			);
+		}else{
+			$http.get('/api/v1/statistics/dashboardInfo?start='+date).then(
+					function(response){
+						p.resolve(response.data);
+					},
+					function(reason){
+						p.reject(reason);
+					}
+			);
+		}
 		return p.promise;
 	}
 	
 	
 	return {
 		validateCredential : validateCredential,
-		getPlacesToSell : getPlacesToSell,
-		orderTicket : orderTicket
+		dashboardInfo : dashboardInfo
 	}
 
 }]);

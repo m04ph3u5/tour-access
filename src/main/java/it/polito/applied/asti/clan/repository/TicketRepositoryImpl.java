@@ -187,6 +187,13 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		
 	}
 
+	@Override
+	public long countTicketFromDate(Date date) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("emissionDate").gte(date));
+		return mongoOp.count(q, Ticket.class);
+	}
+
 	
 
 }
