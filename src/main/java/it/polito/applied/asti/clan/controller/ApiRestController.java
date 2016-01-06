@@ -110,7 +110,8 @@ public class ApiRestController extends BaseController{
 		List<Poi> poiList = placeRepo.findAll();
 		if(poiList!=null){
 			for(Poi p : poiList){
-				poiToSell.add(new PoiToSell(p));
+				if(p.getTicketable())
+					poiToSell.add(new PoiToSell(p));
 			}
 		}
 		return poiToSell;
