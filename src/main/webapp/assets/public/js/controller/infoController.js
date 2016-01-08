@@ -64,12 +64,26 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 			info.withElderly = self.withElderly;
 		}
 		operatorService.setTip(self.ticketTipology);
-		console.log(self.ticketTipology);
-		console.log(info);
+		
 		operatorService.setInfo(info);
 		
 		
 		$state.go("logged.selectPlace.associateTicket");
+	}
+	
+	self.toSelectPlace = function(){
+		
+		if(self.numTicket==1){
+			info.gender = self.gender;
+			info.age = self.age;
+		}else{
+			info.withChildren = self.withChildren;
+			info.withElderly = self.withElderly;
+		}
+		operatorService.setTip(self.ticketTipology);
+		
+		operatorService.setInfo(info);
+		$state.go("logged.selectPlace");
 	}
 	
 	self.remove = function(){
