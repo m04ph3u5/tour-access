@@ -56,6 +56,17 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 		}
 	}
 	
+	self.remove = function(){
+		
+		self.numFullTicket = 1;
+		self.selected=[];
+		for (var j = 0; j<self.places.length; j++){
+			self.places[j].selected = false;			
+		}
+		operatorService.reset();
+
+	}
+	
 	self.removeToSelected = function(place){
 		console.log(place);
 		var i = -1;
