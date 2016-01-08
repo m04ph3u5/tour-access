@@ -72,5 +72,13 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		$state.go("logged.selectPlace.associateTicket");
 	}
 	
+	self.remove = function(){
+		
+		operatorService.reset();
+		
+		
+		$state.go("logged.selectPlace");
+	}
+	
 	
 }]);
