@@ -9,6 +9,7 @@ import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface TicketService {
@@ -21,4 +22,6 @@ public interface TicketService {
 	public List<RoleTicket> getRoles() throws BadRequestException;
 	public List<StatusTicket> getStatus();
 	public void pingService() throws ServiceUnaivalableException;
+	public long getNumberSelledTicket(Date date);
+	public long getNumberIngress(Date date);
 }

@@ -1,7 +1,8 @@
-angular.module('asti.supervisor').controller('statisticsCtrl', [ 'apiService', '$state',
-              function statisticsCtrl(apiService, $state){
+angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$state',
+              function ticketsCtrl(apiService, $state){
 	
 	var self = this;
+	self.colors=['blue', 'red']
 	self.totalInterval="week";
 	self.groupInterval="week";
 	self.singleInterval="week";

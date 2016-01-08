@@ -6,6 +6,7 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
+import it.polito.applied.asti.clan.pojo.DashboardInfo;
 import it.polito.applied.asti.clan.pojo.GroupAggregateCount;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
@@ -32,7 +33,11 @@ import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -105,7 +110,8 @@ public class ApiRestController extends BaseController{
 		List<Poi> poiList = placeRepo.findAll();
 		if(poiList!=null){
 			for(Poi p : poiList){
-				poiToSell.add(new PoiToSell(p));
+				if(p.getTicketable())
+					poiToSell.add(new PoiToSell(p));
 			}
 		}
 		return poiToSell;
@@ -233,7 +239,7 @@ public class ApiRestController extends BaseController{
 			appService.postLog(logs);
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/totalTickets", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public StatisticsInfo getNumTotalTicketsInInterval( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
@@ -257,6 +263,7 @@ public class ApiRestController extends BaseController{
 		return s;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/groups", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public StatisticsGroupsInfo getGroupsStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
@@ -265,6 +272,8 @@ public class ApiRestController extends BaseController{
 		return stats;
 		
 	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public StatisticsSinglesInfo getSinglessStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
@@ -274,11 +283,41 @@ public class ApiRestController extends BaseController{
 		
 	}
 	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/logApp", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public LogSeriesInfo getAppLogInfp( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
 		System.out.println("Log APP STATISTICS");
 		return appService.getLogInfo(start, end);
 		
+	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/dashboardInfo", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public DashboardInfo getDashboardInfo(@RequestParam(value="start", required=false) String timestamp) throws BadRequestException, NotFoundException{
+		Date date;
+		Calendar c = Calendar.getInstance();
+
+		if(timestamp==null || timestamp.isEmpty())
+			date = new Date();
+		else{
+			c.setTimeInMillis(Long.parseLong(timestamp));
+			date = c.getTime();
+		}
+
+		DashboardInfo d = new DashboardInfo();
+		
+		c.setTime(date);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		date = c.getTime();
+		d.setTodayTicketSelled(ticketService.getNumberSelledTicket(date));
+		d.setTodayIngress(ticketService.getNumberIngress(date));
+		d.setTodayAppAccess(appService.getAccess(date));
+		d.setTodayAppInstallation(appService.getInstallation(date));
+		d.setTodayDevices(appService.getDevices(date));
+		return d;
 	}
 }

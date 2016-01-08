@@ -14,7 +14,8 @@ public interface CustomTicketRepository {
 	public void toReleased(List<Ticket> tickets);
 	
 	public long totalTickets(Date start, Date end);
-	
+	public long countTicketFromDate(Date date);
+
 
 
 }

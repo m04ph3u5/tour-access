@@ -14,7 +14,7 @@ angular.module('asti.supervisor').controller('loginSupervisorCtrl', ['userServic
 		userService.login(self.username, self.password).then(
 				function(data){
 					
-					$state.go("logged.statistics");
+					$state.go("logged.dashboard");
 				},
 				function(reason){
 					self.showError = true;

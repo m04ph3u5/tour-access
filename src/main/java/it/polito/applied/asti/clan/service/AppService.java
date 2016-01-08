@@ -23,4 +23,10 @@ public interface AppService {
 	public void postLog(List<LogDTO> logs);
 
 	public LogSeriesInfo getLogInfo(Date start, Date end);
+
+	public long getAccess(Date date);
+
+	public long getInstallation(Date date);
+
+	public long getDevices(Date date);
 }
