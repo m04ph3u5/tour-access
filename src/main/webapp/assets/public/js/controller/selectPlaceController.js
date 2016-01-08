@@ -39,7 +39,13 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 				console.log("Errore nel recuperare i places");
 			}
 	);
-	
+	self.switchSelected = function(place){
+		if(place.selected==true){
+			self.removeToSelected(place);
+		}else{
+			self.addToSelected(place);
+		}
+	}
 	self.addToSelected = function(place){
 		var i = -1;
 		for (var j = 0; j<self.selected.length; j++){
@@ -55,18 +61,6 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 			place.selected = true;
 		}
 	}
-	
-	self.remove = function(){
-		
-		self.numFullTicket = 1;
-		self.selected=[];
-		for (var j = 0; j<self.places.length; j++){
-			self.places[j].selected = false;			
-		}
-		operatorService.reset();
-
-	}
-	
 	self.removeToSelected = function(place){
 		console.log(place);
 		var i = -1;
@@ -89,4 +83,18 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 			}
 		}
 	}
+	
+	
+	self.removeAll = function(){
+		
+		self.numFullTicket = 1;
+		self.selected=[];
+		for (var j = 0; j<self.places.length; j++){
+			self.places[j].selected = false;			
+		}
+		operatorService.reset();
+
+	}
+	
+	
 }]);
