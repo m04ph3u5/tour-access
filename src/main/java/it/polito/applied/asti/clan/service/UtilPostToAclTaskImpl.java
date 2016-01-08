@@ -53,7 +53,7 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		if(t.getSites()!=null)
 			obj.put("sites", t.getSites().toArray());
 		obj.put("duration", t.getDuration());
-		
+		System.out.println(obj.toString());
 		URL url = new URL(URLTOSEND);
 		HttpsURLConnection httpCon = (HttpsURLConnection) url.openConnection();
 		httpCon.setDoOutput(true);

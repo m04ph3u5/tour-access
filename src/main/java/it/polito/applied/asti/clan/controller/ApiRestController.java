@@ -8,6 +8,7 @@ import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.DashboardInfo;
 import it.polito.applied.asti.clan.pojo.GroupAggregateCount;
+import it.polito.applied.asti.clan.pojo.InfoTicketRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.Name;
@@ -33,13 +34,12 @@ import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -320,4 +320,25 @@ public class ApiRestController extends BaseController{
 		d.setTodayDevices(appService.getDevices(date));
 		return d;
 	}
+	
+//	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public void test() throws BadRequestException, NotFoundException, ServiceUnaivalableException{
+//		TicketRequestDTO t = new TicketRequestDTO();
+//		t.setTipology("DAILY_VISITOR");
+//		List<String> places = new ArrayList<String>();
+//		places.add("s00001");
+//		places.add("s00002");
+//		t.setPlacesId(places);
+//		InfoTicketRequest i = new InfoTicketRequest();
+//		i.setWithChildren(true);
+//		i.setWithElderly(false);
+//		t.setInfo(i);
+//		Set<String> n = new HashSet<String>();
+//		n.add("8521479630");
+//		n.add("9632587410");
+//
+//		t.setTicketsNumber(n);
+//		ticketService.operatorGenerateTickets(t, "0123456789");
+//	}
 }

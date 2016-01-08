@@ -8,8 +8,8 @@
 				<div  class="col-md-6" data-ng-repeat="p in selectPlace.places">
 					<div data-ng-click="selectPlace.switchSelected(p)" style= "cursor:pointer;" class="boxFakeDraft selectable" data-ng-class="{'selectedBox' : p.selected}">
 						<b>{{p.name}}</b>
-							<img src="/assets/public/img/01_p1.png" style="width: 75%">
-<!-- 						<img data-ng-src="{{p.imageId}}" style="width: 50%"> -->
+<!-- 							<img src="/assets/public/img/01_p1.png" style="width: 75%"> -->
+						<img data-ng-src="{{p.imageId}}" style="width: 50%">
 						<div class="textJustify" style="margin: 5px; margin-top:8px;">
 							<p style="color: #000000" class="tooltips" title="{{p.timetable}}"><b>Orari:</b> {{p.timetable | limitTo: 100}} <span data-ng-show="p.timetable.length>100">...</span></p>
 						</div>
@@ -22,10 +22,8 @@
 		</div>
 	
 	</div>
-	<div class="col-xs-4" >
-		<h3  data-ng-show="selectPlace.selected.length>0">Scelti</h3>
-	
-		
+	<div id="myAffix" class="col-xs-4">
+		<h3  data-ng-show="selectPlace.selected.length>0">Scelti</h3>	
 		<div id="tagBox" class="tags-wrapper">
 			<div id="tagsList" class="tags-cloud">
 				<div data-ng-repeat="p in selectPlace.selected" class="row">
@@ -57,6 +55,18 @@
 	
 	</div>
 </div>
+
+<script>
+var fixmeLeft = $('#myAffix').offset().left;
+
+$('#myAffix').affix({
+	  offset: {
+	    top: 50,
+	    left: fixmeLeft
+	  }
+})
+
+</script>
 
 
 <!-- <div style="margin-top:20px; margin-bottom: 50px;" class="row text-center"> -->

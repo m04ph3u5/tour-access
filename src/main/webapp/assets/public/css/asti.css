@@ -44,7 +44,7 @@ tooltips:hover::before {
 	text-align: center;
 	padding: 1%;
 	position: relative;
-	overflow-y: scroll;
+/* 	overflow-y: scroll; */
 	overflow-x: hidden;
 }
 
@@ -131,4 +131,13 @@ tooltips:hover::before {
 	height: 100px;
 	width: 100px;
 	object-fit: scale-down;
+}
+
+.affix-top {
+    /* Initial items */
+}
+
+.affix {
+    top:100px;
+    right : 2%;
 }
