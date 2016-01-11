@@ -43,7 +43,7 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 
 	var orderTicket = function(ticketRequest){
 		var p = $q.defer();
-		$http.post('/api/v1/tickets', ticketRequest).then(
+		$http.post('/api/v1/buyTickets', ticketRequest).then(
 				function(response){
 					p.resolve(response.data);
 				},

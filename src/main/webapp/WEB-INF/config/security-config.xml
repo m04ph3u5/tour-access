@@ -54,8 +54,8 @@
  	   	 	   	
 <!--  	   	<intercept-url pattern="/api/v1/test" access="permitAll" requires-channel="https"/> -->
  	   	
-<!--  	   	<intercept-url pattern="/api/v1/buyTickets" access="permitAll" requires-channel="https"/>
- 	   	 -->
+<!--  	   	<intercept-url pattern="/api/v1/buyTickets" access="permitAll" requires-channel="https"/> -->
+
  	   	<intercept-url pattern="/api/v1/name" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/api/v1/loginOperator" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/api/v1/loginSupervisor" access="permitAll" requires-channel="https"/>

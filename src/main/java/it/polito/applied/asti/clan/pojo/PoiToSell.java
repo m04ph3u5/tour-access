@@ -12,7 +12,7 @@ public class PoiToSell {
 	}
 	
 	public PoiToSell(Poi poi){
-		this.id = poi.getIdPoi();
+		this.id = poi.getIdSite();
 		this.name = poi.getName();
 		this.imageId = poi.getImageId();
 		this.timetable = poi.getTimetable();
