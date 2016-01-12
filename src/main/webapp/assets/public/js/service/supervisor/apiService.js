@@ -67,12 +67,27 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var poiRank = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/poiRank?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
 		dashboardInfo : dashboardInfo,
 		statisticsInfo : statisticsInfo,
-		statisticsSeries : statisticsSeries
+		statisticsSeries : statisticsSeries,
+		poiRank : poiRank
 	}
 
 }]);

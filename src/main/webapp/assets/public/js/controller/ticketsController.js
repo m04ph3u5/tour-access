@@ -71,6 +71,26 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					console.log(reason);
 				}
 		);
+		
+		apiService.poiRank(self.dateStart.getTime(), self.dateEnd.getTime()).then(
+				function(data){
+					self.rank = {};
+					self.rank.labels = [];
+					self.rank.data = [];
+
+					var access = [];
+					var name = [];
+					for(var i=0;i<data.length;i++){
+						self.rank.labels[i] = data[i].name;
+						access[i] = data[i].totAccess;
+					}
+					
+					self.rank.data[0] = access;
+				},
+				function(reason){
+					console.log(reason);
+				}
+		);
 	}
 	
 	self.period = "0";
