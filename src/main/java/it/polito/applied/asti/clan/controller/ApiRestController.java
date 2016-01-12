@@ -11,6 +11,7 @@ import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.Name;
 import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.PoiToAC;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.Read;
@@ -326,6 +327,23 @@ public class ApiRestController extends BaseController{
 		end = c.getTime();
 		
 		return ticketService.getTicketAccessSeries(start, end);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/poiRank", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<PoiRank> getPoiRank(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return ticketService.getPoiRank(start, end);
 	}
 	
 	

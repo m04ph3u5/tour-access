@@ -11,7 +11,7 @@
 
 
 				<div
-					class="col-md-1 col-sm-4 col-xs-6 col-md-offset-2 widget txt-white ">
+					class="col-md-1 col-sm-4 col-xs-6 col-md-offset-5 widget txt-white ">
 
 					<div class="pull-left">
 						<i class="icon-hand-up"></i>
@@ -28,12 +28,7 @@
 					<span class="label-widget"> Installazioni </span> <br>40
 				</div>
 
-				<div class="col-md-1 col-sm-4  col-xs-6  emerald widget txt-white">
-					<div class="pull-left">
-						<i class="icon-map-marker"></i>
-					</div>
-					<span class="label-widget"> POI Visitati</span> <br>10
-				</div>
+				
 			</div>
 
 		</div>
@@ -79,46 +74,40 @@
 
 			<div class="gap"></div>
 
-
-
-
-			<form class="row ">
+			<form class="row">
 				<!--datepicker start-->
-
 				<div class="col-md-1"></div>
 				<div class="col-md-2 ">
 
-					<select id="period" class="form-control">
-						<option value="0">Oggi</option>
+					<select data-ng-model="mobile.period" data-ng-change="mobile.selectPeriod()" id="period" class="form-control">
+						<option selected value="0">Oggi</option>
 						<option value="1">Ultima settimana</option>
 						<option value="2">Ultimo mese</option>
 						<option value="3">Ultimi 3 mesi</option>
 
 					</select>
 				</div>
-				<div class="col-md-3 col-xs-6 form-group ">
-
+				<div class="col-md-3 form-group ">
 
 					<span class="col-md-1">Da:</span>
-
-					<div id="data" class="input-group col-md-10">
-						<input type="data" id="date-from"
+					<div id="dataStart" class="input-group col-md-10">
+						<input data-ui-date="mobile.dateStartOptions" data-ng-model="mobile.dateStart" data-ng-change="mobile.setDate(mobile.dateStart)" id="date-from"
 							class="form-control col-xs-9 datepicker"> <span
-							id="calend" class="input-group-addon" data-event="click">
+							id="calend" class="input-group-addon">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</span>
 					</div>
 				</div>
 
-				<div class="col-md-3 col-xs-6 ">
+				<div class="col-md-3 ">
 
 					<span class="col-md-1">A:</span>
 
-					<div id="data" class="input-group col-md-10">
+					<div id="dataEnd" class="input-group col-md-10">
 
-						<input type="data" id="date-to"
+						<input data-ui-date="mobile.dateEndOptions" data-ng-model="mobile.dateEnd" id="date-to"
 							class="form-control col-xs-9 datepicker"> <span
-							id="calend2" class="input-group-addon" data-event="click">
+							id="calend2" class="input-group-addon">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</span>
 					</div>
@@ -126,9 +115,8 @@
 				</div>
 
 
-				<div class="col-md-2 pull-right">
-					<button id="calculate" type="submit"
-						class="btn  btn-primary btn-exp">Calcola</button>
+				<div class="col-md-2">
+					<button data-ng-click="mobile.elaborate()" class="btn btn-primary btn-exp">Calcola</button>
 
 				</div>
 
@@ -147,23 +135,6 @@
 				<h4>Risultati periodo: oggi</h4>
 
 				<hr>
-
-				<div class="col-sm-4 center">
-					<h4>
-						Accessi: <span id="num-access">400 </span>
-					</h4>
-					<canvas id="chart-area1" max-width="200" max-height="200" />
-
-				</div>
-
-
-				<div class="col-sm-6 center">
-					<h4>
-						Ultime 10 posizioni <span id="num-access"></span>
-					</h4>
-					<canvas id="chart-area2" />
-
-				</div>
 
 				<div class="gap"></div>
 

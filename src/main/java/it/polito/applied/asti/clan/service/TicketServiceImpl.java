@@ -4,6 +4,7 @@ import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.AccessAggregate;
 import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,6 +282,9 @@ public class TicketServiceImpl implements TicketService{
 		s.setTotFemale(ticketRequestRepo.totalSingleWomanTickets(start, end));
 		s.setTotChildren(ticketRequestRepo.totalGroupWithChildrenTickets(start, end));
 		s.setTotElderly(ticketRequestRepo.totalGroupWithOldManTickets(start, end));
+		s.setYoung(ticketRequestRepo.totalSingleYoung(start, end));
+		s.setMiddleAge(ticketRequestRepo.totalSingleMiddleAge(start, end));
+		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
 		s.setTotAccess(readRepo.countIngress(start, end));
 		s.setTotTickets(ticketRepo.totalTickets(start, end));
 		return s;
@@ -287,34 +292,96 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
-		Map<Date, TicketAccessSeries> map = new HashMap<Date, TicketAccessSeries>();
+		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
 		List<AccessAggregate> access = readRepo.getAccessGrouped(start, end);
 		List<TicketAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		Calendar c = Calendar.getInstance();
+		c.setTime(end);
+		c.set(Calendar.HOUR_OF_DAY,23);
+		c.set(Calendar.MINUTE,59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 999);
+		end = c.getTime();
+
+		c.set(Calendar.YEAR, 2015);
+		c.set(Calendar.MONTH, 11);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Date first = c.getTime();
+		
+		c.setTime(start);
+
+		if(start.before(first)){
+			c.set(Calendar.YEAR, 2015);
+			c.set(Calendar.MONTH, 11);
+			c.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		start = c.getTime();
+
+		while(start.before(end)){
+			map.put(start, new TicketAccessSeries());
+			c.setTime(start);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			start = c.getTime();
+		}
+		
 		for(AccessAggregate a : access){
-			if(!map.containsKey(a.getDate())){
-				TicketAccessSeries as = new TicketAccessSeries();
-				as.setTotAccesses(a.getTot());
-				map.put(a.getDate(), as);
-			}else{
-				TicketAccessSeries as = map.get(a.getDate());
-				as.setTotAccesses(a.getTot());
-				map.put(a.getDate(), as);
+			Date d = a.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			TicketAccessSeries tAS = map.get(d);
+			if(tAS!=null){
+					map.put(d, tAS);
 			}
 		}
 		
 		for(TicketAggregate t : ticket){
-			if(!map.containsKey(t.getDate())){
-				TicketAccessSeries as = new TicketAccessSeries();
-				as.setTotTickets(t.getTot());
-				map.put(t.getDate(), as);
-			}else{
-				TicketAccessSeries as = map.get(t.getDate());
-				as.setTotTickets(t.getTot());
-				map.put(t.getDate(), as);
+			Date d = t.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			TicketAccessSeries tAS = map.get(d);
+			if(tAS!=null){
+				tAS.setTotTickets(t.getTot());
+				map.put(d, tAS);
 			}
 		}
-		
 		return map;
+	}
+
+	@Override
+	public List<PoiRank> getPoiRank(Date start, Date end) {
+		List<Poi> poiList = poiRepo.findAll();
+		Map<String, String> namePoi = new HashMap<String, String>();
+		for(Poi p : poiList){
+			namePoi.put(p.getIdSite(), p.getName());
+		}
+		List<PoiRank> l = readRepo.getPoiRank(start, end);
+		for(PoiRank p : l){
+			p.setName(namePoi.get(p.getIdSite()));
+		}
+		return l;
 	}
 
 

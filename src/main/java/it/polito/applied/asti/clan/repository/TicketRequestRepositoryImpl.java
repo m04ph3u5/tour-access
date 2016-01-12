@@ -71,4 +71,31 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
+	@Override
+	public long totalSingleYoung(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("age").is("young"))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
+	@Override
+	public long totalSingleMiddleAge(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("age").is("middleAge"))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
+	@Override
+	public long totalSingleElderly(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("age").is("elderly"))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
 }

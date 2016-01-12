@@ -67,36 +67,56 @@
 				<!--piechart---------->
 
 
-				<div class="col-sm-12 center ">
-					<h4>
-						Totale biglietti: <span id="num-tickets"> {{tickets.statistics.totTickets}} </span>
-					</h4>
+				<div class="col-sm-6 center ">
+					<h3>
+						Vendite	
+					</h3>
 					<canvas id="pie1" class="chart chart-pie" width="250" height="250"
 					  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
 					  data-chart-options="tickets.chartOptions">
 					</canvas>
+					Biglietti venduti totali: <b>{{tickets.statistics.totTickets}}</b>
+					Biglietti singoli: <b>{{tickets.pie1[0]}}</b>
+					Biglietti di gruppo: <b>{{tickets.pie1[1]}}</b>
 				</div>
-
-				<div class="col-sm-12 center">
-					<h4>
-						Biglietti di gruppo: <span id="num-tickets"> {{tickets.statistics.totGroupTickets}} </span>
-					</h4>
+			
+				<div class="col-sm-6 center">
+					<h3>
+						Composizione gruppi
+					</h3>
 					<canvas id="pie2" class="chart chart-pie" width="250" height="250"
 					  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
 					  data-chart-options="tickets.chartOptions">
-					</canvas>				</div>
+					</canvas>
+					Gruppi con anziani: <b>{{tickets.pie2[1]}}</b>
+					Gruppi con bambini: <b>{{tickets.pie2[0]}}</b>
+					Altri: <b>{{tickets.pie1[1] - tickets.pie2[1] - tickets.pie2[0]}}</b>				
+				</div>
 				
-				<div class="col-sm-12 center">
-					<h4>
-						Biglietti singoli: <span id="num-tickets"> {{tickets.statistics.totSingleTickets}} </span>
-					</h4>
+				<div class="col-sm-6 center">
+					<h3>
+						Genere
+					</h3>
 					<canvas id="pie3" class="chart chart-pie" width="250" height="250"
 					  data-chart-data="tickets.pie3" data-chart-labels="tickets.pie3Labels"
 					  data-chart-options="tickets.chartOptions">
 					</canvas>	
+					Uomini: <b>{{tickets.pie3[0]}}</b>
+					Donne: <b>{{tickets.pie3[1]}}</b>
 				</div>
 
-
+				<div class="col-sm-6 center">
+					<h3>
+						Età
+					</h3>
+					<canvas id="pie4" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie4" data-chart-labels="tickets.pie4Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>	
+					Giovani: <b>{{tickets.pie4[0]}}</b>
+					Mezza età: <b>{{tickets.pie4[1]}}</b>
+					Anziani: <b>{{tickets.pie4[1]}}</b>
+				</div>
 
 
 
@@ -119,9 +139,9 @@
 					</thead>
 					<tbody>
 						<tr data-ng-repeat="(key,value) in tickets.series">
-							<td>{{key | date : 'shortDate'}}</td>
-							<td>{{value.totTickets}}</td>
-							<td>{{value.totAccesses}}</td>
+							<td data-ng-show="value.totTickets || value.totAccesses">{{key | date : 'shortDate'}}</td>
+							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totTickets}}</td>
+							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totAccesses}}</td>
 						</tr>
 					</tbody>
 				</table>

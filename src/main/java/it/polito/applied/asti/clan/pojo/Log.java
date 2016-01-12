@@ -203,6 +203,8 @@ public class Log {
 			this.logType = LogType.Comment;
 		else if(type.equals("Photo"))
 			this.logType = LogType.Photo;
+		else if(type.equals("First Installation"))
+			this.logType = LogType.Install;
 
 	}
 }

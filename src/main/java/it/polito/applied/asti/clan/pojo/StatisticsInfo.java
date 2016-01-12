@@ -10,6 +10,9 @@ public class StatisticsInfo {
 	private long totFemale;
 	private long totChildren;
 	private long totElderly;
+	private long young;
+	private long middleAge;
+	private long elderly;
 	
 	
 	public StatisticsInfo(){
@@ -76,6 +79,36 @@ public class StatisticsInfo {
 
 	public void setTotElderly(long totElderly) {
 		this.totElderly = totElderly;
+	}
+
+
+	public long getYoung() {
+		return young;
+	}
+
+
+	public void setYoung(long young) {
+		this.young = young;
+	}
+
+
+	public long getMiddleAge() {
+		return middleAge;
+	}
+
+
+	public void setMiddleAge(long middleAge) {
+		this.middleAge = middleAge;
+	}
+
+
+	public long getElderly() {
+		return elderly;
+	}
+
+
+	public void setElderly(long elderly) {
+		this.elderly = elderly;
 	}
 	
 

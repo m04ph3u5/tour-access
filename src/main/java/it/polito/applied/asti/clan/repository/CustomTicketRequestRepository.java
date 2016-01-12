@@ -1,9 +1,6 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.TicketAggregate;
-
 import java.util.Date;
-import java.util.List;
 
 public interface CustomTicketRequestRepository {
 	
@@ -13,4 +10,7 @@ public interface CustomTicketRequestRepository {
 	public long totalSingleWomanTickets(Date start, Date end);
 	public long totalGroupWithChildrenTickets(Date start, Date end);
 	public long totalGroupWithOldManTickets(Date start, Date end);
+	long totalSingleYoung(Date start, Date end);
+	long totalSingleMiddleAge(Date start, Date end);
+	long totalSingleElderly(Date start, Date end);
 }

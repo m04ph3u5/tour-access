@@ -185,7 +185,9 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public long totalTickets(Date start, Date end) {
 		Query q = new Query();
 		if(start != null && end != null)
-			q.addCriteria(Criteria.where("emissionDate").gte(start).andOperator(Criteria.where("emissionDate").lte(end)).andOperator(Criteria.where("status").ne(PENDING)));
+			q.addCriteria(Criteria.where("emissionDate").gte(start)
+					.andOperator(Criteria.where("emissionDate").lte(end)
+					.andOperator(Criteria.where("status").ne(PENDING))));
 		else if(start == null && end != null)
 			q.addCriteria(Criteria.where("emissionDate").lte(end).andOperator(Criteria.where("status").ne(PENDING)));
 		else if(start != null && end == null)
@@ -205,7 +207,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public List<TicketAggregate> getTicketGrouped(Date start, Date end){
 		Criteria c = new Criteria();
 		c = (Criteria.where("emissionDate").gte(start).
-				andOperator(Criteria.where("emissionDate").lte(end)).andOperator(Criteria.where("status").ne(PENDING)));
+				andOperator(Criteria.where("emissionDate").lte(end).andOperator(Criteria.where("status").ne(PENDING))));
 		
 		
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("emissionDate").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));

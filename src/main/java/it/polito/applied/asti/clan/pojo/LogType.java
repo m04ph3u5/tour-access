@@ -1,7 +1,7 @@
 package it.polito.applied.asti.clan.pojo;
 
 public enum LogType {
-	OpenApp, OpenPath, ClosePath, 
+	Install, OpenApp, OpenPath, ClosePath, 
 	DownloadFinished, UnzipFinished, OpenPoi, ClosePoi,
 	OpenAudio, CloseAudio, OpenPanoImage, ClosePanoImage,
 	OpenVideo, CloseVideo, DirectionRequest,

@@ -21,7 +21,7 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 	self.setDate = function(a){
 		self.dateEndOptions = {
 				"regional" : "it",
-				"minDate" : self.startDate,
+				"minDate" : a,
 	            "numberOfMonths": 1
 		};	
 	}
@@ -36,6 +36,8 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					self.pie2Labels = ["Gruppi con bambini", "Gruppi con anziani"];
 					self.pie3 = [self.statistics.totMale, self.statistics.totFemale];
 					self.pie3Labels = ["Uomini", "Donne"];
+					self.pie4 = [self.statistics.young, self.statistics.middleAge, self.statistics.elderly];
+					self.pie4Labels = ["Giovani", "Mezza età", "Anziani"];
 				},
 				function(reason){
 					console.log(reason);

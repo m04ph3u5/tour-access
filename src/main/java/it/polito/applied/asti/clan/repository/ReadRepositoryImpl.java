@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.AccessAggregate;
+import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
 
 import java.util.Date;
@@ -52,6 +53,23 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		AggregationResults result = mongoOp.aggregate(agg, Read.class, AccessAggregate.class);
 		
 		List<AccessAggregate> l = result.getMappedResults();
+		return l;
+	}
+
+	@Override
+	public List<PoiRank> getPoiRank(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("dtaTransit").gte(start)
+				.andOperator(Criteria.where("dtaTransit").lte(end)
+				.andOperator(Criteria.where("isAccepted").is(true))));
+		
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("idSite").count().as("totAccess"), Aggregation.project("totAccess").and("idSite").previousOperation(), Aggregation.sort(Direction.DESC, "totAccess"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Read.class, PoiRank.class);
+		
+		List<PoiRank> l = result.getMappedResults();
 		return l;
 	}
 
