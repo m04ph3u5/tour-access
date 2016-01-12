@@ -1,60 +1,67 @@
-
-<div class="container" style="margin-top:30px">
-
-	<div class="col-xs-8">
-		<h3>Seleziona i siti da visitare</h3>
-		<div class="boxPlaces">
+<section class="center">
+	<div class="container">
+	<div class=" col-md-8 silver"> <!-- grid POI-->
+		
+			<h2 class="space"> Seleziona i siti da visitare</h2>
+			<div class="gap"></div>
 			
-				<div  class="col-md-6" data-ng-repeat="p in selectPlace.places">
-					<div data-ng-click="selectPlace.switchSelected(p)" style= "cursor:pointer;" class="boxFakeDraft selectable" data-ng-class="{'selectedBox' : p.selected}">
-						<b>{{p.name}}</b>
-<!-- 							<img src="/assets/public/img/01_p1.png" style="width: 75%"> -->
-						<img data-ng-src="{{p.imageId}}" style="width: 50%">
-						<div class="textJustify" style="margin: 5px; margin-top:8px;">
-							<p style="color: #000000" class="tooltips" title="{{p.timetable}}"><b>Orari:</b> {{p.timetable | limitTo: 100}} <span data-ng-show="p.timetable.length>100">...</span></p>
-						</div>
-						<div data-ng-hide="p.selected" class="btn btn-primary" >
-							<span class="glyphicon glyphicon-plus"></span> Aggiungi</div>
-						<div data-ng-show="p.selected" class="btn btn-danger" >
-							<span class="glyphicon glyphicon-remove"></span> Rimuovi</div>
-					</div>
+			
+			
+			
+			<div  class="col-md-4 col-sm-4 col-xs-6" data-ng-repeat="p in selectPlace.places">
+				<div data-ng-click="selectPlace.switchSelected(p)" style= "cursor:pointer;" class="places-item " data-ng-class="{'selectedBox' : p.selected}">
+					
+					<img class="img-responsive" data-ng-src="{{p.imageId}}" alt="">
+					<h5>{{p.name}}</h5>
+					<div data-ng-hide="p.selected" class="overlay">
+                    	<a class=" preview btn btn-primary"  href="#" rel="prettyPhoto"><i class="icon-plus"></i></a>
+                    </div>
+		
+<!-- 					<div data-ng-hide="p.selected" class="btn btn-primary" > -->
+<!-- 						<span class="glyphicon glyphicon-plus"></span> Aggiungi</div> -->
+<!-- 					<div data-ng-show="p.selected" class="btn btn-danger" > -->
+<!-- 						<span class="glyphicon glyphicon-remove"></span> Rimuovi</div> -->
 				</div>
+			</div>
+			
+		
 		</div>
-	
-	</div>
-	<div id="myAffix" class="col-xs-4">
-		<h3  data-ng-show="selectPlace.selected.length>0">Scelti</h3>	
-		<div id="tagBox" class="tags-wrapper">
-			<div id="tagsList" class="tags-cloud">
-				<div data-ng-repeat="p in selectPlace.selected" class="row">
-					<div style="margin-top:3px;" class="tag">
-						<span class="tagName">{{p.name}}</span>
-						<span style="cursor:pointer;" data-ng-click="selectPlace.removeToSelected(p)">&nbsp;<b class="glyphicon glyphicon-remove"></b></span>
+		
+		
+		<div id="myAffix" class="col-xs-4">
+			<h3  data-ng-show="selectPlace.selected.length>0">Siti aggiunti al biglietto: {{selectPlace.selected.length}}</h3>	
+			<div id="tagBox" class="tags-wrapper">
+				<div id="tagsList" class="tags-cloud">
+					<div data-ng-repeat="p in selectPlace.selected" class="row">
+						<div style="margin-top:3px;" class="tag">
+							<span class="tagName">{{p.name}}</span>
+							<span style="cursor:pointer;" data-ng-click="selectPlace.removeToSelected(p)">&nbsp;<b class="glyphicon glyphicon-remove"></b></span>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-			
-		<div class="col-xs-offset-3" data-ng-show="selectPlace.selected.length>0" style="margin-bottom:50px;">
 				
-				<div  class="row" style="margin-top:20px;">
-					<label>Biglietti da acquistare: </label><input style="width: 50px; margin-left: 5px;" type="number" data-ng-model="selectPlace.numFullTicket" min="1">
-				</div>
-				<div class="pull-right">
-					<div class="btn btn-danger" data-ng-click="selectPlace.removeAll()">
-						<span class="glyphicon glyphicon-remove"></span> Annulla
+			<div class="col-xs-offset-3" data-ng-show="selectPlace.selected.length>0" style="margin-bottom:50px;">
+					
+					<div  class="row" style="margin-top:20px;">
+						<label>Biglietti da acquistare: </label><input style="width: 50px; margin-left: 5px;" type="number" data-ng-model="selectPlace.numFullTicket" min="1">
+					</div>
+					<div class="pull-right">
+						<div class="btn btn-danger" data-ng-click="selectPlace.removeAll()">
+							<span class="glyphicon glyphicon-remove"></span> Annulla
+						</div>
+						
+						<div data-ng-click="selectPlace.toInfo()"  class="btn btn-success">
+							<span class="glyphicon glyphicon-ok"></span> Procedi
+						</div>
 					</div>
 					
-					<div data-ng-click="selectPlace.toInfo()"  class="btn btn-success">
-						<span class="glyphicon glyphicon-ok"></span> Procedi
-					</div>
-				</div>
-				
-				
+					
+			</div>
+		
 		</div>
-	
 	</div>
-</div>
+</section>
 
 <script>
 var fixmeLeft = $('#myAffix').offset().left;
