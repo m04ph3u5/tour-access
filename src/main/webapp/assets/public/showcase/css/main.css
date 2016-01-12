@@ -77,7 +77,7 @@ a:focus {
   margin-top: -1px;
   min-width: 180px;
 }
-body > section {
+section {
   padding: 30px 0;
 }
 .turquoise,
@@ -474,6 +474,7 @@ body > section {
   padding: 10px 10px 0;
   margin: 0 20px 20px 0;
   position: relative;
+  min-height: 210px;
 }
 .places-item img {
   width: 100%;
@@ -485,9 +486,10 @@ body > section {
   font-weight: 700;
   font-size: 14px;
   color: #2c3e50;
-  white-space: nowrap;
+
   text-overflow: ellipsis;
   overflow: hidden;
+  
 }
 .places-item .overlay {
   position: absolute;
@@ -1165,7 +1167,7 @@ video::-webkit-media-controls-fullscreen-button {
 
 
 
-@media only screen and (min-width: 768px) and (max-width: 990px)  {
+@media only screen and (min-width: 768px) and (max-width: 992px)  {
 
     
     #video-sum{
@@ -1179,7 +1181,7 @@ video::-webkit-media-controls-fullscreen-button {
   position: relative;   
   padding-bottom: 60.25%;
   /* 16/9 ratio */
-  padding-top: 20px;
+  padding-top: 35px;
   /* IE6 workaround*/
   height: 0;
   overflow: hidden; 
@@ -1380,6 +1382,77 @@ video::-webkit-media-controls-fullscreen-button {
 }
 
 
+/*----------ticket operator-------------*/
+
+.places-item .selected{
+    border-color: coral;
+    border-width: 3px;
+    border-style: solid;
+}
+
+#num_ticket{
+    width: 50px;
+}
+
+#list_poi
+{
+    padding: 15px;
+    margin-top: 10px;
+    min-height: 150px;
+    min-width: 200px;
+}
+
+#list_poi ul{
+    margin: 0;
+    vertical-align: bottom;
+    
+}
+#list_poi h3{
+   float: left;
+    margin-left: 15px;
+    vertical-align: bottom;
+}
+#list_poi ul li{
+    float: left;   
+    margin-left: 0;
+    margin-right: 15px;
+    margin-top: 15px;
+    list-style: none;
+    font-size: 16px;
+    color: gray;
+}
+
+.boxing{
+    padding: 15px;
+}
 
 
+.order{
+    padding-top: 15px;
+}
+
+.order label{
+   margin-left: 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.radio{
+    color: dimgray;
+    font-weight: 300;
+}
+
+select{
+    padding: 5px;
+    font-size: 16px;
+}
+
+.normal-txt{
+    color: dimgray;
+    font-weight: 400;
+}
+
+.space-dwn{
+    margin-bottom: 20px;
+}
 

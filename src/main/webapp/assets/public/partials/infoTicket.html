@@ -1,88 +1,230 @@
-<div class= "container" style="margin-top: 70px;">
-	<div  class="col-sm-3 boxFakeDraft">
-		<h4 class="text-center">Riepilogo</h4>
-		<br>
-		<h5 class="text-center">Numero biglietti: <b>{{info.numTicket}}</b></h5>
+<section>     <!--Riepilogo-->
+        
+        <div class="container white boxing">
+          <h2>Riepilogo</h2>
+            
+            <div class="col-md-1 col-sm-4 col-xs-3 widget txt-white center ">
+                 <div class="pull-left">
+                    <i class="icon-ticket"></i>
+                 </div>
+                <span class="label-widget"> Biglietto/i </span> <br> {{info.numTicket}} 
+             </div>   
+                
+            <div id="list_poi" class="col-md-9 col-sm-7 col-xs-8 white "> 
+                
+                 <div class="pull-left">
+                    <i class="icon-map-marker h1"></i>
+                 </div>
+                <h3>Siti visitabili</h3>
+                <div class="clearfix"></div>
+                <div class="gap"></div>
+                <div id="tagBox" class="col-sm-12 tags-wrapper">
+					<div id="tagsList" class="tags-cloud">
+						<div data-ng-repeat="p in info.places" class="tag">
+							<span class="tagName">{{p.name}}</span><br>
+						</div>
+					</div>
+				</div>
+             
+            </div>
+        
+</section>  <!--End Riepilogo-->
+
+
+<div class="container white boxing" data-ng-show="info.numTicket==1">  <!--Dati cliente-->
+            
+      
+    <h2>Dati cliente</h2>
+     	
+    <div class="order">
+		
+		<label class="h4 control-label">Sesso</label>
+		<label class="radio"> <input type="radio" data-ng-model="info.gender"
+			value="male"> Maschio
+		</label>
+		<label class="radio"> <input type="radio"
+			data-ng-model="info.gender" value="female"> Femmina
+		</label>
 	
-		<div id="tagBox" class="col-sm-12 tags-wrapper">
-			<div id="tagsList" class="tags-cloud">
-				<div data-ng-repeat="p in info.places" class="tag">
-					<span class="tagName">{{p.name}}</span><br>
-				</div>
-			</div>
-		</div>
 	</div>
-	<div class="text-center col-sm-8">
-		<div class="row">
-			<form class="form-inline" style="margin-top: 10px;">
-				<div class="form-group">
-					<label data-ng-show="info.numTicket==1" for="tipology">Tipologia
-						biglietto</label> <label data-ng-show="info.numTicket>1" for="tipology">Tipologia
-						biglietti</label> <select id="tipology"
-						data-ng-model="info.ticketTipology">
-						<option selected value="DAILY_VISITOR">Giornaliero</option>
-						<option value="WEEKLY_VISITOR">Settimanale</option>
-						<option value="DAILY_VIP_VISITOR">Giornaliero VIP</option>
-						<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
-					</select> <span class="glyphicon glyphicon-info-sign tooltips"
-						title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni. &#013;Settimanale VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una settimana senza limitazioni."></span>
-				</div>
+	
+	<div class="order">
+			
+		<label class="h4 control-label">Età</label>
+		<label class="radio"> <input type="radio" data-ng-model="info.age"
+			value="young"> Giovane
+		</label > 
+		<label class="radio"> <input type="radio"
+			data-ng-model="info.age" value="middleAge"> Mezza età
+		</label> 
+		<label class="radio"> <input type="radio"
+			data-ng-model="info.age" value="elderly"> Anziano
+		</label>
+			
+	</div>
 
-			</form>
-		</div>
-		<div class="row" style="margin-top: 30px;">
-			<div data-ng-show="info.numTicket==1">
-				<h3>Dati acquirente</h3>
-				<div class="col-sm-offset-4 col-sm-2">
-					<form name="myForm" class="form-inline" style="margin-top: 15px;">
-						<h4>Sesso</h4>
-						<label> <input type="radio" ng-model="info.gender"
-							value="male"> Maschio
-						</label><br> <label> <input type="radio"
-							ng-model="info.gender" value="female"> Femmina
-						</label>
-					</form>
-				</div>
-				<div class="col-sm-2">
-					<form name="myForm" class="form-inline" style="margin-top: 15px;">
-						<h4>Età</h4>
-						<label> <input type="radio" data-ng-model="info.age"
-							value="young"> Giovane
-						</label><br> <label> <input type="radio"
-							data-ng-model="info.age" value="middleAge"> Mezza età
-						</label><br> <label> <input type="radio"
-							data-ng-model="info.age" value="elderly"> Anziano
-						</label>
-					</form>
-				</div>
-			</div>
-			<div data-ng-show="info.numTicket>1">
-				<form name="myForm" class="form-inline">
-					<h3>Composizione gruppo</h3>
+         
+    <hr>
+            
+    <div class="form-group pull-right">
+    	<label for="num_ticket" class="bolding h4">Tipologia Biglietto:</label>
+                <select id="tipology"
+					data-ng-model="info.ticketTipology">
+					<option selected value="DAILY_VISITOR">Giornaliero</option>
+					<option value="WEEKLY_VISITOR">Settimanale</option>
+					<option value="DAILY_VIP_VISITOR">Giornaliero VIP</option>
+					<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
+				</select> <span class="glyphicon glyphicon-info-sign tooltips"
+					title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni. &#013;Settimanale VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una settimana senza limitazioni."></span>
 
-					<img class="imgPreviewL"
-						data-ng-src="/assets/public/img/bambina.png"><label>Con
-						bambini <input type="checkbox" data-ng-model="info.withChildren">
-					</label><br /> <img class="imgPreviewL"
-						data-ng-src="/assets/public/img/anziani.png"><label>Con
-						anziani <input type="checkbox" data-ng-model="info.withElderly">
-					</label><br />
-				</form>
-			</div>
-		</div>
+    </div>
+    
+    <div class="clearfix"></div>
+    <div class="gap"></div>
+
+
+    <div class="controls pull-right space-dwn">
+	    <button data-ng-click="info.remove()" class="btn btn-danger btn-exp ">Annulla</button>
+	    <button data-ng-click="info.toSelectPlace()" class="btn btn-warning btn-exp ">Indietro</button> 
+	    <button data-ng-click="info.next()" class="btn btn-success btn-exp">Procedi</button> 
+
+  	</div>
+</div>  <!--Dati cliente singolo end-->
+
+<!--Dati gruppo start-->
+<div class="container white boxing" data-ng-show="info.numTicket>1">  
+            
+      
+    <h2>Dati clienti</h2>
+     	
+	<div class="order">
+		<form name="myForm" class="form-inline">
+			<h3>Composizione gruppo</h3>
+	
+			<img class="imgPreviewL"
+				data-ng-src="/assets/public/img/bambina.png"><label class="radio">Con
+				bambini <input type="checkbox" data-ng-model="info.withChildren">
+			</label><br /> <img class="imgPreviewL"
+				data-ng-src="/assets/public/img/anziani.png"><label class="radio">Con
+				anziani <input type="checkbox" data-ng-model="info.withElderly">
+			</label><br />
+		</form>
 	</div>
-	<div class="row">
-		<div class="col-sm-offset-8 col-sm-4 pull-right"
-			style="margin-top: 30px;">
-			<div class="btn btn-danger" data-ng-click="info.remove()">
-				<span class="glyphicon glyphicon-remove"></span> Annulla
-			</div>
-			<div class="btn btn-warning" data-ng-click="info.toSelectPlace()">
-					<span class="glyphicon glyphicon glyphicon-chevron-left"></span> Indietro
-			</div>
-			<div class="btn btn-success" data-ng-click="info.next()">
-				<span class="glyphicon glyphicon-ok"></span> Procedi
-			</div>
-		</div>
-	</div>
-</div>
+
+         
+    <hr>
+            
+    <div class="form-group pull-right">
+    	<label for="num_ticket" class="bolding h4">Tipologia Biglietto:</label>
+                <select id="tipology"
+					data-ng-model="info.ticketTipology">
+					<option selected value="DAILY_VISITOR">Giornaliero</option>
+					<option value="WEEKLY_VISITOR">Settimanale</option>
+					<option value="DAILY_VIP_VISITOR">Giornaliero VIP</option>
+					<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option>
+				</select> <span class="glyphicon glyphicon-info-sign tooltips"
+					title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni. &#013;Settimanale VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una settimana senza limitazioni."></span>
+
+    </div>
+    
+    <div class="clearfix"></div>
+    <div class="gap"></div>
+
+    <div class="controls pull-right space-dwn">
+	    <button data-ng-click="info.remove()" class="btn btn-danger btn-exp ">Annulla</button>
+	    <button data-ng-click="info.toSelectPlace()" class="btn btn-warning btn-exp ">Indietro</button> 
+	    <button data-ng-click="info.next()" class="btn btn-success btn-exp">Procedi</button> 
+
+  	</div>
+</div> <!--Dati gruppo end-->
+
+
+
+<!-- <div class= "container" style="margin-top: 70px;"> -->
+<!-- 	<div  class="col-sm-3 boxFakeDraft"> -->
+<!-- 		<h4 class="text-center">Riepilogo</h4> -->
+<!-- 		<br> -->
+<!-- 		<h5 class="text-center">Numero biglietti: <b>{{info.numTicket}}</b></h5> -->
+	
+<!-- 		<div id="tagBox" class="col-sm-12 tags-wrapper"> -->
+<!-- 			<div id="tagsList" class="tags-cloud"> -->
+<!-- 				<div data-ng-repeat="p in info.places" class="tag"> -->
+<!-- 					<span class="tagName">{{p.name}}</span><br> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="text-center col-sm-8"> -->
+<!-- 		<div class="row"> -->
+<!-- 			<form class="form-inline" style="margin-top: 10px;"> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label data-ng-show="info.numTicket==1" for="tipology">Tipologia -->
+<!-- 						biglietto</label> <label data-ng-show="info.numTicket>1" for="tipology">Tipologia -->
+<!-- 						biglietti</label> <select id="tipology" -->
+<!-- 						data-ng-model="info.ticketTipology"> -->
+<!-- 						<option selected value="DAILY_VISITOR">Giornaliero</option> -->
+<!-- 						<option value="WEEKLY_VISITOR">Settimanale</option> -->
+<!-- 						<option value="DAILY_VIP_VISITOR">Giornaliero VIP</option> -->
+<!-- 						<option value="WEEKLY_VIP_VISITOR">Settimanale VIP</option> -->
+<!-- 					</select> <span class="glyphicon glyphicon-info-sign tooltips" -->
+<!-- 						title="Giornaliero: biglietto valido per un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Settimanale: biglietto valido per una settimana ma con un solo ingresso in ogni sito scelto nell'arco della stessa giornata. &#013;Giornaliero VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una giornata senza limitazioni. &#013;Settimanale VIP: biglietto valido per entrare in ogni sito scelto nell'arco di una settimana senza limitazioni."></span> -->
+<!-- 				</div> -->
+
+<!-- 			</form> -->
+<!-- 		</div> -->
+<!-- 		<div class="row" style="margin-top: 30px;"> -->
+<!-- 			<div data-ng-show="info.numTicket==1"> -->
+<!-- 				<h3>Dati acquirente</h3> -->
+<!-- 				<div class="col-sm-offset-4 col-sm-2"> -->
+<!-- 					<form name="myForm" class="form-inline" style="margin-top: 15px;"> -->
+<!-- 						<h4>Sesso</h4> -->
+<!-- 						<label> <input type="radio" ng-model="info.gender" -->
+<!-- 							value="male"> Maschio -->
+<!-- 						</label><br> <label> <input type="radio" -->
+<!-- 							ng-model="info.gender" value="female"> Femmina -->
+<!-- 						</label> -->
+<!-- 					</form> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-sm-2"> -->
+<!-- 					<form name="myForm" class="form-inline" style="margin-top: 15px;"> -->
+<!-- 						<h4>Età</h4> -->
+<!-- 						<label> <input type="radio" data-ng-model="info.age" -->
+<!-- 							value="young"> Giovane -->
+<!-- 						</label><br> <label> <input type="radio" -->
+<!-- 							data-ng-model="info.age" value="middleAge"> Mezza età -->
+<!-- 						</label><br> <label> <input type="radio" -->
+<!-- 							data-ng-model="info.age" value="elderly"> Anziano -->
+<!-- 						</label> -->
+<!-- 					</form> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div data-ng-show="info.numTicket>1"> -->
+<!-- 				<form name="myForm" class="form-inline"> -->
+<!-- 					<h3>Composizione gruppo</h3> -->
+
+<!-- 					<img class="imgPreviewL" -->
+<!-- 						data-ng-src="/assets/public/img/bambina.png"><label>Con -->
+<!-- 						bambini <input type="checkbox" data-ng-model="info.withChildren"> -->
+<!-- 					</label><br /> <img class="imgPreviewL" -->
+<!-- 						data-ng-src="/assets/public/img/anziani.png"><label>Con -->
+<!-- 						anziani <input type="checkbox" data-ng-model="info.withElderly"> -->
+<!-- 					</label><br /> -->
+<!-- 				</form> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="row"> -->
+<!-- 		<div class="col-sm-offset-8 col-sm-4 pull-right" -->
+<!-- 			style="margin-top: 30px;"> -->
+<!-- 			<div class="btn btn-danger" data-ng-click="info.remove()"> -->
+<!-- 				<span class="glyphicon glyphicon-remove"></span> Annulla -->
+<!-- 			</div> -->
+<!-- 			<div class="btn btn-warning" data-ng-click="info.toSelectPlace()"> -->
+<!-- 					<span class="glyphicon glyphicon glyphicon-chevron-left"></span> Indietro -->
+<!-- 			</div> -->
+<!-- 			<div class="btn btn-success" data-ng-click="info.next()"> -->
+<!-- 				<span class="glyphicon glyphicon-ok"></span> Procedi -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
