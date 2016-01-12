@@ -1,55 +1,83 @@
 package it.polito.applied.asti.clan.pojo;
 
-import java.util.Date;
 
 public class StatisticsInfo {
-	private Date start;
-	private Date end;
+	private long totSingleTickets;
+	private long totGroupTickets;
 	private long totTickets;
-	private long totGroups;
-	private long totSingle;
+	private long totAccess;
+	private long totMale;
+	private long totFemale;
+	private long totChildren;
+	private long totElderly;
 	
 	
-	
-	public StatisticsInfo(Date start, Date end, long totTickets, long totGroups,
-			long totSingle) {
-		this.start = start;
-		this.end = end;
-		this.totTickets = totTickets;
-		this.totGroups = totGroups;
-		this.totSingle = totSingle;
+	public StatisticsInfo(){
 		
 	}
-	public Date getStart() {
-		return start;
-	}
-	public void setStart(Date start) {
-		this.start = start;
-	}
-	public Date getEnd() {
-		return end;
-	}
-	public void setEnd(Date end) {
-		this.end = end;
-	}
+	
+	
 	public long getTotTickets() {
 		return totTickets;
 	}
 	public void setTotTickets(long totTickets) {
 		this.totTickets = totTickets;
 	}
-	public long getTotGroups() {
-		return totGroups;
+	public long getTotSingleTickets() {
+		return totSingleTickets;
 	}
-	public void setTotGroups(long totGroups) {
-		this.totGroups = totGroups;
+	public void setTotSingleTickets(long totSingleTickets) {
+		this.totSingleTickets = totSingleTickets;
 	}
-	public long getTotSingle() {
-		return totSingle;
+
+	public long getTotAccess() {
+		return totAccess;
 	}
-	public void setTotSingle(long totSingle) {
-		this.totSingle = totSingle;
+
+	public void setTotAccess(long totAccess) {
+		this.totAccess = totAccess;
 	}
+
+	public long getTotGroupTickets() {
+		return totGroupTickets;
+	}
+
+	public void setTotGroupTickets(long totGroupTickets) {
+		this.totGroupTickets = totGroupTickets;
+	}
+
+	public long getTotMale() {
+		return totMale;
+	}
+
+	public void setTotMale(long totMale) {
+		this.totMale = totMale;
+	}
+
+	public long getTotFemale() {
+		return totFemale;
+	}
+
+	public void setTotFemale(long totFemale) {
+		this.totFemale = totFemale;
+	}
+
+	public long getTotChildren() {
+		return totChildren;
+	}
+
+	public void setTotChildren(long totChildren) {
+		this.totChildren = totChildren;
+	}
+
+	public long getTotElderly() {
+		return totElderly;
+	}
+
+	public void setTotElderly(long totElderly) {
+		this.totElderly = totElderly;
+	}
+	
 
 	
 	

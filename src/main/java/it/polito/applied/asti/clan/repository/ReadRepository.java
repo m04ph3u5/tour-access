@@ -8,8 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ReadRepository extends MongoRepository<Read, String>, CustomReadRepository{
 	
-	public Read findById(String id);
-
-	
+	public Read findById(String id);	
 
 }

@@ -7,8 +7,6 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.DashboardInfo;
-import it.polito.applied.asti.clan.pojo.GroupAggregateCount;
-import it.polito.applied.asti.clan.pojo.InfoTicketRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.Name;
@@ -23,6 +21,7 @@ import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
@@ -37,9 +36,8 @@ import it.polito.applied.asti.clan.service.UserService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -240,27 +238,19 @@ public class ApiRestController extends BaseController{
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
-	@RequestMapping(value="/v1/statistics/totalTickets", method=RequestMethod.GET)
+	@RequestMapping(value="/v1/statistics/statisticsInfo", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public StatisticsInfo getNumTotalTicketsInInterval( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		System.out.println("TEST");
-		
-		System.out.println(ticketRepo.totalTickets(start, end));
-		long totGroup=0, totSingle=0;
-		List<GroupAggregateCount> l = ticketRequestRepo.totalGroupTickets(start, end);
-		for(GroupAggregateCount g : l){
-			System.out.println(g);	
-			if(g.isGroup() == true){
-				totGroup = g.getTot();
-			}else{
-				totSingle = g.getTot();
-			}
-		}
-			
-		
-		StatisticsInfo s = new StatisticsInfo (start, end, ticketRepo.totalTickets(start, end), totGroup,
-				totSingle);
-		return s;
+	public StatisticsInfo getNumTotalTicketsInInterval( @RequestParam(value = "start", required=true) String startTS, @RequestParam (value = "end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+
+		return ticketService.getStatisticsInfo(start, end);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
@@ -321,24 +311,22 @@ public class ApiRestController extends BaseController{
 		return d;
 	}
 	
-//	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	public void test() throws BadRequestException, NotFoundException, ServiceUnaivalableException{
-//		TicketRequestDTO t = new TicketRequestDTO();
-//		t.setTipology("DAILY_VISITOR");
-//		List<String> places = new ArrayList<String>();
-//		places.add("s00001");
-//		places.add("s00002");
-//		t.setPlacesId(places);
-//		InfoTicketRequest i = new InfoTicketRequest();
-//		i.setWithChildren(true);
-//		i.setWithElderly(false);
-//		t.setInfo(i);
-//		Set<String> n = new HashSet<String>();
-//		n.add("8521479630");
-//		n.add("9632587410");
-//
-//		t.setTicketsNumber(n);
-//		ticketService.operatorGenerateTickets(t, "0123456789");
-//	}
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/statisticsSeries", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Map<Date,TicketAccessSeries> getStatisticsSeries(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return ticketService.getTicketAccessSeries(start, end);
+	}
+	
+	
 }

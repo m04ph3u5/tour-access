@@ -2,11 +2,15 @@ package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
+import it.polito.applied.asti.clan.pojo.AccessAggregate;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
+import it.polito.applied.asti.clan.pojo.TicketAggregate;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
@@ -18,7 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -264,5 +270,52 @@ public class TicketServiceImpl implements TicketService{
 	public long getNumberIngress(Date date) {
 		return readRepo.countIngressFromDate(date);
 	}
+
+	@Override
+	public StatisticsInfo getStatisticsInfo(Date start, Date end) {
+		StatisticsInfo s = new StatisticsInfo();
+		s.setTotSingleTickets(ticketRequestRepo.totalSingleTickets(start, end));
+		s.setTotGroupTickets(ticketRequestRepo.totalGroupTickets(start, end));
+		s.setTotMale(ticketRequestRepo.totalSingleManTickets(start, end));
+		s.setTotFemale(ticketRequestRepo.totalSingleWomanTickets(start, end));
+		s.setTotChildren(ticketRequestRepo.totalGroupWithChildrenTickets(start, end));
+		s.setTotElderly(ticketRequestRepo.totalGroupWithOldManTickets(start, end));
+		s.setTotAccess(readRepo.countIngress(start, end));
+		s.setTotTickets(ticketRepo.totalTickets(start, end));
+		return s;
+	}
+
+	@Override
+	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
+		Map<Date, TicketAccessSeries> map = new HashMap<Date, TicketAccessSeries>();
+		List<AccessAggregate> access = readRepo.getAccessGrouped(start, end);
+		List<TicketAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		for(AccessAggregate a : access){
+			if(!map.containsKey(a.getDate())){
+				TicketAccessSeries as = new TicketAccessSeries();
+				as.setTotAccesses(a.getTot());
+				map.put(a.getDate(), as);
+			}else{
+				TicketAccessSeries as = map.get(a.getDate());
+				as.setTotAccesses(a.getTot());
+				map.put(a.getDate(), as);
+			}
+		}
+		
+		for(TicketAggregate t : ticket){
+			if(!map.containsKey(t.getDate())){
+				TicketAccessSeries as = new TicketAccessSeries();
+				as.setTotTickets(t.getTot());
+				map.put(t.getDate(), as);
+			}else{
+				TicketAccessSeries as = map.get(t.getDate());
+				as.setTotTickets(t.getTot());
+				map.put(t.getDate(), as);
+			}
+		}
+		
+		return map;
+	}
+
 
 }

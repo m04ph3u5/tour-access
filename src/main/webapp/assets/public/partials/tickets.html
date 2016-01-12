@@ -1,98 +1,150 @@
-<div style="margin-top:20px; margin-bottom: 50px;" class="row text-center">
-	<div class="col-sm-offset-1 col-sm-10">
-		<h3>Trend acquisto Ticket</h3>
-		<h5>Venduti: {{tickets.totalTicketSelled}}</h5>
-		<h5>Ingressi: {{tickets.totalIngress}}</h5>
-		<div class="row">
-				<form class="form-inline" style="margin-top: 10px;">
-					<div class="form-group">
-						<label  for="interval">Intervallo di analisi</label> 
-						<select id="interval"
-							data-ng-model="tickets.totalInterval"
-							data-ng-change="tickets.changeIntervalTotal()">
-								<option selected value="week">Settimanale</option>
-								<option value="month">Mensile</option>
-								<option value="three_month">Trimestrale</option>
-								<option value="year">Annuale</option>
-						</select> <span class="glyphicon glyphicon-info-sign tooltips"
-								title="Intervallo di analisi."></span>
-					</div>
-				</form>
-		</div>
-		<div class=" boxPlaces">
-			<div style="margin: 10px;" class="row">
-				<h5>Ticket acquistati / ingressi</h5>
-				
-				<canvas height="300" width="600" id="line" class="chart chart-line" chart-data="tickets.dataTotal"
-					  chart-labels="tickets.labelsTotal" chart-series="tickets.seriesTotal"
-					  chart-click="tickets.onClickTotal" chart-colours="tickets.colors" >
-				</canvas> 
-				
+<div style="margin-top: 20px;">
+	<section id="tickets">
+
+		<div class="container">
+			<div class="col-md-12 center ">
+				<h1>Statistiche biglietti</h1>
 			</div>
-		</div>
-		
-	</div>
-	
-	<div class="col-sm-offset-1 col-sm-10">
-		<h3>Trend acquisto Ticket di gruppo</h3>
-		<div class="row">
-				<form class="form-inline" style="margin-top: 10px;">
-					<div class="form-group">
-						<label  for="interval">Intervallo di analisi</label> 
-						<select id="interval"
-							data-ng-model="tickets.groupInterval"
-							data-ng-change="tickets.changeIntervalGroup()">
-								<option selected value="week">Settimanale</option>
-								<option value="month">Mensile</option>
-								<option value="three_month">Trimestrale</option>
-								<option value="year">Annuale</option>
-						</select> <span class="glyphicon glyphicon-info-sign tooltips"
-								title="Intervallo di analisi."></span>
+
+			<div class="gap"></div>
+
+			<form class="row">
+				<!--datepicker start-->
+				<div class="col-md-1"></div>
+				<div class="col-md-2 ">
+
+					<select data-ng-model="tickets.period" data-ng-change="tickets.selectPeriod()" id="period" class="form-control">
+						<option selected value="0">Ultima settimana</option>
+						<option value="1">Ultimo mese</option>
+						<option value="2">Ultimi 3 mesi</option>
+						<option value="3">Periodo</option>
+
+					</select>
+				</div>
+				<div class="col-md-3 form-group ">
+
+					<span class="col-md-1">Da:</span>
+					<div id="dataStart" class="input-group col-md-10">
+						<input data-ui-date="tickets.dateStartOptions" data-ng-model="tickets.dateStart" data-ng-change="tickets.setDate(tickets.dateStart)" id="date-from"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend" class="input-group-addon">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
 					</div>
-				</form>
-		</div>
-		<div class=" boxPlaces">
-			<div style="margin: 10px;" class="row">
-				<h5>Ticket di gruppo </h5>
-				
-				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="tickets.dataGroup"
-					  chart-labels="tickets.labelsGroup" chart-legend="true" chart-series="tickets.seriesGroup"
-					  chart-click="tickets.onClickGroup" >
-				</canvas>
-			</div>
-		</div>
-		
-	</div>
-	
-	<div class="col-sm-offset-1 col-sm-10">
-		<h3>Trend acquisto Ticket singoli</h3>
-		<div class="row">
-				<form class="form-inline" style="margin-top: 10px;">
-					<div class="form-group">
-						<label  for="interval">Intervallo di analisi</label> 
-						<select id="interval"
-							data-ng-model="tickets.singleInterval"
-							data-ng-change="tickets.changeIntervalSingle()">
-								<option selected value="week">Settimanale</option>
-								<option value="month">Mensile</option>
-								<option value="three_month">Trimestrale</option>
-								<option value="year">Annuale</option>
-						</select> <span class="glyphicon glyphicon-info-sign tooltips"
-								title="Intervallo di analisi."></span>
+				</div>
+
+				<div class="col-md-3 ">
+
+					<span class="col-md-1">A:</span>
+
+					<div id="dataEnd" class="input-group col-md-10">
+
+						<input data-ui-date="tickets.dateEndOptions" data-ng-model="tickets.dateEnd" id="date-to"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend2" class="input-group-addon">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
 					</div>
-				</form>
-		</div>
-		<div class="boxPlaces">
-			<div style="margin: 10px;" class="row">
-				<h5>Ticket singoli</h5>
+
+				</div>
+
+
+				<div class="col-md-2">
+					<button data-ng-click="tickets.elaborate()" class="btn btn-primary btn-exp">Calcola</button>
+
+				</div>
+
+
+
+			</form>
+			<!--datepicker end-->
+
+
+			<div class="gap"></div>
+
+
+			<div id="stats" class="row white">
+				<!--piechart---------->
+
+
+				<div class="col-sm-12 center ">
+					<h4>
+						Totale biglietti: <span id="num-tickets"> {{tickets.statistics.totTickets}} </span>
+					</h4>
+					<canvas id="pie1" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>
+				</div>
+
+				<div class="col-sm-12 center">
+					<h4>
+						Biglietti di gruppo: <span id="num-tickets"> {{tickets.statistics.totGroupTickets}} </span>
+					</h4>
+					<canvas id="pie2" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>				</div>
 				
-				<canvas style="height:200px; width:400px;" id="line" class="chart chart-line" chart-data="tickets.dataSingle"
-					  chart-labels="tickets.labelsSingle" chart-legend="true" chart-series="tickets.seriesSingle"
-					  chart-click="tickets.onClickSingle" >
-				</canvas>
+				<div class="col-sm-12 center">
+					<h4>
+						Biglietti singoli: <span id="num-tickets"> {{tickets.statistics.totSingleTickets}} </span>
+					</h4>
+					<canvas id="pie3" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie3" data-chart-labels="tickets.pie3Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>	
+				</div>
+
+
+
+
+
 			</div>
+			<!--end pie chart-->
+
+			<div class="gap"></div>
+
+			<div class="col-xs-12 col-sm-6 center">
+
+
+				<table class="table table-striped text-left">
+
+					<thead>
+						<tr>
+							<th>Data</th>
+							<th>Numero Biglietti</th>
+							<th>Numero Ingressi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="(key,value) in tickets.series">
+							<td>{{key | date : 'shortDate'}}</td>
+							<td>{{value.totTickets}}</td>
+							<td>{{value.totAccesses}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+
+
+
+
 		</div>
-		
-	</div>
-	
+		<!--container-->
+
+	</section>
+	<section>
+		<div class="center">
+			<h2>N° Ticket/ingressi</h2>
+
+
+				<canvas height="450" width="800" id="line" class="chart chart-line" data-chart-data="tickets.lineChart.data"
+					  data-chart-labels="tickets.lineChart.labels" data-chart-series="tickets.lineChart.series"
+					  data-chart-options=tickets.chartOptions>
+				</canvas> 		</div>
+
+	</section>
 </div>

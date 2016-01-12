@@ -1,58 +1,240 @@
-<div class="container">
-	<h2 style="margin-top: 15px;">Analisi applicazioni mobili</h2>
-	<br>
-	<h4>Info</h4>
-	<div>
-		<form class="form-inline" style="margin-top: 10px;">
-			<div class="form-group">
-				<label for="interval">Intervallo di analisi</label> <select
-					id="interval" data-ng-model="mobile.infoInterval"
-					data-ng-change="mobile.changeIntervalInfo()">
-					<option selected value="week">Settimanale</option>
-					<option value="month">Mensile</option>
-					<option value="three_month">Trimestrale</option>
-					<option value="year">Annuale</option>
-				</select>
+<div style="margin-top: 20px;">
+
+	<section class="white">
+
+
+		<div class="container center">
+			<h2>Statistiche giornaliere</h2>
+
+
+			<div class="col-xs-12">
+
+
+				<div
+					class="col-md-1 col-sm-4 col-xs-6 col-md-offset-2 widget txt-white ">
+
+					<div class="pull-left">
+						<i class="icon-hand-up"></i>
+					</div>
+					<span class="label-widget"> Accessi </span> <br> 10 <i
+						class="fa fa-university"></i>
+				</div>
+
+				<div class="col-md-1 col-sm-4  col-xs-6  widget txt-white coral">
+					<div class="pull-left">
+						<i class="icon-circle-arrow-down"></i>
+					</div>
+
+					<span class="label-widget"> Installazioni </span> <br>40
+				</div>
+
+				<div class="col-md-1 col-sm-4  col-xs-6  emerald widget txt-white">
+					<div class="pull-left">
+						<i class="icon-map-marker"></i>
+					</div>
+					<span class="label-widget"> POI Visitati</span> <br>10
+				</div>
 			</div>
-		</form>
-	</div>
-	<br>
-	<h5>Totole accessi {{mobile.info}}: <b>{{mobile.infoData.todayAppAccess}}</b></h5>
-	<h5>Numero dispositivi differenti: <b>{{mobile.infoData.todayDevices}}</b></h5>
-	<h5>Nuove installazioni: <b>{{mobile.infoData.todayAppInstallation}}</b></h5>
-	<br>
-	<h4>Top 10 devices</h4>
-	<div>
-		<canvas id="top10" class="chart chart-bar" width=600 height=300
-			chart-data="mobile.top10data" chart-labels="mobile.top10labels"
-			chart-series="mobile.top10series">
-		</canvas>
-	</div>
-	<div class="row">
-		<br>
-		<hr>
-	</div>
-	<br>
-	<h4>Andamento accessi</h4>
-	<div>
-		<form class="form-inline" style="margin-top: 10px;">
-			<div class="form-group">
-				<label for="interval">Intervallo di analisi</label> <select
-					id="interval" data-ng-model="mobile.accessInterval"
-					data-ng-change="mobile.changeIntervalAccess()">
-					<option selected value="week">Settimanale</option>
-					<option value="month">Mensile</option>
-					<option value="three_month">Trimestrale</option>
-					<option value="year">Annuale</option>
-				</select>
+
+		</div>
+
+	</section>
+
+
+
+	<!--da dare una dimensione responsive ai grafici mensili--->
+
+
+	<section>
+		<div class="center">
+			<h2>Trend mensili</h2>
+			<div class="gap"></div>
+			<h4>Numero Accessi/Installazioni</h4>
+			<canvas id="chart-area3" width="800px" height="200px" />
+		</div>
+
+
+		<div class="gap"></div>
+		<div class="center">
+
+			<h4>POI più visitati</h4>
+			<canvas id="chart-area4" width="800px" height="200px" />
+		</div>
+
+	</section>
+
+
+
+
+	<!---------Ricerca -->
+
+	<section id="access" class="white">
+
+		<div class="container">
+
+
+			<div class="col-md-12 center ">
+				<h2>Ricerca dati</h2>
 			</div>
-		</form>
-	</div>
-	<div>
-		<canvas height="300" width="600" id="line" class="chart chart-line"
-			chart-data="mobile.accessData" chart-labels="mobile.accessLabels"
-			chart-series="mobile.accessSeries"
-			chart-colours="mobile.colors">
-				</canvas>
-	</div>
+
+			<div class="gap"></div>
+
+
+
+
+			<form class="row ">
+				<!--datepicker start-->
+
+				<div class="col-md-1"></div>
+				<div class="col-md-2 ">
+
+					<select id="period" class="form-control">
+						<option value="0">Oggi</option>
+						<option value="1">Ultima settimana</option>
+						<option value="2">Ultimo mese</option>
+						<option value="3">Ultimi 3 mesi</option>
+
+					</select>
+				</div>
+				<div class="col-md-3 col-xs-6 form-group ">
+
+
+					<span class="col-md-1">Da:</span>
+
+					<div id="data" class="input-group col-md-10">
+						<input type="data" id="date-from"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend" class="input-group-addon" data-event="click">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+				</div>
+
+				<div class="col-md-3 col-xs-6 ">
+
+					<span class="col-md-1">A:</span>
+
+					<div id="data" class="input-group col-md-10">
+
+						<input type="data" id="date-to"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend2" class="input-group-addon" data-event="click">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="col-md-2 pull-right">
+					<button id="calculate" type="submit"
+						class="btn  btn-primary btn-exp">Calcola</button>
+
+				</div>
+
+
+
+			</form>
+			<!--datepicker end-->
+
+
+			<div class="gap"></div>
+
+			<!-----------------Risultati---------->
+			<div id="results" class="row">
+
+
+				<h4>Risultati periodo: oggi</h4>
+
+				<hr>
+
+				<div class="col-sm-4 center">
+					<h4>
+						Accessi: <span id="num-access">400 </span>
+					</h4>
+					<canvas id="chart-area1" max-width="200" max-height="200" />
+
+				</div>
+
+
+				<div class="col-sm-6 center">
+					<h4>
+						Ultime 10 posizioni <span id="num-access"></span>
+					</h4>
+					<canvas id="chart-area2" />
+
+				</div>
+
+				<div class="gap"></div>
+
+
+				<div class="col-xs-12 col-sm-12 center">
+
+
+					<!-- dettagli aprirà un'altra tabella con elenco POI visitati-->
+
+					<table class="table table-striped text-left">
+
+						<thead>
+							<tr>
+								<th>Data</th>
+								<th>Numero accessi</th>
+								<th>Installazioni</th>
+								<th>Percorsi iniziati</th>
+								<th>POI Visitati</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>12/02/15</td>
+								<td>42</td>
+								<td>4</td>
+								<td>12</td>
+								<td>2
+									<button class="poi-details btn-primary  pull-right">
+										DETTAGLI</button>
+								</td>
+
+							</tr>
+							<tr>
+								<td>13/02/15</td>
+								<td>70</td>
+								<td>0</td>
+								<td>2</td>
+								<td>2
+									<button class="poi-details btn-primary  pull-right">
+										DETTAGLI</button>
+								</td>
+
+							</tr>
+							<tr>
+								<td>14/02/15</td>
+								<td>100</td>
+								<td>30</td>
+								<td>32</td>
+								<td>32
+									<button class="poi-details btn-primary pull-right">
+										DETTAGLI</button>
+								</td>
+
+
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+
+
+			</div>
+			<!--end risultati-->
+
+
+
+
+		</div>
+		<!--container-->
+
+	</section>
+	<!--/access end-->
 </div>

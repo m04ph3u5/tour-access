@@ -5,12 +5,15 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface TicketService {
 
@@ -24,4 +27,6 @@ public interface TicketService {
 	public void pingService() throws ServiceUnaivalableException;
 	public long getNumberSelledTicket(Date date);
 	public long getNumberIngress(Date date);
+	public StatisticsInfo getStatisticsInfo(Date start, Date end);
+	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end);
 }

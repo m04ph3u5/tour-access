@@ -39,10 +39,40 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var statisticsInfo = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/statisticsInfo?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
+	var statisticsSeries = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/statisticsSeries?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
-		dashboardInfo : dashboardInfo
+		dashboardInfo : dashboardInfo,
+		statisticsInfo : statisticsInfo,
+		statisticsSeries : statisticsSeries
 	}
 
 }]);

@@ -1,17 +1,6 @@
 jQuery(function($) {
   
-     //controllo biglietto
-        var url= window.location.href;
-        {
-            var n = url.indexOf("?c=");
-            if(n!=-1){
-              window.location.assign("https://www.astimusei.it/app#download"); 
-            }
-            
-        };
-    
-    
-    
+  
 	//#main-slider
 	$(function(){
 		$('#main-slider.carousel').carousel({
@@ -34,22 +23,19 @@ jQuery(function($) {
 		$places_selectors = $('.places-filter >li>a');
 		if($places_selectors!='undefined'){
 			$places = $('.places-items');
-//			$places.isotope({
-//				itemSelector : 'li',
-//				layoutMode : 'fitRows'
-//			});
+			
 			$places_selectors.on('click', function(){
 				$places_selectors.removeClass('active');
 				$(this).addClass('active');
 				var selector = $(this).attr('data-filter');
-				$places.isotope({ filter: selector });
+               
+				
 				return false;
 			});
 		};
         
-        
-       
-        
+     $('#results').css("visibility","hidden");    
+  
         
         
 	});
@@ -76,4 +62,22 @@ jQuery(function($) {
 	$("a[rel^='prettyPhoto']").prettyPhoto({
 		social_tools: false
 	});	
+    
+
+      //stats submit
+    
+    $('#calculate').click(function(event) {
+			event.preventDefault();
+		$('#results').css("visibility","visible");
+	});	
+      
+     
+    
+    
 });
+
+
+
+
+
+

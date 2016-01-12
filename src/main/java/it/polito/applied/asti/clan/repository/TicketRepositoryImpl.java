@@ -1,6 +1,10 @@
 package it.polito.applied.asti.clan.repository;
 
+import it.polito.applied.asti.clan.pojo.AccessAggregate;
+import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAggregate;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +13,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -193,7 +200,20 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		q.addCriteria(Criteria.where("emissionDate").gte(date));
 		return mongoOp.count(q, Ticket.class);
 	}
-
 	
+	@Override
+	public List<TicketAggregate> getTicketGrouped(Date start, Date end){
+		Criteria c = new Criteria();
+		c = (Criteria.where("emissionDate").gte(start).
+				andOperator(Criteria.where("emissionDate").lte(end)));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("emissionDate").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TicketAggregate.class);
+		
+		List<TicketAggregate> l = result.getMappedResults();
+		return l;
+	}
 
 }
