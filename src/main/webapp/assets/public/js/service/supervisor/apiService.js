@@ -81,13 +81,43 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var appSeries = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/appSeries?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
+	var appInfo = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/appInfo?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
 		dashboardInfo : dashboardInfo,
 		statisticsInfo : statisticsInfo,
 		statisticsSeries : statisticsSeries,
-		poiRank : poiRank
+		poiRank : poiRank,
+		appSeries : appSeries,
+		appInfo: appInfo
 	}
 
 }]);

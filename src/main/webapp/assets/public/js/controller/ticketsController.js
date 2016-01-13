@@ -62,10 +62,6 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					}
 					self.lineChart.data[0] = tickets;
 					self.lineChart.data[1] = accesses;
-					console.log(self.lineChart);
-					console.log(tickets);
-					console.log(accesses);
-					console.log(self.lineChart.data);
 				},
 				function(reason){
 					console.log(reason);

@@ -1,10 +1,7 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.AccessAggregate;
-import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TicketAggregate;
-import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -204,7 +201,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	}
 	
 	@Override
-	public List<TicketAggregate> getTicketGrouped(Date start, Date end){
+	public List<TotAggregate> getTicketGrouped(Date start, Date end){
 		Criteria c = new Criteria();
 		c = (Criteria.where("emissionDate").gte(start).
 				andOperator(Criteria.where("emissionDate").lte(end).andOperator(Criteria.where("status").ne(PENDING))));
@@ -212,9 +209,9 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("emissionDate").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TicketAggregate.class);
+		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
 		
-		List<TicketAggregate> l = result.getMappedResults();
+		List<TotAggregate> l = result.getMappedResults();
 		return l;
 	}
 

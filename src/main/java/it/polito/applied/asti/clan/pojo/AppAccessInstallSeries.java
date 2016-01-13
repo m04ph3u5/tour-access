@@ -1,15 +1,13 @@
 package it.polito.applied.asti.clan.pojo;
 
-
-public class TicketAccessSeries {
-
-	private long totTickets;
+public class AppAccessInstallSeries {
+	private long totInstall;
 	private long totAccesses;
-	public long getTotTickets() {
-		return totTickets;
+	public long getTotInstall() {
+		return totInstall;
 	}
-	public void setTotTickets(long totTickets) {
-		this.totTickets = totTickets;
+	public void setTotInstall(long totInstall) {
+		this.totInstall = totInstall;
 	}
 	public long getTotAccesses() {
 		return totAccesses;
@@ -17,14 +15,11 @@ public class TicketAccessSeries {
 	public void setTotAccesses(long totAccesses) {
 		this.totAccesses = totAccesses;
 	}
-	public void addToTotTickets(long totTickets){
-		this.totTickets+=totTickets;
-	}
 	public void addToTotAccesses(long totAccesses){
 		this.totAccesses+=totAccesses;
 	}
-	
-	
-	
+	public void addToTotInstall(long totInstall){
+		this.totInstall+=totInstall;
+	}
 	
 }

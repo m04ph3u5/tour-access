@@ -3,6 +3,8 @@ package it.polito.applied.asti.clan.controller;
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
+import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
+import it.polito.applied.asti.clan.pojo.AppInfo;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
@@ -346,5 +348,37 @@ public class ApiRestController extends BaseController{
 		return ticketService.getPoiRank(start, end);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/appSeries", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Map<Date,AppAccessInstallSeries> getAppSeries(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return appService.getAppInstallAccessSeries(start, end);
+	}
 	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/appInfo", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Map<Date,AppInfo> getAppInfo(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return appService.getAppInfo(start, end);
+	}
 }

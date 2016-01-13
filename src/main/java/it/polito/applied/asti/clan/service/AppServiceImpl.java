@@ -1,6 +1,8 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
+import it.polito.applied.asti.clan.pojo.AppInfo;
 import it.polito.applied.asti.clan.pojo.Comment;
 import it.polito.applied.asti.clan.pojo.CommentDTO;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
@@ -8,8 +10,10 @@ import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Log;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
+import it.polito.applied.asti.clan.pojo.LogType;
 import it.polito.applied.asti.clan.pojo.PathInfo;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 import it.polito.applied.asti.clan.pojo.VersionZip;
 import it.polito.applied.asti.clan.repository.CommentRepository;
 import it.polito.applied.asti.clan.repository.LogRepository;
@@ -18,9 +22,11 @@ import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.repository.VersionZipRepository;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -151,7 +157,13 @@ public class AppServiceImpl implements AppService{
 	public void postLog(List<LogDTO> logsDTO) {
 		List<Log> logs = new ArrayList<Log>();
 		for(int i=0; i<logsDTO.size(); i++){
-			logs.add(new Log(logsDTO.get(i)));
+			Log l = new Log(logsDTO.get(i));
+			if(l.getLogType().equals(LogType.Install)){
+				if(!logRepo.isDeviceInstalled(l.getDeviceId()))
+					logs.add(l);
+			}else
+				logs.add(l);
+
 		}
 		logRepo.save(logs);
 	}
@@ -190,6 +202,202 @@ public class AppServiceImpl implements AppService{
 	@Override
 	public long getDevices(Date date) {
 		return logRepo.distinctDevicesFromDate(date);
+	}
+
+	@Override
+	public Map<Date, AppAccessInstallSeries> getAppInstallAccessSeries(Date start, Date end) {
+		TreeMap<Date, AppAccessInstallSeries> map = new TreeMap<Date, AppAccessInstallSeries>();
+		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
+		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
+		Calendar c = Calendar.getInstance();
+		c.setTime(end);
+		c.set(Calendar.HOUR_OF_DAY,23);
+		c.set(Calendar.MINUTE,59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 999);
+		end = c.getTime();
+
+		c.set(Calendar.YEAR, 2015);
+		c.set(Calendar.MONTH, 11);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Date first = c.getTime();
+		
+		c.setTime(start);
+
+		if(start.before(first)){
+			c.set(Calendar.YEAR, 2015);
+			c.set(Calendar.MONTH, 11);
+			c.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		start = c.getTime();
+
+		while(start.before(end)){
+			map.put(start, new AppAccessInstallSeries());
+			c.setTime(start);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			start = c.getTime();
+		}
+		
+		for(TotAggregate a : access){
+			Date d = a.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppAccessInstallSeries tAS = map.get(d);
+			if(tAS!=null){
+					tAS.addToTotAccesses(a.getTot());
+					map.put(d, tAS);
+			}
+		}
+		
+		for(TotAggregate t : install){
+			Date d = t.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppAccessInstallSeries tAS = map.get(d);
+			if(tAS!=null){
+				tAS.addToTotInstall(t.getTot());
+				map.put(d, tAS);
+			}
+		}
+		return map;
+	}
+
+	@Override
+	public Map<Date, AppInfo> getAppInfo(Date start, Date end) {
+		TreeMap<Date, AppInfo> map = new TreeMap<Date, AppInfo>();
+		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
+		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
+		List<TotAggregate> pathStarted = logRepo.getPathStarted(start, end);
+		List<TotAggregate> checkedTicket = logRepo.getCheckedTicket(start, end);
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(end);
+		c.set(Calendar.HOUR_OF_DAY,23);
+		c.set(Calendar.MINUTE,59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 999);
+		end = c.getTime();
+
+		c.set(Calendar.YEAR, 2015);
+		c.set(Calendar.MONTH, 11);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Date first = c.getTime();
+		
+		c.setTime(start);
+
+		if(start.before(first)){
+			c.set(Calendar.YEAR, 2015);
+			c.set(Calendar.MONTH, 11);
+			c.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		start = c.getTime();
+
+		while(start.before(end)){
+			map.put(start, new AppInfo());
+			c.setTime(start);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			start = c.getTime();
+		}
+		
+		for(TotAggregate a : access){
+			Date d = a.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppInfo tAS = map.get(d);
+			if(tAS!=null){
+					tAS.addToNumAccess(a.getTot());
+					map.put(d, tAS);
+			}
+		}
+		
+		for(TotAggregate t : install){
+			Date d = t.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppInfo tAS = map.get(d);
+			if(tAS!=null){
+				tAS.addToNumInstallation(t.getTot());
+				map.put(d, tAS);
+			}
+		}
+		for(TotAggregate p : pathStarted){
+			Date d = p.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppInfo tAS = map.get(d);
+			if(tAS!=null){
+					tAS.addToNumPathStarted(p.getTot());
+					map.put(d, tAS);
+			}
+		}
+		
+		for(TotAggregate ct : checkedTicket){
+			Date d = ct.getDate();
+			c.setTime(d);
+			c.set(Calendar.HOUR_OF_DAY,0);
+			c.set(Calendar.MINUTE,0);
+			c.set(Calendar.SECOND, 0);
+			c.set(Calendar.MILLISECOND, 0);
+
+			d = c.getTime();
+			AppInfo tAS = map.get(d);
+			if(tAS!=null){
+				tAS.addToNumCheckedTicket(ct.getTot());
+				map.put(d, tAS);
+			}
+		}
+		return map;
 	}
 
 }

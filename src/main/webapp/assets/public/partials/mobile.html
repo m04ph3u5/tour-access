@@ -11,12 +11,12 @@
 
 
 				<div
-					class="col-md-1 col-sm-4 col-xs-6 col-md-offset-5 widget txt-white ">
+					class="col-md-1 col-sm-4 col-xs-6 col-md-offset-2 widget txt-white ">
 
 					<div class="pull-left">
 						<i class="icon-hand-up"></i>
 					</div>
-					<span class="label-widget"> Accessi </span> <br> 10 <i
+					<span class="label-widget"> Accessi </span> <br> {{mobile.info.todayAppAccess}} <i
 						class="fa fa-university"></i>
 				</div>
 
@@ -25,10 +25,15 @@
 						<i class="icon-circle-arrow-down"></i>
 					</div>
 
-					<span class="label-widget"> Installazioni </span> <br>40
+					<span class="label-widget"> Installazioni </span> <br>{{mobile.info.todayAppInstallation}}
 				</div>
 
-				
+				<div class="col-md-1 col-sm-4  col-xs-6  emerald widget txt-white">
+					<div class="pull-left">
+						<i class="icon-mobile-phone"></i>
+					</div>
+					<span class="label-widget"> Numero device</span> <br>{{mobile.info.todayDevices}}
+				</div>
 			</div>
 
 		</div>
@@ -42,19 +47,13 @@
 
 	<section>
 		<div class="center">
-			<h2>Trend mensili</h2>
-			<div class="gap"></div>
-			<h4>Numero Accessi/Installazioni</h4>
-			<canvas id="chart-area3" width="800px" height="200px" />
-		</div>
+			<h2>N° Accessi/Installazioni</h2>
 
 
-		<div class="gap"></div>
-		<div class="center">
-
-			<h4>POI più visitati</h4>
-			<canvas id="chart-area4" width="800px" height="200px" />
-		</div>
+				<canvas height="450" width="800" id="line" class="chart chart-line" data-chart-data="mobile.lineChart.data"
+					  data-chart-labels="mobile.lineChart.labels" data-chart-series="mobile.lineChart.series"
+					  data-chart-options="mobile.chartOptions">
+				</canvas> 		</div>
 
 	</section>
 
@@ -132,7 +131,7 @@
 			<div id="results" class="row">
 
 
-				<h4>Risultati periodo: oggi</h4>
+				<h4>Risultati periodo: {{mobile.periodString}}</h4>
 
 				<hr>
 
@@ -152,45 +151,18 @@
 								<th>Numero accessi</th>
 								<th>Installazioni</th>
 								<th>Percorsi iniziati</th>
-								<th>POI Visitati</th>
+								<th>Biglietti inquadrati</th>
 
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>12/02/15</td>
-								<td>42</td>
-								<td>4</td>
-								<td>12</td>
-								<td>2
-									<button class="poi-details btn-primary  pull-right">
-										DETTAGLI</button>
-								</td>
-
-							</tr>
-							<tr>
-								<td>13/02/15</td>
-								<td>70</td>
-								<td>0</td>
-								<td>2</td>
-								<td>2
-									<button class="poi-details btn-primary  pull-right">
-										DETTAGLI</button>
-								</td>
-
-							</tr>
-							<tr>
-								<td>14/02/15</td>
-								<td>100</td>
-								<td>30</td>
-								<td>32</td>
-								<td>32
-									<button class="poi-details btn-primary pull-right">
-										DETTAGLI</button>
-								</td>
-
-
-							</tr>
+							<tr data-ng-repeat="(key,value) in mobile.table">
+							<td data-ng-show="value.numAccess || value.numInstallation || value.numPathStarted || value.numCheckedTicket">{{key | date : 'shortDate'}}</td>
+							<td data-ng-show="value.numAccess || value.numInstallation || value.numPathStarted || value.numCheckedTicket">{{value.numAccess}}</td>
+							<td data-ng-show="value.numAccess || value.numInstallation || value.numPathStarted || value.numCheckedTicket">{{value.numInstallation}}</td>
+							<td data-ng-show="value.numAccess || value.numInstallation || value.numPathStarted || value.numCheckedTicket">{{value.numPathStarted}}</td>
+							<td data-ng-show="value.numAccess || value.numInstallation || value.numPathStarted || value.numCheckedTicket">{{value.numCheckedTicket}}</td>
+						</tr>
 						</tbody>
 					</table>
 

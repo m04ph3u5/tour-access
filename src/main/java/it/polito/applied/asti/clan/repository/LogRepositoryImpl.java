@@ -1,6 +1,9 @@
 package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.Log;
+import it.polito.applied.asti.clan.pojo.LogType;
+import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -41,22 +47,10 @@ public class LogRepositoryImpl implements CustomLogRepository{
 
 	@Override
 	public long countNumberInstallationFromDate(Date date) {
-		DBObject q = new BasicDBObject("date", new BasicDBObject("$lt",date));
-		List<?> l = mongoOp.getCollection("Log").distinct("deviceId", q);
-		
-		if(l!=null){
-			BasicDBObject andQuery = new BasicDBObject();
-			List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-			obj.add(new BasicDBObject("deviceId", new BasicDBObject("$nin",l)));
-			obj.add(new BasicDBObject("date", new BasicDBObject("$gte",date)));
-			andQuery.put("$and", obj);
-			List<?> l2 = mongoOp.getCollection("log").distinct("deviceId", andQuery);
-			if(l2!=null)
-				return l2.size();
-			else
-				return 0;
-		}else
-			return 0;
+		Query q = new Query();
+		q.addCriteria(Criteria.where("date").gte(date)
+				.andOperator(Criteria.where("logType").is(LogType.Install)));
+		return mongoOp.count(q, Log.class);
 	}
 
 	@Override
@@ -68,6 +62,81 @@ public class LogRepositoryImpl implements CustomLogRepository{
 		else
 			return 0;
 
+	}
+
+	@Override
+	public boolean isDeviceInstalled(String deviceId) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("deviceId").is(deviceId)
+				.andOperator(Criteria.where("logType").is(LogType.Install)));
+		long l = mongoOp.count(q, Log.class);
+		if(l>0)
+			return true;
+		else 
+			return false;
+	}
+
+	@Override
+	public List<TotAggregate> getAccessGrouped(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("date").gte(start).
+				andOperator(Criteria.where("date").lte(end)));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		return l;
+	}
+
+	@Override
+	public List<TotAggregate> getInstallGrouped(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("date").gte(start).
+				andOperator(Criteria.where("date").lte(end).
+				andOperator(Criteria.where("logType").is(LogType.Install))));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		return l;
+	}
+
+	@Override
+	public List<TotAggregate> getPathStarted(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("date").gte(start).
+				andOperator(Criteria.where("date").lte(end).
+				andOperator(Criteria.where("logType").is(LogType.OpenPath))));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		return l;
+	}
+
+	@Override
+	public List<TotAggregate> getCheckedTicket(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("date").gte(start).
+				andOperator(Criteria.where("date").lte(end).
+				andOperator(Criteria.where("logType").is(LogType.CheckTicket))));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		
+		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		return l;
 	}
 
 }

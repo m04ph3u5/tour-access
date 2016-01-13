@@ -1,8 +1,8 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.AccessAggregate;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 	}
 	
 	@Override
-	public List<AccessAggregate> getAccessGrouped(Date start, Date end){
+	public List<TotAggregate> getAccessGrouped(Date start, Date end){
 		Criteria c = new Criteria();
 		c = (Criteria.where("dtaTransit").gte(start)
 				.andOperator(Criteria.where("dtaTransit").lte(end)
@@ -50,9 +50,9 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("dtaTransit").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Read.class, AccessAggregate.class);
+		AggregationResults result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
 		
-		List<AccessAggregate> l = result.getMappedResults();
+		List<TotAggregate> l = result.getMappedResults();
 		return l;
 	}
 

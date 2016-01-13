@@ -2,7 +2,6 @@ package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
-import it.polito.applied.asti.clan.pojo.AccessAggregate;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
@@ -11,9 +10,9 @@ import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
-import it.polito.applied.asti.clan.pojo.TicketAggregate;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
@@ -293,8 +292,8 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
-		List<AccessAggregate> access = readRepo.getAccessGrouped(start, end);
-		List<TicketAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
+		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
 		Calendar c = Calendar.getInstance();
 		c.setTime(end);
 		c.set(Calendar.HOUR_OF_DAY,23);
@@ -337,7 +336,7 @@ public class TicketServiceImpl implements TicketService{
 			start = c.getTime();
 		}
 		
-		for(AccessAggregate a : access){
+		for(TotAggregate a : access){
 			Date d = a.getDate();
 			c.setTime(d);
 			c.set(Calendar.HOUR_OF_DAY,0);
@@ -348,11 +347,12 @@ public class TicketServiceImpl implements TicketService{
 			d = c.getTime();
 			TicketAccessSeries tAS = map.get(d);
 			if(tAS!=null){
+					tAS.addToTotAccesses(a.getTot());
 					map.put(d, tAS);
 			}
 		}
 		
-		for(TicketAggregate t : ticket){
+		for(TotAggregate t : ticket){
 			Date d = t.getDate();
 			c.setTime(d);
 			c.set(Calendar.HOUR_OF_DAY,0);
@@ -363,7 +363,7 @@ public class TicketServiceImpl implements TicketService{
 			d = c.getTime();
 			TicketAccessSeries tAS = map.get(d);
 			if(tAS!=null){
-				tAS.setTotTickets(t.getTot());
+				tAS.addToTotTickets(t.getTot());
 				map.put(d, tAS);
 			}
 		}

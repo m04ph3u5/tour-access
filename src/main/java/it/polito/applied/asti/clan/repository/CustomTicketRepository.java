@@ -1,7 +1,7 @@
 package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TicketAggregate;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 import java.util.Date;
 import java.util.List;
@@ -16,5 +16,5 @@ public interface CustomTicketRepository {
 	
 	public long totalTickets(Date start, Date end);
 	public long countTicketFromDate(Date date);
-	List<TicketAggregate> getTicketGrouped(Date start, Date end);
+	List<TotAggregate> getTicketGrouped(Date start, Date end);
 }

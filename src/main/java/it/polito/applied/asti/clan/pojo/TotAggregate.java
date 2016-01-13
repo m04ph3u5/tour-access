@@ -2,12 +2,12 @@ package it.polito.applied.asti.clan.pojo;
 
 import java.util.Date;
 
-public class TicketAggregate {
+public class TotAggregate {
 	private Date date;
 	private long tot;
 	
 	
-	public TicketAggregate(Date date, long tot) {
+	public TotAggregate(Date date, long tot) {
 		this.date = date;
 		this.tot = tot;
 	}
