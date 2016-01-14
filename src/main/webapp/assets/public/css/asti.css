@@ -8,6 +8,7 @@ tooltips:before {
 	display: none;
 }
 
+
 tooltips:hover::before {
 	width: 200px;
 	display: block;

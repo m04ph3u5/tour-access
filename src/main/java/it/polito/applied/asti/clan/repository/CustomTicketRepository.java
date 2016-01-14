@@ -16,5 +16,5 @@ public interface CustomTicketRepository {
 	
 	public long totalTickets(Date start, Date end);
 	public long countTicketFromDate(Date date);
-	List<TotAggregate> getTicketGrouped(Date start, Date end);
+	public List<TotAggregate> getTicketGrouped(Date start, Date end);
 }

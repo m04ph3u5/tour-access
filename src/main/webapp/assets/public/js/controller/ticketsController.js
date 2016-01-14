@@ -123,4 +123,6 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 
 	}
 	
+	
+	
 }]);

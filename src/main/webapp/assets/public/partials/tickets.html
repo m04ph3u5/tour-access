@@ -66,59 +66,102 @@
 			<div id="stats" class="row white">
 				<!--piechart---------->
 
-
-				<div class="col-sm-6 center ">
-					<h3>
-						Vendite	
-					</h3>
-					<canvas id="pie1" class="chart chart-pie" width="250" height="250"
-					  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
-					  data-chart-options="tickets.chartOptions">
-					</canvas>
-					Biglietti venduti totali: <b>{{tickets.statistics.totTickets}}</b>
-					Biglietti singoli: <b>{{tickets.pie1[0]}}</b>
-					Biglietti di gruppo: <b>{{tickets.pie1[1]}}</b>
+				<div class="row">
+					<div class="col-sm-6 center ">
+						<h3>
+							Totale vendite	
+						</h3>
+						<canvas id="pie1" class="chart chart-pie" width="250" height="250"
+						  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
+						  data-chart-options="tickets.chartOptions">
+						</canvas>
+					</div>
+					<div class="col-sm-6" >
+						
+						<table border="1"  style="margin-top:15%; border-collapse: separate; border-spacing: 5px;">
+							<tr>
+								<td width="50%" >Tot. biglietti venduti: </td><td align="right" width="50%"><b> {{tickets.statistics.totTickets}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%">Singolarmente: </td><td align="right" width="50%"><b> {{tickets.pie1[0]}}</b></td>
+							</tr>
+							<tr>
+	
+								<td width="50%">In gruppo: </td><td align="right" width="50%"><b> {{tickets.pie1[1]}}</b></td>
+							</tr>
+							
+						</table>
+						
+					</div>
 				</div>
-			
-				<div class="col-sm-6 center">
-					<h3>
-						Composizione gruppi
-					</h3>
-					<canvas id="pie2" class="chart chart-pie" width="250" height="250"
-					  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
-					  data-chart-options="tickets.chartOptions">
-					</canvas>
-					Gruppi con anziani: <b>{{tickets.pie2[1]}}</b>
-					Gruppi con bambini: <b>{{tickets.pie2[0]}}</b>
-					Altri: <b>{{tickets.pie1[1] - tickets.pie2[1] - tickets.pie2[0]}}</b>				
+				<hr>
+				<div class="row">
+					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets>0">
+						<h3>
+							Gruppi
+						</h3>
+						<canvas id="pie2" class="chart chart-pie" width="250" height="250"
+						  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
+						  data-chart-options="tickets.chartOptions">
+						</canvas>			
+					</div>
+					<div class="col-sm-6" data-ng-show="tickets.statistics.totGroupTickets>0">
+						
+						<table border="1"  style="margin-top:15%; border-collapse: separate; border-spacing: 5px;">
+							<tr>
+								<td width="50%">Tot. gruppi: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td>
+							</tr>
+							<tr>
+	
+								<td width="50%">Altri: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.pie2[1] - tickets.pie2[0]}}</b></td>
+							</tr>
+						</table>
+						
+					</div>
+					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets == 0">
+						Non sono stati emessi biglietti di gruppo
+					</div>
 				</div>
+				<hr>
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
+					<h3>
+						Singoli (Sesso)
+					</h3>
 				
-				<div class="col-sm-6 center">
-					<h3>
-						Genere
-					</h3>
 					<canvas id="pie3" class="chart chart-pie" width="250" height="250"
 					  data-chart-data="tickets.pie3" data-chart-labels="tickets.pie3Labels"
 					  data-chart-options="tickets.chartOptions">
 					</canvas>	
-					Uomini: <b>{{tickets.pie3[0]}}</b>
+					Uomini: <b>{{tickets.pie3[0]}}</b><br>
 					Donne: <b>{{tickets.pie3[1]}}</b>
+
 				</div>
 
-				<div class="col-sm-6 center">
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
 					<h3>
-						Età
+						Singoli (Età)
 					</h3>
+					
 					<canvas id="pie4" class="chart chart-pie" width="250" height="250"
 					  data-chart-data="tickets.pie4" data-chart-labels="tickets.pie4Labels"
 					  data-chart-options="tickets.chartOptions">
 					</canvas>	
+
 					Giovani: <b>{{tickets.pie4[0]}}</b>
 					Mezza età: <b>{{tickets.pie4[1]}}</b>
 					Anziani: <b>{{tickets.pie4[2]}}</b>
+
 				</div>
 
-
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets == 0">
+					Non sono stati emessi biglietti singoli
+				</div>
 
 			</div>
 			<!--end pie chart-->

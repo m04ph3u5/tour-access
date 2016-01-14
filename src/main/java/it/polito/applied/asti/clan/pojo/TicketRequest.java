@@ -17,6 +17,7 @@ public class TicketRequest {
 	private boolean isGroup;
 	private InfoTicketRequest info;
 	private String tipology;
+	private boolean acceptedFromAcl=false;
 	
 	public TicketRequest(){
 		
@@ -49,6 +50,12 @@ public class TicketRequest {
 			this.info.setAge(null);
 			this.info.setGender(null);
 		}		
+	}
+	public boolean getAcceptedFromAcl() {
+		return  acceptedFromAcl;
+	}
+	public void  setAcceptedFromAcl(boolean acceptedFromAcl) {
+		  this.acceptedFromAcl= acceptedFromAcl;
 	}
 	
 	public String getTipology() {
