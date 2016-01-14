@@ -168,6 +168,7 @@ public class TicketServiceImpl implements TicketService{
 		}
 		
 		ticketRepo.save(tickets);
+		
 		try {
 			postToAcl.sendTicketsToAcl(tickets);
 		} catch (JSONException | IOException e) {
@@ -175,6 +176,7 @@ public class TicketServiceImpl implements TicketService{
 			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
 		}
 		ticketRepo.toReleased(tickets);	
+		ticketRequestRepo.toReleased(ticketRequest);
 	}
 
 	@Override
@@ -275,17 +277,25 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public StatisticsInfo getStatisticsInfo(Date start, Date end) {
 		StatisticsInfo s = new StatisticsInfo();
-		s.setTotSingleTickets(ticketRequestRepo.totalSingleTickets(start, end));
-		s.setTotGroupTickets(ticketRequestRepo.totalGroupTickets(start, end));
-		s.setTotMale(ticketRequestRepo.totalSingleManTickets(start, end));
-		s.setTotFemale(ticketRequestRepo.totalSingleWomanTickets(start, end));
+		long totT = ticketRepo.totalTickets(start, end);
+		s.setTotTickets(totT); //setto il numero totale di tickets prendendolo dal repo dei ticket
+		long totSingle = ticketRequestRepo.totalSingleTickets(start, end);
+		s.setTotSingleTickets(totSingle);
+		s.setTotGroupTickets(totT-totSingle);
+		long totSingleMan = ticketRequestRepo.totalSingleManTickets(start, end);
+		s.setTotGroups(ticketRequestRepo.totalGroups(start, end));
+		s.setTotMale(totSingleMan);
+		s.setTotFemale(totSingle - totSingleMan);
 		s.setTotChildren(ticketRequestRepo.totalGroupWithChildrenTickets(start, end));
 		s.setTotElderly(ticketRequestRepo.totalGroupWithOldManTickets(start, end));
 		s.setYoung(ticketRequestRepo.totalSingleYoung(start, end));
 		s.setMiddleAge(ticketRequestRepo.totalSingleMiddleAge(start, end));
 		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
 		s.setTotAccess(readRepo.countIngress(start, end));
-		s.setTotTickets(ticketRepo.totalTickets(start, end));
+		
+		System.out.println("male: "+ totSingleMan);
+		
+		
 		return s;
 	}
 

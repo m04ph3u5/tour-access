@@ -4,6 +4,7 @@ package it.polito.applied.asti.clan.pojo;
 public class StatisticsInfo {
 	private long totSingleTickets;
 	private long totGroupTickets;
+	private long totGroups;
 	private long totTickets;
 	private long totAccess;
 	private long totMale;
@@ -49,6 +50,13 @@ public class StatisticsInfo {
 		this.totGroupTickets = totGroupTickets;
 	}
 
+	public long getTotGroups() {
+		return totGroups;
+	}
+
+	public void setTotGroups(long totGroups) {
+		this.totGroups = totGroups;
+	}
 	public long getTotMale() {
 		return totMale;
 	}
