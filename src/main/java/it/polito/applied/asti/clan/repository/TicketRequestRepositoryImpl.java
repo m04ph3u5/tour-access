@@ -40,7 +40,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("M"))));
+				.andOperator(Criteria.where("info.gender").is("male"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -49,7 +49,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("F"))));
+				.andOperator(Criteria.where("info.gender").is("female"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -76,7 +76,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("age").is("young"))));
+				.andOperator(Criteria.where("info.age").is("young"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -85,7 +85,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("age").is("middleAge"))));
+				.andOperator(Criteria.where("info.age").is("middleAge"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -94,7 +94,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("age").is("elderly"))));
+				.andOperator(Criteria.where("info.age").is("elderly"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 

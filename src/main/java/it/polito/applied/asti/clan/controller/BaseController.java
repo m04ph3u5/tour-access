@@ -27,6 +27,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("400");
+		writeLog(e.getMessage(),"400");
+
 		/*DA INSERIRE URL*/
 		return error;
 	}
@@ -38,6 +40,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("403");
+		writeLog(e.getMessage(),"403");
+
 		/*DA INSERIRE URL*/
 		return error;
 	}
@@ -48,6 +52,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("503");
+		writeLog(e.getMessage(),"503");
+
 		/*DA INSERIRE URL*/
 		return error;
 	}
@@ -58,7 +64,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("404");
-		/*DA INSERIRE URL*/
+		/*DA INSERIRE URL*/		writeLog(e.getMessage(),"404");
+
 		return error;
 	}
 	
@@ -68,7 +75,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage(e.getMessage());
 		error.setStatusCode("403");
-		/*DA INSERIRE URL*/
+		/*DA INSERIRE URL*/		writeLog(e.getMessage(),"403");
+
 		return error;
 	}
 	
@@ -78,6 +86,7 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setMessage("Internal server error");
 		error.setStatusCode("500");
+		writeLog(e.getMessage(),"500");
 		return error;
 	}
 	
@@ -88,6 +97,7 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("400");
 		System.out.println("HttpMessageNotReadableException: "+e.getMessage());
+		writeLog(e.getMessage(),"400");
 		return error;
 	}
 	
@@ -99,6 +109,8 @@ public abstract class BaseController {
 		error.setStatusCode("400");
 		System.out.println("HttpMediaTypeNotAcceptableException: "+e.getMessage());
 		error.setMessage(e.getMessage());
+		writeLog(e.getMessage(),"400");
+
 		return error;
 	}
 	
@@ -110,6 +122,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("403");
 		System.out.println("FORBIDDEN");
+		writeLog(e.getMessage(),"403");
+
 		return error;
 	}
 	
@@ -119,6 +133,7 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("404");
 		System.out.println("File not found"+e.getMessage());
+		writeLog(e.getMessage(),"404");
 		return error;
 	}
 	
@@ -128,6 +143,8 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("400");
 		System.out.println("io exception: "+e.getMessage());
+		writeLog(e.getMessage(),"400");
+
 		return error;
 	}
 	
@@ -137,6 +154,11 @@ public abstract class BaseController {
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("400");
 		System.out.println("generic exception: "+e.getClass()+" "+e.getMessage());
+		writeLog(e.getMessage(),"400");
 		return error;
+	}
+	
+	private void writeLog(String message, String statusCode){
+		System.err.println(statusCode+" "+message);
 	}
 }

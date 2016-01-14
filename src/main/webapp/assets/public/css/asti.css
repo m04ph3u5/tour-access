@@ -141,3 +141,7 @@ tooltips:hover::before {
     top:100px;
     right : 2%;
 }
+
+.errorValidate {
+	borderColor : #FF0000;
+}
