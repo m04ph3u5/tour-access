@@ -8,8 +8,8 @@ public class VersionDTO {
 		
 	}
 	
-	public VersionDTO(VersionZip v){
-		this.version = v.getVersion();
+	public VersionDTO(int version){
+		this.version = version;
 	}
 
 	public int getVersion() {

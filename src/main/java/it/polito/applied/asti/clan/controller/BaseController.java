@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.controller;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.exception.ErrorInfo;
 import it.polito.applied.asti.clan.exception.ForbiddenException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
@@ -84,12 +85,21 @@ public abstract class BaseController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ErrorInfo handleMongoException(MongoException e){
 		ErrorInfo error = new ErrorInfo();
-		error.setMessage("Internal server error");
+		error.setMessage("Internal server error: "+e.getMessage());
 		error.setStatusCode("500");
 		writeLog(e.getMessage(),"500");
 		return error;
 	}
 	
+	@ExceptionHandler(ConflictException.class)
+	@ResponseStatus(value = HttpStatus.CONFLICT)
+	public ErrorInfo handleConflictException(ConflictException e){
+		ErrorInfo error = new ErrorInfo();
+		error.setMessage(e.getMessage());
+		error.setStatusCode("409");
+		writeLog(e.getMessage(),"409");
+		return error;
+	}
 	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -159,6 +169,6 @@ public abstract class BaseController {
 	}
 	
 	private void writeLog(String message, String statusCode){
-		System.err.println(statusCode+" "+message);
+		System.err.println("EXCEPTION: "+statusCode+" "+message);
 	}
 }

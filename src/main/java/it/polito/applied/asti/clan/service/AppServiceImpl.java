@@ -1,21 +1,25 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.Comment;
 import it.polito.applied.asti.clan.pojo.CommentDTO;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
+import it.polito.applied.asti.clan.pojo.DeviceTicketAssociation;
 import it.polito.applied.asti.clan.pojo.Log;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.LogType;
 import it.polito.applied.asti.clan.pojo.PathInfo;
 import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketTime;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
-import it.polito.applied.asti.clan.pojo.VersionZip;
 import it.polito.applied.asti.clan.repository.CommentRepository;
+import it.polito.applied.asti.clan.repository.DeviceTicketAssociationRepository;
 import it.polito.applied.asti.clan.repository.LogRepository;
 import it.polito.applied.asti.clan.repository.PathInfoRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
@@ -30,7 +34,6 @@ import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,6 +45,12 @@ public class AppServiceImpl implements AppService{
 	private String VALIDATED;
 	@Value("${status.released.id}")
 	private String RELEASED;
+	
+	@Value("${version.zip}")
+	private int zipVersion;
+	
+	@Value("${version.app}")
+	private int actualAppVersion;
 	
 	/*Grandezza pagina commenti da restituire all'app mobile*/
 	private final int DIM_PAGE = 10;
@@ -65,16 +74,21 @@ public class AppServiceImpl implements AppService{
 	@Autowired
 	private UtilAverageTask avgTask;
 	
+	@Autowired
+	private DeviceTicketAssociationRepository deviceTicketAssociationRepo;
+	
 	
 	@Override
-	public VersionZip getVersion() {
-		Sort s = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
-		return versionRepo.findAll(s).get(0);
+	public int getVersion() {
+		return zipVersion;
 	}
 
 	@Override
-	public boolean checkTicket(String ticket) {
-		List<Ticket> tickets = ticketRepo.findByIdTicket(ticket);
+	public boolean checkTicket(CheckTicketInput c) {
+		DeviceTicketAssociation d = deviceTicketAssociationRepo.findByDeviceId(c.getDeviceId());
+		d.addTicketTime(new TicketTime(c.getTicket(), new Date()));
+		deviceTicketAssociationRepo.save(d);
+		List<Ticket> tickets = ticketRepo.findByIdTicket(c.getTicket());
 		if(tickets!=null && tickets.size()>0){
 			if(tickets.get(0).getStatus().equals(CANCELED))
 				return false;
@@ -129,7 +143,7 @@ public class AppServiceImpl implements AppService{
 
 
 	@Override
-	public void postComment(List<LogDTO> logComment) throws BadRequestException {
+	public void postComment(List<LogDTO> logComment, int appVersion) throws BadRequestException {
 		List<Comment> comments = new ArrayList<Comment>();
 		
 		for(LogDTO dto : logComment){
@@ -141,24 +155,24 @@ public class AppServiceImpl implements AppService{
 			comments.add(c);
 			avgTask.queue(c.getIdPath());
 		}
-		postCommentLog(comments, logComment);
+		postCommentLog(comments, logComment, appVersion);
 	}
 
-	private void postCommentLog(List<Comment> comments, List<LogDTO> logComment) {
+	private void postCommentLog(List<Comment> comments, List<LogDTO> logComment, int appVersion) {
 		List<Log> logs = new ArrayList<Log>();
 		for(int i=0; i<logComment.size(); i++){
-			logs.add(new Log(logComment.get(i), comments.get(i).getId()));
+			logs.add(new Log(logComment.get(i), comments.get(i).getId(), appVersion));
 		}
 		
 		logRepo.save(logs);
 	}
 
 	@Override
-	public void postLog(List<LogDTO> logsDTO) {
+	public void postLog(List<LogDTO> logsDTO, int appVersion) {
 		List<Log> logs = new ArrayList<Log>();
 		for(int i=0; i<logsDTO.size(); i++){
-			Log l = new Log(logsDTO.get(i));
-			if(l.getLogType().equals(LogType.Install)){
+			Log l = new Log(logsDTO.get(i), appVersion);
+			if(l.getLogType()!=null && l.getLogType().equals(LogType.Install)){
 				if(!logRepo.isDeviceInstalled(l.getDeviceId()))
 					logs.add(l);
 			}else
@@ -398,6 +412,12 @@ public class AppServiceImpl implements AppService{
 			}
 		}
 		return map;
+	}
+
+	@Override
+	public void checkAppVersion(int appVersion) throws ConflictException {
+		if(appVersion!=actualAppVersion)
+			throw new ConflictException("La tua versione dell'app ("+appVersion+") è obsoleta. Per favore, scarica la nuova versione");
 	}
 
 }

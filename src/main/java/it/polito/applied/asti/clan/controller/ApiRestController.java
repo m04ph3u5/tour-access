@@ -1,10 +1,12 @@
 package it.polito.applied.asti.clan.controller;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
@@ -78,7 +80,6 @@ public class ApiRestController extends BaseController{
 	@Autowired
 	private AppService appService;
 	
-
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public Name getNameOfUser(@RequestParam(value = "username", required=false) String username) throws BadRequestException, NotFoundException{
@@ -201,12 +202,20 @@ public class ApiRestController extends BaseController{
 	public VersionDTO getVersion() throws BadRequestException {
 		return new VersionDTO(appService.getVersion());
 	}
+	
+	@RequestMapping(value="/v1/appVersion", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void checkAppVersion(@RequestParam(value = "versionCode", required=true) Integer appVersion) throws BadRequestException, ConflictException {
+		if(appVersion==null)
+			appVersion = 0;
+		appService.checkAppVersion(appVersion);
+	}
 
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/checkTicket", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public Response checkTicket(@RequestBody TicketNumber t) throws BadRequestException {
-		return new Response(appService.checkTicket(t.getTicket()));
+	public Response checkTicket(@RequestBody CheckTicketInput t) throws BadRequestException {
+		return new Response(appService.checkTicket(t));
 	}
 
 	@PreAuthorize("hasRole('ROLE_APP')")
@@ -220,7 +229,10 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_APP')")
 	@RequestMapping(value="/v1/logging", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void postLog(@RequestBody List<LogDTO> logs) throws BadRequestException, NotFoundException {
+	public void postLog(@RequestBody List<LogDTO> logs, @RequestParam(value = "versionCode", required=false) Integer appVersion) throws BadRequestException, NotFoundException {
+		if(appVersion==null)
+			appVersion = 0;
+		
 		List<LogDTO> logComment=null;
 		for(int i=0; i<logs.size(); i++){
 			LogDTO l = logs.get(i);
@@ -233,11 +245,11 @@ public class ApiRestController extends BaseController{
 		}
 
 		if(logComment!=null){
-			appService.postComment(logComment);
+			appService.postComment(logComment, appVersion);
 		}
 
 		if(logs.size()!=0)
-			appService.postLog(logs);
+			appService.postLog(logs, appVersion);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
