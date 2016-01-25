@@ -50,7 +50,7 @@ public class AppServiceImpl implements AppService{
 	private int zipVersion;
 	
 	@Value("${version.app}")
-	private int actualAppVersion;
+	private int minSupportedVersion;
 	
 	/*Grandezza pagina commenti da restituire all'app mobile*/
 	private final int DIM_PAGE = 10;
@@ -86,7 +86,13 @@ public class AppServiceImpl implements AppService{
 	@Override
 	public boolean checkTicket(CheckTicketInput c) {
 		DeviceTicketAssociation d = deviceTicketAssociationRepo.findByDeviceId(c.getDeviceId());
-		d.addTicketTime(new TicketTime(c.getTicket(), new Date()));
+		if(d!=null)
+			d.addTicketTime(new TicketTime(c.getTicket(), new Date()));
+		else{
+			d = new DeviceTicketAssociation();
+			d.setDeviceId(c.getDeviceId());
+			d.addTicketTime(new TicketTime(c.getTicket(), new Date()));
+		}
 		deviceTicketAssociationRepo.save(d);
 		List<Ticket> tickets = ticketRepo.findByIdTicket(c.getTicket());
 		if(tickets!=null && tickets.size()>0){
@@ -416,7 +422,7 @@ public class AppServiceImpl implements AppService{
 
 	@Override
 	public void checkAppVersion(int appVersion) throws ConflictException {
-		if(appVersion!=actualAppVersion)
+		if(appVersion<minSupportedVersion)
 			throw new ConflictException("La tua versione dell'app ("+appVersion+") è obsoleta. Per favore, scarica la nuova versione");
 	}
 
