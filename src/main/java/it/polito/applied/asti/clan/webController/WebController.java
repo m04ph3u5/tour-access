@@ -31,6 +31,12 @@ public class WebController {
 	    return "/template/terms.html";
 	}
 	
+	@RequestMapping(value="/termini-del-servizio-app",method=RequestMethod.GET)
+	public String termsApp() {
+		System.out.println("terms");
+	    return "/template/termsApp.html";
+	}
+	
 	@RequestMapping(value="/index",method=RequestMethod.GET)
 	public String indexExplicit() {
 		System.out.println("index");

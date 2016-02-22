@@ -45,6 +45,7 @@
  	   	<intercept-url pattern="/" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/index" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/termini-del-servizio" access="permitAll" requires-channel="https"/>
+ 	   	<intercept-url pattern="/termini-del-servizio-app" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/contatti" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/app" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/progetto" access="permitAll" requires-channel="https"/>
