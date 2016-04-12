@@ -1,8 +1,10 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
@@ -15,15 +17,15 @@ import java.util.Map;
 
 public interface AppService {
 
-	public VersionZip getVersion();
+	public int getVersion();
 
-	public boolean checkTicket(String ticket);
+	public boolean checkTicket(CheckTicketInput t);
 
 	public CommentsPage getComments(CommentsRequest request) throws BadRequestException;
 
-	public void postComment(List<LogDTO> logComment) throws BadRequestException;
+	public void postComment(List<LogDTO> logComment, int appVersion) throws BadRequestException;
 
-	public void postLog(List<LogDTO> logs);
+	public void postLog(List<LogDTO> logs, int appVersion);
 
 	public LogSeriesInfo getLogInfo(Date start, Date end);
 
@@ -37,4 +39,6 @@ public interface AppService {
 			Date start, Date end);
 
 	public Map<Date, AppInfo> getAppInfo(Date start, Date end);
+
+	public void checkAppVersion(int appVersion) throws ConflictException;
 }

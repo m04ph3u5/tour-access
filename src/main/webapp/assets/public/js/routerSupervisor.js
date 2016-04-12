@@ -92,6 +92,24 @@ angular.module('asti.supervisor')
 				pageTitle : 'AstiMusei - Applicazione mobile'
 			}
 		})
+		.state('logged.changePassword',{
+			url : '/supervisor/password',
+			views : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
+				},
+				"body" : {
+					templateUrl : "assets/public/partials/changePassword.html",
+					controller : 'changePasswordSupervisorCtrl',
+					controllerAs : 'changePassword'
+				}
+			},
+			data : {
+				pageTitle : 'AstiMusei - Modifica password'
+			}
+		})
 	
 		
 		$urlRouterProvider.otherwise(function($injector,$location){

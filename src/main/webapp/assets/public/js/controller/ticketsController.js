@@ -27,7 +27,13 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 	}
 	
 	self.updateData = function(){
-		apiService.statisticsInfo(self.dateStart.getTime(), self.dateEnd.getTime()).then(
+		if(self.dateStart>self.dateEnd){
+			self.period = "0";
+			self.dateEnd = new Date();
+			self.dateStart = angular.copy(self.dateEnd);
+			self.dateStart.addDays(-7);
+		}else{
+			apiService.statisticsInfo(self.dateStart.getTime(), self.dateEnd.getTime()).then(
 				function(data){
 					self.statistics = data;
 					self.pie1 = [self.statistics.totSingleTickets, self.statistics.totGroupTickets];
@@ -42,7 +48,8 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 				function(reason){
 					console.log(reason);
 				}
-		);
+			);
+		}
 	}
 	
 	self.updateSeries = function(){

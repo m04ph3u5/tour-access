@@ -48,8 +48,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("male")
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.gender").is("male"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -58,8 +57,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("female")
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.gender").is("female"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -88,8 +86,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("young")
-						.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.age").is("young"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -98,8 +95,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("middleAge").
-				andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.age").is("middleAge"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -108,8 +104,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("elderly")
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.age").is("elderly"))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 

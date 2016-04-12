@@ -12,10 +12,11 @@ public class Log {
 	@Id
 	private String id;
 	private String source;
-	private Integer version;
+	private Integer version; //VERSIONE DEI DATI (ZIP)
 	private Date date;
 	private String deviceId;
 	private LogType logType;
+	private int appVersion; //VERSIONE DELL'APP
 	
 	/*ARGS*/
 	private Integer idPath;
@@ -33,11 +34,12 @@ public class Log {
 		
 	}
 	
-	public Log(LogDTO log){
+	public Log(LogDTO log, int appVersion){
 		this.source = "APP_ANDROID";
-		this.version = log.getSource(); //source dall'applicazione mobile equivale al numero di versione
+		this.version = log.getSource(); //source dall'applicazione mobile equivale al numero di versione dei dati
 		this.date = log.getTimestamp();
 		this.deviceId = log.getDevice_id();
+		this.appVersion = appVersion;
 		assignLogType(log.getType());
 		if(log.getArgs()!=null){
 			this.idPath = log.getArgs().getId_path();
@@ -61,8 +63,8 @@ public class Log {
 		}
 	}
 	
-	public Log(LogDTO log, String idComment){
-		this(log);
+	public Log(LogDTO log, String idComment, int appVersion){
+		this(log, appVersion);
 		this.idComment = idComment;
 	}
 	
@@ -158,6 +160,14 @@ public class Log {
 	}
 	public void setVersion(int version) {
 		this.version = version;
+	}
+
+	public int getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(int appVersion) {
+		this.appVersion = appVersion;
 	}
 
 	private void assignLogType(String type){
