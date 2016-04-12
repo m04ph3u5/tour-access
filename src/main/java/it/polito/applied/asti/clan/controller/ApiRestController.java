@@ -1,41 +1,5 @@
 package it.polito.applied.asti.clan.controller;
 
-import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.exception.NotFoundException;
-import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
-import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
-import it.polito.applied.asti.clan.pojo.AppInfo;
-import it.polito.applied.asti.clan.pojo.CommentsPage;
-import it.polito.applied.asti.clan.pojo.CommentsRequest;
-import it.polito.applied.asti.clan.pojo.Credential;
-import it.polito.applied.asti.clan.pojo.DashboardInfo;
-import it.polito.applied.asti.clan.pojo.LogDTO;
-import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
-import it.polito.applied.asti.clan.pojo.Name;
-import it.polito.applied.asti.clan.pojo.Poi;
-import it.polito.applied.asti.clan.pojo.PoiRank;
-import it.polito.applied.asti.clan.pojo.PoiToAC;
-import it.polito.applied.asti.clan.pojo.PoiToSell;
-import it.polito.applied.asti.clan.pojo.Read;
-import it.polito.applied.asti.clan.pojo.Response;
-import it.polito.applied.asti.clan.pojo.RoleTicket;
-import it.polito.applied.asti.clan.pojo.StatisticsGroupsInfo;
-import it.polito.applied.asti.clan.pojo.StatisticsInfo;
-import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
-import it.polito.applied.asti.clan.pojo.StatusTicket;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
-import it.polito.applied.asti.clan.pojo.TicketNumber;
-import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
-import it.polito.applied.asti.clan.pojo.User;
-import it.polito.applied.asti.clan.pojo.VersionDTO;
-import it.polito.applied.asti.clan.repository.PoiRepository;
-import it.polito.applied.asti.clan.repository.TicketRepository;
-import it.polito.applied.asti.clan.repository.TicketRequestRepository;
-import it.polito.applied.asti.clan.service.AppService;
-import it.polito.applied.asti.clan.service.TicketService;
-import it.polito.applied.asti.clan.service.UserService;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,6 +19,44 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
+import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
+import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.CommentsPage;
+import it.polito.applied.asti.clan.pojo.CommentsRequest;
+import it.polito.applied.asti.clan.pojo.Credential;
+import it.polito.applied.asti.clan.pojo.DashboardInfo;
+import it.polito.applied.asti.clan.pojo.LogDTO;
+import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
+import it.polito.applied.asti.clan.pojo.Name;
+import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiRank;
+import it.polito.applied.asti.clan.pojo.PoiToAC;
+import it.polito.applied.asti.clan.pojo.PoiToSell;
+import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.Response;
+import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.SensorLog;
+import it.polito.applied.asti.clan.pojo.StatisticsGroupsInfo;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
+import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
+import it.polito.applied.asti.clan.pojo.StatusTicket;
+import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
+import it.polito.applied.asti.clan.pojo.TicketNumber;
+import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
+import it.polito.applied.asti.clan.pojo.User;
+import it.polito.applied.asti.clan.pojo.VersionDTO;
+import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.TicketRepository;
+import it.polito.applied.asti.clan.repository.TicketRequestRepository;
+import it.polito.applied.asti.clan.service.AppService;
+import it.polito.applied.asti.clan.service.TicketService;
+import it.polito.applied.asti.clan.service.UserService;
+import it.polito.applied.asti.clan.service.UtilPostToAclTask;
 
 
 @RestController
@@ -77,6 +79,8 @@ public class ApiRestController extends BaseController{
 
 	@Autowired
 	private AppService appService;
+	
+
 	
 
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
@@ -164,6 +168,14 @@ public class ApiRestController extends BaseController{
 	public List<Ticket> getValidTickets() throws BadRequestException {
 
 		return ticketService.getValidTickets();
+	}
+	
+	//preauthorize in security config
+	@RequestMapping(value="/v1/sensorLog", method=RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)		
+	public void addSensorLog(@RequestBody SensorLog log) throws BadRequestException {
+		
+		ticketService.saveSensorLog(log);
 	}
 
 	//preauthorize in security config

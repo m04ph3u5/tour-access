@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.service;
 
 import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.Ticket;
 
 import java.io.BufferedReader;
@@ -105,6 +106,9 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		System.out.println(result);
 		in.close();
 	}
+
+
+	
 	
 	 
 }

@@ -1,23 +1,5 @@
 package it.polito.applied.asti.clan.service;
 
-import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
-import it.polito.applied.asti.clan.pojo.Poi;
-import it.polito.applied.asti.clan.pojo.PoiRank;
-import it.polito.applied.asti.clan.pojo.Read;
-import it.polito.applied.asti.clan.pojo.RoleTicket;
-import it.polito.applied.asti.clan.pojo.StatisticsInfo;
-import it.polito.applied.asti.clan.pojo.StatusTicket;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
-import it.polito.applied.asti.clan.pojo.TicketRequest;
-import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-import it.polito.applied.asti.clan.repository.PoiRepository;
-import it.polito.applied.asti.clan.repository.ReadRepository;
-import it.polito.applied.asti.clan.repository.TicketRepository;
-import it.polito.applied.asti.clan.repository.TicketRequestRepository;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +13,26 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
+import it.polito.applied.asti.clan.pojo.Poi;
+import it.polito.applied.asti.clan.pojo.PoiRank;
+import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.RoleTicket;
+import it.polito.applied.asti.clan.pojo.SensorLog;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
+import it.polito.applied.asti.clan.pojo.StatusTicket;
+import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
+import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
+import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.ReadRepository;
+import it.polito.applied.asti.clan.repository.SensorRepository;
+import it.polito.applied.asti.clan.repository.TicketRepository;
+import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -77,6 +79,9 @@ public class TicketServiceImpl implements TicketService{
 	
 	@Autowired
 	private ReadRepository readRepo;
+	
+	@Autowired
+	private SensorRepository sensorRepo;
 	
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
@@ -392,6 +397,12 @@ public class TicketServiceImpl implements TicketService{
 			p.setName(namePoi.get(p.getIdSite()));
 		}
 		return l;
+	}
+
+	@Override
+	public void saveSensorLog(SensorLog log) {
+		sensorRepo.save(log);
+		
 	}
 
 
