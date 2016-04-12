@@ -1,5 +1,16 @@
 package it.polito.applied.asti.clan.service;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
@@ -23,18 +34,6 @@ import it.polito.applied.asti.clan.repository.DeviceTicketAssociationRepository;
 import it.polito.applied.asti.clan.repository.LogRepository;
 import it.polito.applied.asti.clan.repository.PathInfoRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
-import it.polito.applied.asti.clan.repository.VersionZipRepository;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AppServiceImpl implements AppService{
@@ -56,8 +55,8 @@ public class AppServiceImpl implements AppService{
 	private final int DIM_PAGE = 10;
 	
 	
-	@Autowired
-	private VersionZipRepository versionRepo;
+//	@Autowired
+//	private VersionZipRepository versionRepo;
 	
 	@Autowired
 	private TicketRepository ticketRepo;

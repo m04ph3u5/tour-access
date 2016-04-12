@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class LogDTO {
 
-	private int source;  //Numero versione
+	private int source;  //01 Android - 02 iOS
 	private Date timestamp; /*UTC*/
 	private String device_id;
 	private String type;
