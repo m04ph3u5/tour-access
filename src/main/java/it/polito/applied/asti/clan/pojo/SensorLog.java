@@ -21,6 +21,7 @@ public class SensorLog {
 	private int idSonda; 	//NUMERO_SERIALE_SONDA
 	private double valTemp;      //VALORE_GRADI_CENTIGRADI
 	private double valHum;		//VALORE_UMIDITA
+	private long timemarker;
 	
 	public String getIdSite() {
 		return idSite;
@@ -54,6 +55,12 @@ public class SensorLog {
 	}
 	public String getId() {
 		return id;
+	}
+	public long getTimemarker() {
+		return timemarker;
+	}
+	public void setTimemarker(long timemarker) {
+		this.timemarker = timemarker;
 	}
 	
 	
