@@ -92,6 +92,27 @@ angular.module('asti.supervisor')
 				pageTitle : 'AstiMusei - Applicazione mobile'
 			}
 		})
+		.state('logged.sensorLog',{
+			url : '/supervisor/sensors/{idSite}',
+			views : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
+				},
+				"body" : {
+					templateUrl : "assets/public/partials/sensorLog.html",
+					controller : 'sensorLogCtrl',
+					controllerAs : 'sensorLog'
+				}
+			},
+			params : {
+				idSite : null
+			},
+			data : {
+				pageTitle : 'AstiMusei - Monitoraggio ambientale'
+			}
+		})
 		.state('logged.changePassword',{
 			url : '/supervisor/password',
 			views : {

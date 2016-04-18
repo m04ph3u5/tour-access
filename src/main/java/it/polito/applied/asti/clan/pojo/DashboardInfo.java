@@ -1,5 +1,7 @@
 package it.polito.applied.asti.clan.pojo;
 
+import java.util.List;
+
 public class DashboardInfo {
 	
 	private long todayTicketSelled;
@@ -7,6 +9,7 @@ public class DashboardInfo {
 	private long todayAppAccess;
 	private long todayDevices;
 	private long todayAppInstallation;
+	private List<SiteSensorDTO> monitoredSites;
 	
 	public long getTodayTicketSelled() {
 		return todayTicketSelled;
@@ -37,6 +40,12 @@ public class DashboardInfo {
 	}
 	public void setTodayDevices(long todayDevices) {
 		this.todayDevices = todayDevices;
+	}
+	public List<SiteSensorDTO> getMonitoredSites() {
+		return monitoredSites;
+	}
+	public void setMonitoredSites(List<SiteSensorDTO> monitoredSites) {
+		this.monitoredSites = monitoredSites;
 	}
 	
 	

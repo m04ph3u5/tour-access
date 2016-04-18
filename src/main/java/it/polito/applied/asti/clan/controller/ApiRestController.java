@@ -54,9 +54,8 @@ import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
-import it.polito.applied.asti.clan.repository.TicketRepository;
-import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 import it.polito.applied.asti.clan.service.AppService;
+import it.polito.applied.asti.clan.service.SensorService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
 
@@ -74,10 +73,7 @@ public class ApiRestController extends BaseController{
 	private TicketService ticketService;
 	
 	@Autowired
-	private TicketRepository ticketRepo;
-	
-	@Autowired
-	private TicketRequestRepository ticketRequestRepo;
+	private SensorService sensorService;
 
 	@Autowired
 	private AppService appService;
@@ -176,7 +172,7 @@ public class ApiRestController extends BaseController{
 	@ResponseStatus(value = HttpStatus.OK)		
 	public void addSensorLog(@RequestBody SensorLog log) throws BadRequestException {
 		
-		ticketService.saveSensorLog(log);
+		sensorService.saveSensorLog(log);
 	}
 
 	//preauthorize in security config
@@ -335,6 +331,7 @@ public class ApiRestController extends BaseController{
 		d.setTodayAppAccess(appService.getAccess(date));
 		d.setTodayAppInstallation(appService.getInstallation(date));
 		d.setTodayDevices(appService.getDevices(date));
+		d.setMonitoredSites(sensorService.getMonitoredSiteInfo(date));
 		return d;
 	}
 	

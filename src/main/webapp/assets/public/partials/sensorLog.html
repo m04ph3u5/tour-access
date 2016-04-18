@@ -1,0 +1,224 @@
+<div style="margin-top: 20px;">
+	<section id="tickets">
+
+		<div class="container">
+			<div class="col-md-12 center ">
+				<h1>Monitoraggio dati ambientali</h1>
+			</div>
+
+			<div class="gap"></div>
+
+			<form class="row">
+				<!--datepicker start-->
+				<div class="col-md-1"></div>
+				<div class="col-md-2 ">
+
+					<select data-ng-model="tickets.period" data-ng-change="tickets.selectPeriod()" id="period" class="form-control">
+						<option selected value="0">Ultima settimana</option>
+						<option value="1">Ultimo mese</option>
+						<option value="2">Ultimi 3 mesi</option>
+						<option value="3">Periodo</option>
+
+					</select>
+				</div>
+				<div class="col-md-3 form-group ">
+
+					<span class="col-md-1">Da:</span>
+					<div id="dataStart" class="input-group col-md-10">
+						<input data-ui-date="tickets.dateStartOptions" data-ng-model="tickets.dateStart" data-ng-change="tickets.setDate(tickets.dateStart)" id="date-from"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend" class="input-group-addon">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+				</div>
+
+				<div class="col-md-3 ">
+
+					<span class="col-md-1">A:</span>
+
+					<div id="dataEnd" class="input-group col-md-10">
+
+						<input data-ui-date="tickets.dateEndOptions" data-ng-model="tickets.dateEnd" id="date-to"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend2" class="input-group-addon">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+
+				</div>
+
+
+				<div class="col-md-2">
+					<button data-ng-click="tickets.elaborate()" class="btn btn-primary btn-exp">Calcola</button>
+
+				</div>
+
+
+
+			</form>
+			<!--datepicker end-->
+
+
+			<div class="gap"></div>
+
+
+			<div id="stats" class="row white">
+				<!--piechart---------->
+
+				<div class="row">
+					<div class="col-sm-6 center ">
+						<h3>
+							Totale vendite	
+						</h3>
+						<canvas id="pie1" class="chart chart-pie" width="250" height="250"
+						  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
+						  data-chart-options="tickets.chartOptions">
+						</canvas>
+					</div>
+					<div class="col-sm-6" >
+						
+						<table class="table table-striped text-left" style="margin-top:15%; width: 50%;">
+							<tr>
+								<td width="50%" >Tot. biglietti venduti: </td><td align="right" width="50%"><b> {{tickets.statistics.totTickets}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%">Singolarmente: </td><td align="right" width="50%"><b> {{tickets.pie1[0]}}</b></td>
+							</tr>
+							<tr>
+	
+								<td width="50%">In gruppo: </td><td align="right" width="50%"><b> {{tickets.pie1[1]}}</b></td>
+							</tr>
+							
+						</table>
+						
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets>0">
+						<h3>
+							Gruppi
+						</h3>
+						<canvas id="pie2" class="chart chart-pie" width="250" height="250"
+						  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
+						  data-chart-options="tickets.chartOptions">
+						</canvas>			
+					</div>
+					<div class="col-sm-6" data-ng-show="tickets.statistics.totGroupTickets>0">
+						
+						<table class="table table-striped text-left" style="margin-top:15%; width: 50%;">
+							<tr>
+								<td width="50%">Tot. gruppi: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td>
+							</tr>
+							<tr>
+	
+								<td width="50%">Altri: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.pie2[1] - tickets.pie2[0]}}</b></td>
+							</tr>
+						</table>
+						
+					</div>
+					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets == 0">
+						Non sono stati emessi biglietti di gruppo
+					</div>
+				</div>
+				<hr>
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
+					<h3>
+						Singoli (Sesso)
+					</h3>
+				
+					<canvas id="pie3" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie3" data-chart-labels="tickets.pie3Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>	
+					Uomini: <b>{{tickets.pie3[0]}}</b><br>
+					Donne: <b>{{tickets.pie3[1]}}</b>
+
+				</div>
+
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
+					<h3>
+						Singoli (Età)
+					</h3>
+					
+					<canvas id="pie4" class="chart chart-pie" width="250" height="250"
+					  data-chart-data="tickets.pie4" data-chart-labels="tickets.pie4Labels"
+					  data-chart-options="tickets.chartOptions">
+					</canvas>	
+
+					Giovani: <b>{{tickets.pie4[0]}}</b>
+					Mezza età: <b>{{tickets.pie4[1]}}</b>
+					Anziani: <b>{{tickets.pie4[2]}}</b>
+
+				</div>
+
+				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets == 0">
+					Non sono stati emessi biglietti singoli
+				</div>
+
+			</div>
+			<!--end pie chart-->
+
+			<div class="gap"></div>
+
+			<div class="col-xs-12 col-sm-6 center">
+
+
+				<table class="table table-striped text-left">
+
+					<thead>
+						<tr>
+							<th>Data</th>
+							<th>Numero Biglietti</th>
+							<th>Numero Ingressi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="(key,value) in tickets.series">
+							<td data-ng-show="value.totTickets || value.totAccesses">{{key | date : 'shortDate'}}</td>
+							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totTickets}}</td>
+							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totAccesses}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+
+
+
+
+		</div>
+		<!--container-->
+
+	</section>
+	<section>
+		<div class="center">
+			<h2>N° Ticket/ingressi</h2>
+
+
+				<canvas height="450" width="800" id="line" class="chart chart-line" data-chart-data="tickets.lineChart.data"
+					  data-chart-labels="tickets.lineChart.labels" data-chart-series="tickets.lineChart.series"
+					  data-chart-options="tickets.chartOptions">
+				</canvas> 		</div>
+
+	</section>
+	
+	<section>
+		<div class="center">
+			<h2>Visite ai punti di interesse</h2>
+
+
+				<canvas height="450" width="800" id="bar" class="chart chart-bar" data-chart-data="tickets.rank.data"
+					  data-chart-labels="tickets.rank.labels" data-chart-options="tickets.chartOptions">
+				</canvas> 		</div>
+
+	</section>
+</div>

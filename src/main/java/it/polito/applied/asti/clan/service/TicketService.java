@@ -32,5 +32,4 @@ public interface TicketService {
 	public StatisticsInfo getStatisticsInfo(Date start, Date end);
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end);
 	public List<PoiRank> getPoiRank(Date start, Date end);
-	public void saveSensorLog(SensorLog log);
 }

@@ -20,7 +20,6 @@ import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
-import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
@@ -30,7 +29,6 @@ import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.ReadRepository;
-import it.polito.applied.asti.clan.repository.SensorRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 
@@ -79,9 +77,6 @@ public class TicketServiceImpl implements TicketService{
 	
 	@Autowired
 	private ReadRepository readRepo;
-	
-	@Autowired
-	private SensorRepository sensorRepo;
 	
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
@@ -398,12 +393,5 @@ public class TicketServiceImpl implements TicketService{
 		}
 		return l;
 	}
-
-	@Override
-	public void saveSensorLog(SensorLog log) {
-		sensorRepo.save(log);
-		
-	}
-
 
 }
