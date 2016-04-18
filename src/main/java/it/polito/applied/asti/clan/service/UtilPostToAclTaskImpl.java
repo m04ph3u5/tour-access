@@ -61,7 +61,7 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		httpCon.setRequestMethod("PUT");
 		httpCon.setRequestProperty("Accept", "application/json");
 		httpCon.setRequestProperty("Content-Type", "application/json");
-		httpCon.setConnectTimeout(5000);
+		httpCon.setConnectTimeout(10000);
 		OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
 		out.write(obj.toString());
 		out.flush();
@@ -89,7 +89,7 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		URL url = new URL(URLTOPING);
 		HttpsURLConnection httpCon = (HttpsURLConnection) url.openConnection();
 		httpCon.setRequestMethod("GET");
-		httpCon.setConnectTimeout(5000);
+		httpCon.setConnectTimeout(10000);
 		
 		InputStream res = httpCon.getInputStream();
 		BufferedReader in = new BufferedReader(new InputStreamReader(res));

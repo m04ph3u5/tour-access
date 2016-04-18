@@ -62,8 +62,9 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	public boolean isValid(String[] ticketNumbers, Date start) {
 		Query q = new Query();
 		Criteria c2 = new Criteria();
-		
-		c2.orOperator((Criteria.where("endDate").gte(start)), (Criteria.where("status").ne(PENDING)), (Criteria.where("status").ne(CANCELED)));
+		Criteria c3 = new Criteria();
+		c3.andOperator(Criteria.where("status").ne(PENDING), Criteria.where("endDate").gte(start));
+		c2.orOperator(c3, (Criteria.where("status").is(CANCELED)));
 		
 		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
 				.andOperator(c2));

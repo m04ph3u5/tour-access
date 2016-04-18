@@ -172,7 +172,7 @@ public class TicketServiceImpl implements TicketService{
 		try {
 			postToAcl.sendTicketsToAcl(tickets);
 		} catch (JSONException | IOException e) {
-//			ticketRepo.removeLastTickets(tickets);
+			ticketRepo.removeLastTickets(tickets);
 			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
 		}
 		ticketRepo.toReleased(tickets);	

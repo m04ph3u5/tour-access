@@ -1,5 +1,5 @@
 <div style="margin-top: 20px;">
-	<section id="tickets">
+	<section id="sensor">
 
 		<div class="container">
 			<div class="col-md-12 center ">
@@ -13,190 +13,110 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-2 ">
 
-					<select data-ng-model="tickets.period" data-ng-change="tickets.selectPeriod()" id="period" class="form-control">
-						<option selected value="0">Ultima settimana</option>
-						<option value="1">Ultimo mese</option>
-						<option value="2">Ultimi 3 mesi</option>
-						<option value="3">Periodo</option>
+					<select data-ng-model="sensorLog.period" data-ng-change="sensorLog.selectPeriod()" id="period" class="form-control">
+						<option selected value="0">Oggi</option>
+						<option value="1">Seleziona un giorno</option>
+						<option value="2">Ultima settimana</option>
+						<option value="3">Ultimo mese</option>
+						<option value="4">Seleziona un periodo</option>
 
 					</select>
 				</div>
-				<div class="col-md-3 form-group ">
-
-					<span class="col-md-1">Da:</span>
-					<div id="dataStart" class="input-group col-md-10">
-						<input data-ui-date="tickets.dateStartOptions" data-ng-model="tickets.dateStart" data-ng-change="tickets.setDate(tickets.dateStart)" id="date-from"
-							class="form-control col-xs-9 datepicker"> <span
-							id="calend" class="input-group-addon">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</span>
+					<div data-ng-if="sensorLog.showTwoCal" class="col-md-3 form-group ">
+	
+						<span class="col-md-1">Da:</span>
+						<div id="dataStart" class="input-group col-md-10">
+							<input data-ui-date="sensorLog.dateStartOptions" data-ng-model="sensorLog.dateStart" data-ng-change="sensorLog.setDateStart(sensorLog.dateStart)" id="date-from"
+								class="form-control col-xs-9 datepicker"> <span
+								id="calend" class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+						</div>
 					</div>
-				</div>
-
-				<div class="col-md-3 ">
-
-					<span class="col-md-1">A:</span>
-
-					<div id="dataEnd" class="input-group col-md-10">
-
-						<input data-ui-date="tickets.dateEndOptions" data-ng-model="tickets.dateEnd" id="date-to"
-							class="form-control col-xs-9 datepicker"> <span
-							id="calend2" class="input-group-addon">
-							<i class="glyphicon glyphicon-calendar"></i>
-						</span>
+	
+					<div data-ng-if="sensorLog.showTwoCal" class="col-md-3 ">
+	
+						<span class="col-md-1">A:</span>
+	
+						<div id="dataEnd" class="input-group col-md-10">
+	
+							<input data-ui-date="sensorLog.dateEndOptions" data-ng-model="sensorLog.dateEnd" data-ng-change="sensorLog.setDateEnd(sensorLog.dateEnd)" id="date-to"
+								class="form-control col-xs-9 datepicker"> <span
+								id="calend2" class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+						</div>
+	
 					</div>
-
-				</div>
-
+				
+					<div data-ng-if="sensorLog.showOneCal" class="col-md-3 form-group ">
+	
+						<span class="col-md-1"></span>
+						<div id="dataStart" class="input-group col-md-10">
+							<input data-ui-date="sensorLog.dateStartOptions" data-ng-model="sensorLog.dateStart" id="date-from"
+								data-ng-change="sensorLog.setOneDate(sensorLog.dateStart)"
+								class="form-control col-xs-9 datepicker"> <span
+								id="calend" class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+						</div>
+					</div>
 
 				<div class="col-md-2">
-					<button data-ng-click="tickets.elaborate()" class="btn btn-primary btn-exp">Calcola</button>
-
+					<button data-ng-click="sensorLog.elaborate()" class="btn btn-primary btn-exp">Calcola</button>
 				</div>
 
 
 
 			</form>
 			<!--datepicker end-->
-
-
-			<div class="gap"></div>
-
-
-			<div id="stats" class="row white">
-				<!--piechart---------->
-
-				<div class="row">
-					<div class="col-sm-6 center ">
-						<h3>
-							Totale vendite	
-						</h3>
-						<canvas id="pie1" class="chart chart-pie" width="250" height="250"
-						  data-chart-data="tickets.pie1" data-chart-labels="tickets.pie1Labels"
-						  data-chart-options="tickets.chartOptions">
-						</canvas>
-					</div>
-					<div class="col-sm-6" >
-						
-						<table class="table table-striped text-left" style="margin-top:15%; width: 50%;">
-							<tr>
-								<td width="50%" >Tot. biglietti venduti: </td><td align="right" width="50%"><b> {{tickets.statistics.totTickets}}</b></td>
-							</tr>
-							<tr>
-								<td width="50%">Singolarmente: </td><td align="right" width="50%"><b> {{tickets.pie1[0]}}</b></td>
-							</tr>
-							<tr>
-	
-								<td width="50%">In gruppo: </td><td align="right" width="50%"><b> {{tickets.pie1[1]}}</b></td>
-							</tr>
-							
-						</table>
-						
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets>0">
-						<h3>
-							Gruppi
-						</h3>
-						<canvas id="pie2" class="chart chart-pie" width="250" height="250"
-						  data-chart-data="tickets.pie2" data-chart-labels="tickets.pie2Labels"
-						  data-chart-options="tickets.chartOptions">
-						</canvas>			
-					</div>
-					<div class="col-sm-6" data-ng-show="tickets.statistics.totGroupTickets>0">
-						
-						<table class="table table-striped text-left" style="margin-top:15%; width: 50%;">
-							<tr>
-								<td width="50%">Tot. gruppi: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups}}</b></td>
-							</tr>
-							<tr>
-								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
-							</tr>
-							<tr>
-								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td>
-							</tr>
-							<tr>
-	
-								<td width="50%">Altri: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.pie2[1] - tickets.pie2[0]}}</b></td>
-							</tr>
-						</table>
-						
-					</div>
-					<div class="col-sm-6 center" data-ng-show="tickets.statistics.totGroupTickets == 0">
-						Non sono stati emessi biglietti di gruppo
-					</div>
-				</div>
-				<hr>
-				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
-					<h3>
-						Singoli (Sesso)
-					</h3>
-				
-					<canvas id="pie3" class="chart chart-pie" width="250" height="250"
-					  data-chart-data="tickets.pie3" data-chart-labels="tickets.pie3Labels"
-					  data-chart-options="tickets.chartOptions">
-					</canvas>	
-					Uomini: <b>{{tickets.pie3[0]}}</b><br>
-					Donne: <b>{{tickets.pie3[1]}}</b>
-
-				</div>
-
-				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets>0">
-					<h3>
-						Singoli (Età)
-					</h3>
-					
-					<canvas id="pie4" class="chart chart-pie" width="250" height="250"
-					  data-chart-data="tickets.pie4" data-chart-labels="tickets.pie4Labels"
-					  data-chart-options="tickets.chartOptions">
-					</canvas>	
-
-					Giovani: <b>{{tickets.pie4[0]}}</b>
-					Mezza età: <b>{{tickets.pie4[1]}}</b>
-					Anziani: <b>{{tickets.pie4[2]}}</b>
-
-				</div>
-
-				<div class="col-sm-6 center" data-ng-show="tickets.statistics.totSingleTickets == 0">
-					Non sono stati emessi biglietti singoli
-				</div>
-
-			</div>
-			<!--end pie chart-->
-
-			<div class="gap"></div>
-
-			<div class="col-xs-12 col-sm-6 center">
-
-
-				<table class="table table-striped text-left">
-
-					<thead>
-						<tr>
-							<th>Data</th>
-							<th>Numero Biglietti</th>
-							<th>Numero Ingressi</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr data-ng-repeat="(key,value) in tickets.series">
-							<td data-ng-show="value.totTickets || value.totAccesses">{{key | date : 'shortDate'}}</td>
-							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totTickets}}</td>
-							<td data-ng-show="value.totTickets || value.totAccesses">{{value.totAccesses}}</td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-
-
-
-
-
 		</div>
 		<!--container-->
+	</section>
+	<section class="white">
+
+
+		<div class="container center">
+			<h2>Statistiche {{sensorLog.periodString}}</h2>
+
+
+			<div class="col-xs-12">
+
+
+				<div
+					class="col-md-1 col-sm-3 col-xs-6 col-md-offset-1 widget txt-white ">
+
+					<div class="pull-left">
+						<i class="icon-hand-up"></i>
+					</div>
+					<span class="label-widget"> Rilevazioni </span> <br> 55 <i
+						class="fa fa-university"></i>
+				</div>
+
+				<div class="col-md-1 col-sm-3  col-xs-6  widget txt-white coral">
+					<div class="pull-left">
+						<i class="icon-upload-alt"></i>
+					</div>
+
+					<span class="label-widget"> Numero sonde </span> <br>66
+				</div>
+
+				<div style="background-color: #f1c40f;" class="col-md-1 col-sm-3  col-xs-6 widget txt-white">
+					<div class="pull-left">
+						<i class="icon-sun"></i>
+					</div>
+					<span class="label-widget"> Temperetura</span> <br>22.25°C
+				</div>
+				
+				<div class="col-md-1 col-sm-3  col-xs-6  emerald widget txt-white">
+					<div class="pull-left">
+						<i class="icon-tint"></i>
+					</div>
+					<span class="label-widget"> Umidità</span> <br>77.12%
+				</div>
+			</div>
+
+		</div>
 
 	</section>
 	<section>
