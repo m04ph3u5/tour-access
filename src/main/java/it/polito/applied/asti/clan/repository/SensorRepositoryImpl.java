@@ -73,7 +73,8 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
 				Aggregation.project().andExpression("year(timestamp)").as("year")
 				.andExpression("month(timestamp)").as("month")
-				.andExpression("dayOfMonth(timestamp)").as("day"),
+				.andExpression("dayOfMonth(timestamp)").as("day")
+				.and("valTemp"),
 				Aggregation.group(Aggregation.fields().and("year").and("month").and("day")).avg("valTemp").as("avg"),
 				Aggregation.project("avg").and("year").previousOperation().and("month").previousOperation().and("day").previousOperation());
 		
