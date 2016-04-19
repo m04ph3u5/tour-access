@@ -39,6 +39,19 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var getInfoSite = function(start, end, idSite){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/infoSite?start='+start.getTime()+'&end='+end.getTime()+'&idSite='+idSite).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		return p.promise;
+	}
+	
 	var statisticsInfo = function(start, end){
 		var p = $q.defer();
 		$http.get('/api/v1/statistics/statisticsInfo?start='+start+'&end='+end).then(
@@ -117,7 +130,8 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		statisticsSeries : statisticsSeries,
 		poiRank : poiRank,
 		appSeries : appSeries,
-		appInfo: appInfo
+		appInfo: appInfo,
+		getInfoSite : getInfoSite
 	}
 
 }]);

@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import it.polito.applied.asti.clan.pojo.InfoEnvironmentSite;
+import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
 import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.SiteSensorDTO;
 
@@ -40,5 +42,21 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 		
 		List<SiteSensorDTO> l = result.getMappedResults();
 		return l;
+	}
+
+	@Override
+	public List<InfoEnvironmentSonda> findInfoSiteInInterval(Date start, Date end, String idSite) {
+		Criteria c = new Criteria();
+		c = Criteria.where("idSite").is(idSite).andOperator(Criteria.where("timestamp").gte(start).andOperator(Criteria.where("timestamp").lte(end)));
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.group("idSonda").avg("valTemp").as("temp")
+					.avg("valHum").as("humid")
+					.count().as("numRilevazioni"),
+				Aggregation.project("temp", "humid", "numRilevazioni").and("idSonda").previousOperation());
+		AggregationResults result = mongoOp.aggregate(agg, SensorLog.class, InfoEnvironmentSonda.class);
+		
+		List<InfoEnvironmentSonda> i = result.getMappedResults();
+		return i;
 	}
 }

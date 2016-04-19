@@ -1,16 +1,16 @@
 <div class="container">
 	<h2 style="margin-top: 15px;">Benvenuto {{dashboard.name}}</h2>
-	<h4>{{dashboard.today | date:'short'}}</h4>
+	<h4>{{dashboard.today | date:'short'}} - Riepilogo giornaliero</h4>
 	<br>
 	<div class="row">
 		<div class="col-sm-6">
 			<h3>Biglietti e ingressi</h3>
 			<div style="margin-left:15px; margin-top:20px;">
 				<h5>
-					Vendite giornaliere: <b>{{dashboard.info.todayTicketSelled}}</b>
+					Vendite: <b>{{dashboard.info.todayTicketSelled}}</b>
 				</h5>
 				<h5>
-					Ingressi giornalieri: <b>{{dashboard.info.todayIngress}}</b>
+					Ingressi: <b>{{dashboard.info.todayIngress}}</b>
 				</h5>
 				<br>
 				<div class="btn btn-primary tooltips"
@@ -23,7 +23,7 @@
 			<h3>Applicazione Android</h3>
 			<div style="margin-left:15px; margin-top:20px;">
 				<h5>
-					Totale accessi giornalieri: <b>{{dashboard.info.todayAppAccess}}</b>
+					Totale accessi: <b>{{dashboard.info.todayAppAccess}}</b>
 				</h5>
 				<h5>
 					Numero dispositivi differenti: <b>{{dashboard.info.todayDevices}}</b>

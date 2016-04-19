@@ -42,7 +42,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	}
 	
 	self.setOneDate = function(a){
-		self.setEndDate = a;
+		self.dateEnd = a;
 	}
 	
 	self.period = "0";
@@ -51,80 +51,101 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	self.showOneCal = false;
 	self.dateStart = angular.copy(today);
 	self.dateEnd = self.dateStart;
+	
 	self.selectPeriod = function(){
 		switch(self.period){
-		//OGGI
-		case "0": {
-			self.showTwoCal = false;
-			self.showOneCal = false;
-			resetMinDate();
-			self.dateStart = angular.copy(today);
-			self.dateEnd = self.dateStart;
-			break;
-		}
-		//SELEZIONA UN GIORNO
-		case "1": {
-			self.showTwoCal = false;
-			self.showOneCal = true;
-			resetMinDate();
-			self.dateStart = angular.copy(today);
-			break;
-		}
-		//ULTIMA SETTIMANA
-		case "2" : {
-			self.showTwoCal = false;
-			self.showOneCal = false;
-			resetMinDate();
-			self.dateEnd = angular.copy(today);
-			self.dateStart = angular.copy(self.dateEnd);
-			self.dateStart.addDays(-7);
-			break;
-		}
-		//ULTIMO MESE
-		case "3" : {
-			self.showTwoCal = false;
-			self.showOneCal = false;
-			resetMinDate();
-			self.dateEnd = angular.copy(today);
-			self.dateStart = angular.copy(self.dateEnd);
-			self.dateStart.addDays(-30);
-			break;
-		}
-		case "4" : {
-			self.showTwoCal = true;
-			self.showOneCal = false;
-			resetMinDate();
-			break;
-		}
+			//OGGI
+			case "0": {
+				self.showTwoCal = false;
+				self.showOneCal = false;
+				resetMinDate();
+				self.dateStart = angular.copy(today);
+				self.dateEnd = self.dateStart;
+				break;
+			}
+			//SELEZIONA UN GIORNO
+			case "1": {
+				self.showTwoCal = false;
+				self.showOneCal = true;
+				resetMinDate();
+				self.dateStart = angular.copy(today);
+				break;
+			}
+			//ULTIMA SETTIMANA
+			case "2" : {
+				self.showTwoCal = false;
+				self.showOneCal = false;
+				resetMinDate();
+				self.dateEnd = angular.copy(today);
+				self.dateStart = angular.copy(self.dateEnd);
+				self.dateStart.addDays(-7);
+				break;
+			}
+			//ULTIMO MESE
+			case "3" : {
+				self.showTwoCal = false;
+				self.showOneCal = false;
+				resetMinDate();
+				self.dateEnd = angular.copy(today);
+				self.dateStart = angular.copy(self.dateEnd);
+				self.dateStart.addDays(-30);
+				break;
+			}
+			case "4" : {
+				self.showTwoCal = true;
+				self.showOneCal = false;
+				resetMinDate();
+				break;
+			}
 		}
 	}
+	var getInfoSite = function(){
+		apiService.getInfoSite(self.dateStart, self.dateEnd, idSite).then(
+				function(data){
+					self.info = data;
+					console.log(self.info);
+				},
+				function(reason){
+					console.log(reason);
+				}
+		);
+	}
+	getInfoSite();
+	
 	
 	self.elaborate = function(){
 		switch(self.period){
-		//OGGI
-		case "0": {
-			self.periodString="giornaliere";
-			break;
-		}
-		//SELEZIONA UN GIORNO
-		case "1": {
-			self.periodString="del "+$filter('date')(self.dateStart, "d MMMM");
-			break;
-		}
-		//ULTIMA SETTIMANA
-		case "2" : {
-			self.periodString="dell'ultima settimana ("+$filter('date')(self.dateStart, "d MMMM")+" - "+$filter('date')(self.dateEnd, "d MMMM")+")";
-			break;
-		}
-		//ULTIMO MESE
-		case "3" : {
-			self.periodString="dell'ultimo mese ("+$filter('date')(self.dateStart, "d MMMM")+" - "+$filter('date')(self.dateEnd, "d MMMM")+")";
-			break;
-		}
-		case "4" : {
-			self.periodString="dal "+$filter('date')(self.dateStart, "d MMMM")+" al "+$filter('date')(self.dateEnd, "d MMMM");
-			break;
-		}
+			//OGGI
+			case "0": {
+				self.periodString="giornaliere";
+				getInfoSite();
+				break;
+			}
+			//SELEZIONA UN GIORNO
+			case "1": {
+				
+				self.periodString="del "+$filter('date')(self.dateStart, "d MMMM");
+				getInfoSite();
+				break;
+			}
+			//ULTIMA SETTIMANA
+			case "2" : {
+				self.periodString="dell'ultima settimana ("+$filter('date')(self.dateStart, "d MMMM")+" - "+$filter('date')(self.dateEnd, "d MMMM")+")";
+				getInfoSite();
+				break;
+			}
+			//ULTIMO MESE
+			case "3" : {
+				self.periodString="dell'ultimo mese ("+$filter('date')(self.dateStart, "d MMMM")+" - "+$filter('date')(self.dateEnd, "d MMMM")+")";
+				getInfoSite();
+				break;
+			}
+			case "4" : {
+				self.periodString="dal "+$filter('date')(self.dateStart, "d MMMM")+" al "+$filter('date')(self.dateEnd, "d MMMM");
+				getInfoSite();
+				break;
+			}
+			
 		}
 
 	}

@@ -32,6 +32,7 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.DashboardInfo;
+import it.polito.applied.asti.clan.pojo.InfoEnvironmentSite;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.Name;
@@ -333,6 +334,40 @@ public class ApiRestController extends BaseController{
 		d.setTodayDevices(appService.getDevices(date));
 		d.setMonitoredSites(sensorService.getMonitoredSiteInfo(date));
 		return d;
+	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/infoSite", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public InfoEnvironmentSite getInfoSite(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end, @RequestParam(value="idSite", required=true) String idSite) throws BadRequestException, NotFoundException{
+		
+		if(start==null || start.isEmpty() || end==null || end.isEmpty())
+			throw new BadRequestException();
+		
+		Date startDate, endDate;
+		Calendar cStart = Calendar.getInstance();
+		Calendar cEnd = Calendar.getInstance();
+		
+		cStart.setTimeInMillis(Long.parseLong(start));
+		cStart.set(Calendar.HOUR_OF_DAY, 0);
+		cStart.set(Calendar.MINUTE, 0);
+		cStart.set(Calendar.SECOND, 0);
+		cEnd.setTimeInMillis(Long.parseLong(end));
+		cEnd.set(Calendar.HOUR_OF_DAY, 23);
+		cEnd.set(Calendar.MINUTE, 59);
+		cEnd.set(Calendar.SECOND, 59);
+		
+		startDate = cStart.getTime();
+		endDate = cEnd.getTime();
+		
+		
+
+		InfoEnvironmentSite info;
+		
+		info = sensorService.getInfoSite(startDate, endDate, idSite);
+		System.out.println(info.getHumid());
+		
+		return info;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")

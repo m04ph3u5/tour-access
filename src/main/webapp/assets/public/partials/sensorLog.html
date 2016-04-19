@@ -89,7 +89,7 @@
 					<div class="pull-left">
 						<i class="icon-hand-up"></i>
 					</div>
-					<span class="label-widget"> Rilevazioni </span> <br> 55 <i
+					<span class="label-widget"> Rilevazioni </span> <br> {{sensorLog.info.numRilevazioni}} <i
 						class="fa fa-university"></i>
 				</div>
 
@@ -98,21 +98,21 @@
 						<i class="icon-upload-alt"></i>
 					</div>
 
-					<span class="label-widget"> Numero sonde </span> <br>66
+					<span class="label-widget"> Numero sonde </span> <br>{{sensorLog.info.numSonde}}
 				</div>
 
 				<div style="background-color: #f1c40f;" class="col-md-1 col-sm-3  col-xs-6 widget txt-white">
 					<div class="pull-left">
 						<i class="icon-sun"></i>
 					</div>
-					<span class="label-widget"> Temperetura</span> <br>22.25°C
+					<span class="label-widget"> Temperatura</span> <br>{{sensorLog.info.temp | number:2}}°C
 				</div>
 				
 				<div class="col-md-1 col-sm-3  col-xs-6  emerald widget txt-white">
 					<div class="pull-left">
 						<i class="icon-tint"></i>
 					</div>
-					<span class="label-widget"> Umidità</span> <br>77.12%
+					<span class="label-widget"> Umidità</span> <br>{{sensorLog.info.humid | number:2}}%
 				</div>
 			</div>
 
