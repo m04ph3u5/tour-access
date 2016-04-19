@@ -8,7 +8,7 @@ public class Sonda {
 
 	@Id
 	private String id;
-	private String idSonda;
+	private int idSonda;
 	private String name;
 	private String idSite;
 	
@@ -16,10 +16,10 @@ public class Sonda {
 	public String getId() {
 		return id;
 	}
-	public String getIdSonda() {
+	public int getIdSonda() {
 		return idSonda;
 	}
-	public void setIdSonda(String idSonda) {
+	public void setIdSonda(int idSonda) {
 		this.idSonda = idSonda;
 	}
 	public String getName() {

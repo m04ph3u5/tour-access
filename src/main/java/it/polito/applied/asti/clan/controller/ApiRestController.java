@@ -32,6 +32,7 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.DashboardInfo;
+import it.polito.applied.asti.clan.pojo.EnvironmentSeries;
 import it.polito.applied.asti.clan.pojo.InfoEnvironmentSite;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
@@ -366,7 +367,6 @@ public class ApiRestController extends BaseController{
 		
 		info = sensorService.getInfoSite(startDate, endDate, idSite);
 		System.out.println(info.getHumid());
-		
 		return info;
 	}
 	
@@ -437,4 +437,36 @@ public class ApiRestController extends BaseController{
 		
 		return appService.getAppInfo(start, end);
 	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/environmentInfo", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Map<Date,EnvironmentSeries> getEnvironmentInfo(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end,
+			@RequestParam(value="idSite", required=true) String idSite, @RequestParam(value="idSonda", required=true) int idSonda) throws BadRequestException, NotFoundException{
+		if(start==null || start.isEmpty() || end==null || end.isEmpty() || idSite==null || idSite.isEmpty())
+			throw new BadRequestException();
+		
+		Date startDate, endDate;
+		Calendar cStart = Calendar.getInstance();
+		Calendar cEnd = Calendar.getInstance();
+		
+		cStart.setTimeInMillis(Long.parseLong(start));
+		cStart.set(Calendar.HOUR_OF_DAY, 0);
+		cStart.set(Calendar.MINUTE, 0);
+		cStart.set(Calendar.SECOND, 0);
+		cStart.set(Calendar.MILLISECOND, 0);
+
+		cEnd.setTimeInMillis(Long.parseLong(end));
+		cEnd.set(Calendar.HOUR_OF_DAY, 23);
+		cEnd.set(Calendar.MINUTE, 59);
+		cEnd.set(Calendar.SECOND, 59);
+		cEnd.set(Calendar.MILLISECOND, 999);
+
+		startDate = cStart.getTime();
+		endDate = cEnd.getTime();
+		
+		return sensorService.getEnvironmentSeries(idSite, idSonda, startDate, endDate);
+	}
+
+	
 }

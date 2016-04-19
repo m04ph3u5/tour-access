@@ -293,7 +293,7 @@ public class TicketServiceImpl implements TicketService{
 		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
 		s.setTotAccess(readRepo.countIngress(start, end));
 		
-		System.out.println("male: "+ totSingleMan);
+//		System.out.println("male: "+ totSingleMan);
 		
 		
 		return s;

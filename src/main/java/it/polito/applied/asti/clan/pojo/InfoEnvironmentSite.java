@@ -10,17 +10,8 @@ public class InfoEnvironmentSite {
 	private float temp;
 	private float humid;
 	private List<Sonda> sonde;
-	private int campoDiProva;
 	
 	
-	public int getCampoDiProva() {
-		return campoDiProva;
-	}
-
-	public void setCampoDiProva(int campoDiProva) {
-		this.campoDiProva = campoDiProva;
-	}
-
 	public InfoEnvironmentSite() {
 		super();
 		this.sonde = new ArrayList<Sonda>();

@@ -51,10 +51,10 @@
 				Rilevazioni effettuate: <b>{{s.numRead}}</b>
 			</p>
 			<p>
-				Temperatura media: <b>{{s.avgTemperature | number : 2}} °C</b>
+				Temperatura media: <b data-ng-hide="s.numRead==0">{{s.avgTemperature | number : 2}} °C</b><b data-ng-show="s.numRead==0">N/D</b>
 			</p>
 			<p>
-				Umidità media: <b>{{s.avgHumidity | number : 2}} %</b>
+				Umidità media: <b data-ng-hide="s.numRead==0">{{s.avgHumidity | number : 2}} %</b><b data-ng-show="s.numRead==0">N/D</b>
 			</p>
 			<span class="btn btn-primary tooltips"
 				title="Vai alla pagina relativa ai dettagli del monitoraggio ambientale"

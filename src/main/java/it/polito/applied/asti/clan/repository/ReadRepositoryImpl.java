@@ -48,11 +48,15 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		
 		
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("dtaTransit").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.group("dtaTransit").count().as("tot"), 
+				Aggregation.project("tot").and("date").previousOperation(), 
+				Aggregation.sort(Direction.ASC, "date"));
 		
 		AggregationResults result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
+		
 		return l;
 	}
 

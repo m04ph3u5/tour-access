@@ -213,6 +213,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
+		for(TotAggregate t : l)
+			System.out.println(t);
 		return l;
 	}
 
