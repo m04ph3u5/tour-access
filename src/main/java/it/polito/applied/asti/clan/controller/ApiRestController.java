@@ -32,7 +32,6 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.DashboardInfo;
-import it.polito.applied.asti.clan.pojo.EnvironmentSeries;
 import it.polito.applied.asti.clan.pojo.InfoEnvironmentSite;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
@@ -442,7 +441,7 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/environmentInfo", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public Map<String,Map<Date,TotAvgAggregate>> getEnvironmentInfo(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end,
+	public Map<Date,List<TotAvgAggregate>> getEnvironmentInfo(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end,
 			@RequestParam(value="idSite", required=true) String idSite) throws BadRequestException, NotFoundException{
 		if(start==null || start.isEmpty() || end==null || end.isEmpty() || idSite==null || idSite.isEmpty())
 			throw new BadRequestException();

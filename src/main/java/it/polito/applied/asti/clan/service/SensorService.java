@@ -16,6 +16,6 @@ public interface SensorService {
 	public List<SiteSensorDTO> getMonitoredSiteInfo(Date date);
 	public InfoEnvironmentSite getInfoSite(Date start, Date end, String idSite);
 
-	public Map<String, Map<Date, TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate);
+	public Map<Date, List<TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate);
 
 }

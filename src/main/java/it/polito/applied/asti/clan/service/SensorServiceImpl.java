@@ -96,7 +96,7 @@ public class SensorServiceImpl implements SensorService{
 	}
 
 	@Override
-	public Map<String, Map<Date, TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate) {
+	public Map<Date, List<TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate) {
 		Map<String, Map<Date,TotAvgAggregate>> globalMap=null;
 		List<Sonda> sonde = sondaRepo.findByIdSite(idSite);
 		if(sonde!=null && sonde.size()>0){
@@ -109,6 +109,7 @@ public class SensorServiceImpl implements SensorService{
 				List<TotAvgAggregate> aggregates = sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, s.getIdSonda(), startDate, endDate, hourGranularity);
 				
 				for(TotAvgAggregate tt : aggregates){
+					
 					cal.set(Calendar.YEAR, tt.getYear());
 					cal.set(Calendar.MONTH, tt.getMonth()-1);
 					cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
