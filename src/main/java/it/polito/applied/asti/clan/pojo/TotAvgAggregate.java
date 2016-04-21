@@ -9,6 +9,7 @@ public class TotAvgAggregate {
 	private int day;
 	private int hour;
 	private int tot;
+	private int idSonda;
 	
 	public int getYear() {
 		return year;
@@ -51,6 +52,12 @@ public class TotAvgAggregate {
 	}
 	public void setHour(int hour) {
 		this.hour = hour;
+	}
+	public int getIdSonda() {
+		return idSonda;
+	}
+	public void setIdSonda(int idSonda) {
+		this.idSonda = idSonda;
 	}
 	
 	
