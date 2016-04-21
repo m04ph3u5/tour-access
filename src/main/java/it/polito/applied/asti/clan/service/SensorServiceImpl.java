@@ -128,10 +128,6 @@ public class SensorServiceImpl implements SensorService{
 		return map;
 	}
 
-
-
-
-
 	private boolean getGranularity(Date startDate, Date endDate) {
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();

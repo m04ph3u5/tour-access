@@ -112,7 +112,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 				function(data){
 					self.info = data;
 					getTimeSeries();
-					console.log(self.info);
+					
 				},
 				function(reason){
 					console.log(reason);
@@ -136,7 +136,9 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	}
 	
 	var createLabels = function(){
+		
 		var granularity = calculateGranularity();
+		
 		var start = angular.copy(self.dateStart);
 		switch(granularity){
 		case 0: {
@@ -154,7 +156,8 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 			/*Period that has duration greater than 1 day but less than 3 month.
 			 * It allows to see daily data granularity*/
 			start.setHours(0,0,0,0);
-			var end = angular.copy(start);
+			var end = angular.copy(self.dateEnd);
+			
 			while(start<end){
 				self.charts.labels.push($filter('date')(start, 'shortDate'));
 				start.addDays(1);
@@ -177,43 +180,48 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	var getTimeSeries = function(){
 		apiService.environmentSeries(self.dateStart, self.dateEnd, idSite).then(
 				function(data){
-					console.log(data);
-					var series = data;
+					
+					self.series = data;
+					
+					self.charts = {};
+					self.charts.series = [];
+					self.charts.labels = [];
+					self.charts.idSeries = [];
+					self.tempCharts.data = [];
+					self.humCharts.data = [];
+					createLabels();
 					var granularity = calculateGranularity();
-					if(series){
-						
-						self.charts = {};
-						self.charts.series = [];
-						self.charts.labels = [];
-						self.charts.idSeries = [];
-						self.tempCharts.data = [];
-						self.humCharts.data = [];
-						createLabels();
-						
+					if(self.series){
+					
 						for(var i=0; self.info && self.info.sonde && i<self.info.sonde.length; i++){
 							self.charts.series.push(self.info.sonde[i].name);
 							self.charts.idSeries.push(self.info.sonde[i].idSonda);
 							self.tempCharts.data[i] = Array.apply(null, Array(self.charts.labels.length)).map(Number.prototype.valueOf,0);
 							self.humCharts.data[i] = Array.apply(null, Array(self.charts.labels.length)).map(Number.prototype.valueOf,0);
+							
 						}
 						
 						var index = 0;
-						for(var d in series){
+				
+						for(var d in self.series){
 							switch(granularity){
-							case 0: {
-								index = self.charts.labels.indexOf($filter('date')(d, 'HH:mm'));
-								break;
+								case 0: {
+									index = self.charts.labels.indexOf($filter('date')(d, 'HH:mm'));
+									
+									break;
+								}
+								case 1: {
+									index = self.charts.labels.indexOf($filter('date')(d, 'shortDate'));
+									
+									break;
+								}
+								case 2: {
+									//TODO weekly granularity
+									break;
+								}
 							}
-							case 1: {
-								index = self.charts.labels.indexOf($filter('date')(d, 'shortDate'));
-								break;
-							}
-							case 2: {
-								//TODO weekly granularity
-								break;
-							}
-							}
-							var list = series[d];
+						
+							var list = self.series[d];
 							for(var j=0; list && j<list.length; j++){
 								var indexSonda = self.charts.idSeries.indexOf(list[j].idSonda);
 								self.tempCharts.data[indexSonda][index] = list[j].avgTemp;
