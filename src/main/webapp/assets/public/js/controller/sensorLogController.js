@@ -145,8 +145,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 			var end = angular.copy(start);
 			end.addDays(1);
 			while(start<end){
-				self.tempCharts.labels.push($filter('date')(start, 'HH:mm'));
-				self.humCharts.labels.push($filter('date')(start, 'HH:mm'));
+				self.charts.labels.push($filter('date')(start, 'HH:mm'));
 				start.setHours(start.getHours()+1);
 			}
 			break;
@@ -157,8 +156,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 			start.setHours(0,0,0,0);
 			var end = angular.copy(start);
 			while(start<end){
-				self.tempCharts.labels.push($filter('date')(start, 'shortDate'));
-				self.humCharts.labels.push($filter('date')(start, 'shortDate'));
+				self.charts.labels.push($filter('date')(start, 'shortDate'));
 				start.addDays(1);
 			}
 			break;
@@ -179,31 +177,49 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	var getTimeSeries = function(){
 		apiService.environmentSeries(self.dateStart, self.dateEnd, idSite).then(
 				function(data){
+					console.log(data);
 					var series = data;
+					var granularity = calculateGranularity();
 					if(series){
-						
-						self.tempCharts.labels = [];
-						self.humCharts.labels = [];
-						createLabels();
-						self.tempCharts.data = [];
-						self.humCharts.data = [];
 						
 						self.charts = {};
 						self.charts.series = [];
-						for(var idSonda in series){
-							
-							if(self.info && self.info.sonde){
-								for(var j=0; j<self.info.sonde.length; j++){
-									if(self.info.sonde[j].idSonda==idSonda)
-										self.charts.series.push(self.info.sonde[j].name);
-								}
+						self.charts.labels = [];
+						self.charts.idSeries = [];
+						self.tempCharts.data = [];
+						self.humCharts.data = [];
+						createLabels();
+						
+						for(var i=0; self.info && self.info.sonde && i<self.info.sonde.length; i++){
+							self.charts.series.push(self.info.sonde[i].name);
+							self.charts.idSeries.push(self.info.sonde[i].idSonda);
+							self.tempCharts.data[i] = Array.apply(null, Array(self.charts.labels.length)).map(Number.prototype.valueOf,0);
+							self.humCharts.data[i] = Array.apply(null, Array(self.charts.labels.length)).map(Number.prototype.valueOf,0);
+						}
+						
+						var index = 0;
+						for(var d in series){
+							switch(granularity){
+							case 0: {
+								index = self.charts.labels.indexOf($filter('date')(d, 'HH:mm'));
+								break;
 							}
-							for(var e in series[idSonda]){
-								
+							case 1: {
+								index = self.charts.labels.indexOf($filter('date')(d, 'shortDate'));
+								break;
 							}
-							self.lineCharts[i].data[0] = temp;
-							self.lineCharts[i].data[1] = hum;
-						}	
+							case 2: {
+								//TODO weekly granularity
+								break;
+							}
+							}
+							var list = series[d];
+							for(var j=0; list && j<list.length; j++){
+								var indexSonda = self.charts.idSeries.indexOf(list[j].idSonda);
+								self.tempCharts.data[indexSonda][index] = list[j].avgTemp;
+								self.humCharts.data[indexSonda][index] = list[j].avgHum;
+							}
+						}
 					}
 				},
 				function(reason){

@@ -120,15 +120,26 @@
 
 	</section>
 	
-	<section data-ng-repeat="s in sensorLog.lineCharts">
+	<section>
 		<div class="center">
-			<h2>Sonda {{s.sonda.name}} ({{s.sonda.id}})</h2>
+			<h2>Andamento temperatura</h2>
 
-			<canvas data-ng-if="s.data.length>0 && s.data[0].length>0" height="450" width="800" id="line" class="chart chart-line" data-chart-data="s.data"
-				  data-chart-labels="s.labels" data-chart-series="s.series"
+			<canvas height="450" width="800" id="line1" class="chart chart-line" data-chart-data="sensorLog.tempCharts.data"
+				  data-chart-labels="sensorLog.charts.labels" data-chart-series="sensorLog.charts.series"
 				  data-chart-options="sensorLog.chartOptions">
 			</canvas>
-			<h4 data-ng-hide="s.data.length>0 && s.data[0].length>0">Non ci sono rilevazioni disponibili per il periodo selezionato</h4> 		
+		</div>
+
+	</section>
+	
+	<section>
+		<div class="center">
+			<h2>Andamento umidità</h2>
+
+			<canvas height="450" width="800" id="line2" class="chart chart-line" data-chart-data="sensorLog.humCharts.data"
+				  data-chart-labels="sensorLog.charts.labels" data-chart-series="sensorLog.charts.series"
+				  data-chart-options="sensorLog.chartOptions">
+			</canvas>
 		</div>
 
 	</section>
