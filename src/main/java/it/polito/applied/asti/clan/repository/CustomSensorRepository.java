@@ -12,5 +12,5 @@ public interface CustomSensorRepository {
 	public List<String> getSites();
 	public List<SiteSensorDTO> getAvgs(Date start);
 	public List<InfoEnvironmentSonda> findInfoSiteInInterval(Date start, Date end, String idSite);
-	public List<TotAvgAggregate> getAvgSeriesTemperatureAndHumidity(String idSite, int idSonda, Date startDate, Date endDate, boolean hourGranualarity);
+	public List<TotAvgAggregate> getAvgSeriesTemperatureAndHumidity(String idSite, Date startDate, Date endDate, boolean hourGranualarity);
 }

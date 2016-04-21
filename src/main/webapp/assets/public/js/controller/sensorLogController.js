@@ -141,8 +141,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 		switch(granularity){
 		case 0: {
 			/*Period of 1 day which allows to see hourly data granularity*/
-			var startHour = start.getHours();
-			start.setHours(startHour,0,0,0);
+			start.setHours(0,0,0,0);
 			var end = angular.copy(start);
 			end.addDays(1);
 			while(start<end){

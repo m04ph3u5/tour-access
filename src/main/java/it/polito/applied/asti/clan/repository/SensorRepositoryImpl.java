@@ -65,16 +65,15 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 	}
 
 	@Override
-	public List<TotAvgAggregate> getAvgSeriesTemperatureAndHumidity(String idSite, int idSonda, Date startDate, Date endDate, boolean hourGranualarity) {
+	public List<TotAvgAggregate> getAvgSeriesTemperatureAndHumidity(String idSite, Date startDate, Date endDate, boolean hourGranualarity) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
 		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 		
 		Criteria c = new Criteria();
 		c = Criteria.where("idSite").is(idSite)
-				.andOperator(Criteria.where("idSonda").is(idSonda)
 				.andOperator(Criteria.where("timestamp").gte(startDate)
-				.andOperator(Criteria.where("timestamp").lte(endDate))));
+				.andOperator(Criteria.where("timestamp").lte(endDate)));
 		Aggregation agg;
 		
 		
@@ -82,6 +81,7 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 			agg = Aggregation.newAggregation(Aggregation.match(c),
 					Aggregation.project()
 					.and("timestamp").plus(offset).as("timestamp")
+					.and("idSonda").as("idSonda")
 					.and("valTemp").as("valTemp")
 					.and("valHum").as("valHum"),
 					Aggregation.sort(Sort.Direction.DESC, "timestamp"),
@@ -90,8 +90,9 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 					.andExpression("month(timestamp)").as("month")
 					.andExpression("dayOfMonth(timestamp)").as("day")
 					.and("valTemp").as("valTemp")
+					.and("idSonda").as("idSonda")
 					.and("valHum").as("valHum"),
-					Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+					Aggregation.group(Aggregation.fields().and("year").and("month").and("day").and("idSonda"))
 						.avg("valTemp").as("avgTemp")
 						.avg("valHum").as("avgHum")
 						.count().as("tot"));
@@ -99,6 +100,7 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 			agg = Aggregation.newAggregation(Aggregation.match(c),
 					Aggregation.project()
 					.and("timestamp").plus(offset).as("timestamp")
+					.and("idSonda").as("idSonda")
 					.and("valTemp").as("valTemp")
 					.and("valHum").as("valHum"),
 					Aggregation.sort(Sort.Direction.DESC, "timestamp"),
@@ -108,8 +110,9 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 					.andExpression("dayOfMonth(timestamp)").as("day")
 					.andExpression("hour(timestamp)").as("hour")
 					.and("valTemp").as("valTemp")
+					.and("idSonda").as("idSonda")
 					.and("valHum").as("valHum"),
-					Aggregation.group(Aggregation.fields().and("year").and("month").and("day").and("hour"))
+					Aggregation.group(Aggregation.fields().and("year").and("month").and("day").and("hour").and("idSonda"))
 						.avg("valTemp").as("avgTemp")
 						.avg("valHum").as("avgHum")
 						.count().as("tot"));
