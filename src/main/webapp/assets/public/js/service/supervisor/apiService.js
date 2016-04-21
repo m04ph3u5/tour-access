@@ -122,6 +122,20 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var environmentSeries = function(start, end, idSite){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/environmentInfo?start='+start.getTime()+'&end='+end.getTime()+'&idSite='+idSite).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
@@ -131,7 +145,8 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		poiRank : poiRank,
 		appSeries : appSeries,
 		appInfo: appInfo,
-		getInfoSite : getInfoSite
+		getInfoSite : getInfoSite,
+		environmentSeries : environmentSeries
 	}
 
 }]);

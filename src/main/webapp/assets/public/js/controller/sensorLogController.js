@@ -4,6 +4,14 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	var self = this;
 	var idSite = $stateParams.idSite;
 	
+	var oneDayMillis = 86400000;
+	var threeMonthsMillis = 2592000000;
+	
+	self.chartOptions = {
+	   responsive: false,
+	   maintainAspectRatio: false
+	}
+	
 	var today = new Date();
 	
 	self.dateStartOptions = {
@@ -103,6 +111,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 		apiService.getInfoSite(self.dateStart, self.dateEnd, idSite).then(
 				function(data){
 					self.info = data;
+					getTimeSeries();
 					console.log(self.info);
 				},
 				function(reason){
@@ -112,6 +121,97 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	}
 	getInfoSite();
 	
+	/*Return integer that represents granularity of time series charts.
+	 * 0 - hour granularity
+	 * 1 - day granularity
+	 * 2 - week granularity*/
+	var calculateGranularity = function(){
+		var diff = self.dateEnd.getTime()-self.dateStart.getTime();
+		if(diff<oneDayMillis)
+			return 0;
+		else if(diff<threeMonthsMillis)
+			return 1;
+		else
+			return 2;
+	}
+	
+	var createLabels = function(){
+		var granularity = calculateGranularity();
+		var start = angular.copy(self.dateStart);
+		switch(granularity){
+		case 0: {
+			/*Period of 1 day which allows to see hourly data granularity*/
+			var startHour = start.getHours();
+			start.setHours(startHour,0,0,0);
+			var end = angular.copy(start);
+			end.addDays(1);
+			while(start<end){
+				self.tempCharts.labels.push($filter('date')(start, 'HH:mm'));
+				self.humCharts.labels.push($filter('date')(start, 'HH:mm'));
+				start.setHours(start.getHours()+1);
+			}
+			break;
+		}
+		case 1: {
+			/*Period that has duration greater than 1 day but less than 3 month.
+			 * It allows to see daily data granularity*/
+			start.setHours(0,0,0,0);
+			var end = angular.copy(start);
+			while(start<end){
+				self.tempCharts.labels.push($filter('date')(start, 'shortDate'));
+				self.humCharts.labels.push($filter('date')(start, 'shortDate'));
+				start.addDays(1);
+			}
+			break;
+		}
+		case 2: {
+			start.setHours(0,0,0,0);
+
+			break;
+		}
+		}
+		var start = angular.copy(self.dateStart);
+		start.setHours(0,0,0,0);
+		
+	}
+	
+	self.tempCharts = {};
+	self.humCharts = {};
+	var getTimeSeries = function(){
+		apiService.environmentSeries(self.dateStart, self.dateEnd, idSite).then(
+				function(data){
+					var series = data;
+					if(series){
+						
+						self.tempCharts.labels = [];
+						self.humCharts.labels = [];
+						createLabels();
+						self.tempCharts.data = [];
+						self.humCharts.data = [];
+						
+						self.charts = {};
+						self.charts.series = [];
+						for(var idSonda in series){
+							
+							if(self.info && self.info.sonde){
+								for(var j=0; j<self.info.sonde.length; j++){
+									if(self.info.sonde[j].idSonda==idSonda)
+										self.charts.series.push(self.info.sonde[j].name);
+								}
+							}
+							for(var e in series[idSonda]){
+								
+							}
+							self.lineCharts[i].data[0] = temp;
+							self.lineCharts[i].data[1] = hum;
+						}	
+					}
+				},
+				function(reason){
+					console.log("Error retreaving time series for sonda ");
+				}
+		);
+	}
 	
 	self.elaborate = function(){
 		switch(self.period){

@@ -53,6 +53,7 @@ import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
+import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
@@ -441,8 +442,8 @@ public class ApiRestController extends BaseController{
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/environmentInfo", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
-	public Map<Date,EnvironmentSeries> getEnvironmentInfo(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end,
-			@RequestParam(value="idSite", required=true) String idSite, @RequestParam(value="idSonda", required=true) int idSonda) throws BadRequestException, NotFoundException{
+	public Map<String,Map<Date,TotAvgAggregate>> getEnvironmentInfo(@RequestParam(value="start", required=true) String start, @RequestParam(value="end", required=true) String end,
+			@RequestParam(value="idSite", required=true) String idSite) throws BadRequestException, NotFoundException{
 		if(start==null || start.isEmpty() || end==null || end.isEmpty() || idSite==null || idSite.isEmpty())
 			throw new BadRequestException();
 		
@@ -465,7 +466,7 @@ public class ApiRestController extends BaseController{
 		startDate = cStart.getTime();
 		endDate = cEnd.getTime();
 		
-		return sensorService.getEnvironmentSeries(idSite, idSonda, startDate, endDate);
+		return sensorService.getEnvironmentSeries(idSite, startDate, endDate);
 	}
 
 	

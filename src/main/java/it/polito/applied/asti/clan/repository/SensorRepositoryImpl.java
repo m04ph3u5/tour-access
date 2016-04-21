@@ -1,9 +1,11 @@
 package it.polito.applied.asti.clan.repository;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -63,35 +65,66 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 	}
 
 	@Override
-	public List<TotAvgAggregate> getAvgSeriesTemperature(String idSite, int idSonda, Date startDate, Date endDate) {
+	public List<TotAvgAggregate> getAvgSeriesTemperatureAndHumidity(String idSite, int idSonda, Date startDate, Date endDate, boolean hourGranualarity) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(startDate);
+		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		
 		Criteria c = new Criteria();
 		c = Criteria.where("idSite").is(idSite)
 				.andOperator(Criteria.where("idSonda").is(idSonda)
 				.andOperator(Criteria.where("timestamp").gte(startDate)
 				.andOperator(Criteria.where("timestamp").lte(endDate))));
+		Aggregation agg;
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
-				Aggregation.project().andExpression("year(timestamp)").as("year")
-				.andExpression("month(timestamp)").as("month")
-				.andExpression("dayOfMonth(timestamp)").as("day")
-				.and("valTemp"),
-				Aggregation.group(Aggregation.fields().and("year").and("month").and("day")).avg("valTemp").as("avg"),
-				Aggregation.project("avg").and("year").previousOperation().and("month").previousOperation().and("day").previousOperation());
+		
+		if(!hourGranualarity){
+			agg = Aggregation.newAggregation(Aggregation.match(c),
+					Aggregation.project()
+					.and("timestamp").plus(offset).as("timestamp")
+					.and("valTemp").as("valTemp")
+					.and("valHum").as("valHum"),
+					Aggregation.sort(Sort.Direction.DESC, "timestamp"),
+					Aggregation.project()
+					.andExpression("year(timestamp)").as("year")
+					.andExpression("month(timestamp)").as("month")
+					.andExpression("dayOfMonth(timestamp)").as("day")
+					.and("valTemp").as("valTemp")
+					.and("valHum").as("valHum"),
+					Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+						.avg("valTemp").as("avgTemp")
+						.avg("valHum").as("avgHum")
+						.count().as("tot"));
+		}else{
+			agg = Aggregation.newAggregation(Aggregation.match(c),
+					Aggregation.project()
+					.and("timestamp").plus(offset).as("timestamp")
+					.and("valTemp").as("valTemp")
+					.and("valHum").as("valHum"),
+					Aggregation.sort(Sort.Direction.DESC, "timestamp"),
+					Aggregation.project()
+					.andExpression("year(timestamp)").as("year")
+					.andExpression("month(timestamp)").as("month")
+					.andExpression("dayOfMonth(timestamp)").as("day")
+					.andExpression("hour(timestamp)").as("hour")
+					.and("valTemp").as("valTemp")
+					.and("valHum").as("valHum"),
+					Aggregation.group(Aggregation.fields().and("year").and("month").and("day").and("hour"))
+						.avg("valTemp").as("avgTemp")
+						.avg("valHum").as("avgHum")
+						.count().as("tot"));
+			}
 		
 		AggregationResults result = mongoOp.aggregate(agg, SensorLog.class, TotAvgAggregate.class);
 		List<TotAvgAggregate> i = result.getMappedResults();
 
-		if(i!=null){
-			for(TotAvgAggregate tt : i){
-				System.out.println("AVG: "+tt.getAvg()+" DATE: "+tt.getYear()+"/"+tt.getMonth()+"/"+tt.getDay());
-			}
-		}
-		return null;
+//		if(i!=null){
+//			System.out.println("START: "+startDate+" - END: "+endDate);
+//			for(TotAvgAggregate tt : i){
+//				System.out.println("AVG: "+tt.getAvgTemp()+" °C - "+tt.getAvgHum()+"% - DATE: "+tt.getYear()+"/"+tt.getMonth()+"/"+tt.getDay()+" "+tt.getHour());
+//			}
+//		}
+		return i;
 	}
 
-	@Override
-	public List<TotAvgAggregate> getAvgSeriesHumidity(String idSite, int idSonda, Date startDate, Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

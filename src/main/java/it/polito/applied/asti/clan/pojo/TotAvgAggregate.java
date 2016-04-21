@@ -1,27 +1,15 @@
 package it.polito.applied.asti.clan.pojo;
 
-import java.util.Date;
-
 public class TotAvgAggregate {
 	
-	private Date date;
-	private double avg;
+	private double avgTemp;
+	private double avgHum;
 	private int year;
 	private int month;
 	private int day;
+	private int hour;
+	private int tot;
 	
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public double getAvg() {
-		return avg;
-	}
-	public void setAvg(double avg) {
-		this.avg = avg;
-	}
 	public int getYear() {
 		return year;
 	}
@@ -39,6 +27,30 @@ public class TotAvgAggregate {
 	}
 	public void setDay(int day) {
 		this.day = day;
+	}
+	public int getTot() {
+		return tot;
+	}
+	public void setTot(int tot) {
+		this.tot = tot;
+	}
+	public double getAvgTemp() {
+		return avgTemp;
+	}
+	public void setAvgTemp(double avgTemp) {
+		this.avgTemp = avgTemp;
+	}
+	public double getAvgHum() {
+		return avgHum;
+	}
+	public void setAvgHum(double avgHum) {
+		this.avgHum = avgHum;
+	}
+	public int getHour() {
+		return hour;
+	}
+	public void setHour(int hour) {
+		this.hour = hour;
 	}
 	
 	

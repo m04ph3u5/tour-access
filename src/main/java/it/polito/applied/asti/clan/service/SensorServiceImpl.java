@@ -10,13 +10,12 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.polito.applied.asti.clan.pojo.EnvironmentSeries;
 import it.polito.applied.asti.clan.pojo.InfoEnvironmentSite;
 import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.SiteSensorDTO;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
+import it.polito.applied.asti.clan.pojo.Sonda;
 import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.SensorRepository;
@@ -41,7 +40,6 @@ public class SensorServiceImpl implements SensorService{
 
 	@Override
 	public List<SiteSensorDTO> getMonitoredSiteInfo(Date date) {
-		
 		List<SiteSensorDTO> list = sensorRepo.getAvgs(date);
 		if(list!=null && !list.isEmpty()){
 			for(SiteSensorDTO ss : list){
@@ -68,7 +66,7 @@ public class SensorServiceImpl implements SensorService{
 
 	@Override
 	public InfoEnvironmentSite getInfoSite(Date start, Date end, String idSite) {
-		sensorRepo.getAvgSeriesTemperature(idSite, 2, start, end);
+//		sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, 2, start, end, true);
 		List<InfoEnvironmentSonda> l = sensorRepo.findInfoSiteInInterval(start, end, idSite);
 		if(l!=null){
 			InfoEnvironmentSite infoSite = new InfoEnvironmentSite();
@@ -98,18 +96,42 @@ public class SensorServiceImpl implements SensorService{
 	}
 
 	@Override
-	public Map<Date, EnvironmentSeries> getEnvironmentSeries(String idSite, int idSonda, Date startDate, Date endDate) {
-		TreeMap<Date, EnvironmentSeries> map = new TreeMap<Date, EnvironmentSeries>();
+	public Map<String, Map<Date, TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate) {
+		Map<String, Map<Date,TotAvgAggregate>> globalMap=null;
+		List<Sonda> sonde = sondaRepo.findByIdSite(idSite);
+		if(sonde!=null && sonde.size()>0){
+			globalMap = new TreeMap<String, Map<Date,TotAvgAggregate>>();
+			
+			for(Sonda s : sonde){
+				TreeMap<Date, TotAvgAggregate> map = new TreeMap<Date, TotAvgAggregate>();
+				Calendar cal = Calendar.getInstance();
+				boolean hourGranularity = getGranularity(startDate, endDate);
+				List<TotAvgAggregate> aggregates = sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, s.getIdSonda(), startDate, endDate, hourGranularity);
+				
+				for(TotAvgAggregate tt : aggregates){
+					cal.set(Calendar.YEAR, tt.getYear());
+					cal.set(Calendar.MONTH, tt.getMonth()-1);
+					cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
+					if(hourGranularity)
+						cal.set(Calendar.HOUR, tt.getHour());
+					else
+						cal.set(Calendar.HOUR, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
+
+					Date d = cal.getTime();
+					map.put(d, tt);
+				}
+				
+				globalMap.put(""+s.getIdSonda(),map);
+			}
+		}
 		
-		List<List<TotAvgAggregate>> aggregates = queryDBToAggregateData(idSite, idSonda, startDate, endDate);
-		return null;
+		return globalMap;
 	}
 
-	private List<List<TotAvgAggregate>> queryDBToAggregateData(String idSite, int idSonda, Date startDate,
-			Date endDate) {
-		List<TotAvgAggregate> temperature=null;
-		List<TotAvgAggregate> humidity=null;
-		
+	private boolean getGranularity(Date startDate, Date endDate) {
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		cal1.setTime(startDate);
@@ -117,17 +139,7 @@ public class SensorServiceImpl implements SensorService{
 		boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 		                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
 		
-		if(sameDay){
-			
-		}else{
-			temperature = sensorRepo.getAvgSeriesTemperature(idSite, idSonda, startDate, endDate);
-			humidity = sensorRepo.getAvgSeriesHumidity(idSite, idSonda, startDate, endDate);
-		}
-		List<List<TotAvgAggregate>> ret = new ArrayList<List<TotAvgAggregate>>();
-		ret.add(temperature);
-		ret.add(humidity);
-		return ret;
+		return sameDay;
 	}
-
 
 }

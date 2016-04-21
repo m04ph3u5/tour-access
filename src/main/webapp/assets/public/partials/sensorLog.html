@@ -119,26 +119,19 @@
 		</div>
 
 	</section>
-	<section>
+	
+	<section data-ng-repeat="s in sensorLog.lineCharts">
 		<div class="center">
-			<h2>N° Ticket/ingressi</h2>
+			<h2>Sonda {{s.sonda.name}} ({{s.sonda.id}})</h2>
 
-
-				<canvas height="450" width="800" id="line" class="chart chart-line" data-chart-data="tickets.lineChart.data"
-					  data-chart-labels="tickets.lineChart.labels" data-chart-series="tickets.lineChart.series"
-					  data-chart-options="tickets.chartOptions">
-				</canvas> 		</div>
+			<canvas data-ng-if="s.data.length>0 && s.data[0].length>0" height="450" width="800" id="line" class="chart chart-line" data-chart-data="s.data"
+				  data-chart-labels="s.labels" data-chart-series="s.series"
+				  data-chart-options="sensorLog.chartOptions">
+			</canvas>
+			<h4 data-ng-hide="s.data.length>0 && s.data[0].length>0">Non ci sono rilevazioni disponibili per il periodo selezionato</h4> 		
+		</div>
 
 	</section>
 	
-	<section>
-		<div class="center">
-			<h2>Visite ai punti di interesse</h2>
-
-
-				<canvas height="450" width="800" id="bar" class="chart chart-bar" data-chart-data="tickets.rank.data"
-					  data-chart-labels="tickets.rank.labels" data-chart-options="tickets.chartOptions">
-				</canvas> 		</div>
-
-	</section>
+	
 </div>
