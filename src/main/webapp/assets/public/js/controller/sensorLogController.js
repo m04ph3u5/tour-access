@@ -157,7 +157,6 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 			 * It allows to see daily data granularity*/
 			start.setHours(0,0,0,0);
 			var end = angular.copy(self.dateEnd);
-			
 			while(start<end){
 				self.charts.labels.push($filter('date')(start, 'shortDate'));
 				start.addDays(1);

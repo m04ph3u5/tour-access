@@ -1,5 +1,8 @@
 package it.polito.applied.asti.clan.repository;
 
+import it.polito.applied.asti.clan.pojo.SensorLog;
+import it.polito.applied.asti.clan.pojo.SiteSensorDTO;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 
@@ -9,6 +12,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -30,6 +35,36 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		return mongoOp.count(q, TicketRequest.class);
 		
 	}
+	
+	@Override
+	public StatisticsInfo getStatisticsInfoGroup(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)
+				.andOperator(Criteria.where("isGroup").is(true))));
+		
+		Aggregation agg;
+		agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.group("isGroup")
+				);
+		
+		AggregationResults result = mongoOp.aggregate(agg, TicketRequest.class, StatisticsInfo.class);
+		StatisticsInfo s = (StatisticsInfo)result.getUniqueMappedResult();
+		return s;
+	}
+
+	@Override
+	public StatisticsInfo getStatisticsInfoSingle(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)
+				.andOperator(Criteria.where("isGroup").is(false))));
+		
+		Aggregation agg;
+		return null;
+	}
 
 	@Override
 	public long totalSingleTickets(Date start, Date end) {
@@ -48,7 +83,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("male"))));
+				.andOperator(Criteria.where("info.gender").is("male")
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -57,7 +93,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.gender").is("female"))));
+				.andOperator(Criteria.where("info.gender").is("female")
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -86,7 +123,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("young"))));
+				.andOperator(Criteria.where("info.age").is("young")
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -95,7 +133,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("middleAge"))));
+				.andOperator(Criteria.where("info.age").is("middleAge")
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -104,7 +143,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Query q = new Query();
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.age").is("elderly"))));
+				.andOperator(Criteria.where("info.age").is("elderly")
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -118,5 +158,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		mongoOp.updateFirst(q, u, TicketRequest.class);
 		
 	}
+
+	
+	
 
 }

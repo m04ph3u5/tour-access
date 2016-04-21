@@ -283,6 +283,7 @@ public class TicketServiceImpl implements TicketService{
 		s.setTotSingleTickets(totSingle);
 		s.setTotGroupTickets(totT-totSingle);
 		long totSingleMan = ticketRequestRepo.totalSingleManTickets(start, end);
+		System.out.println(totSingle);
 		s.setTotGroups(ticketRequestRepo.totalGroups(start, end));
 		s.setTotMale(totSingleMan);
 		s.setTotFemale(totSingle - totSingleMan);
