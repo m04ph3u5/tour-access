@@ -97,40 +97,40 @@ public class SensorServiceImpl implements SensorService{
 
 	@Override
 	public Map<Date, List<TotAvgAggregate>> getEnvironmentSeries(String idSite, Date startDate, Date endDate) {
-		Map<String, Map<Date,TotAvgAggregate>> globalMap=null;
-		List<Sonda> sonde = sondaRepo.findByIdSite(idSite);
-		if(sonde!=null && sonde.size()>0){
-			globalMap = new TreeMap<String, Map<Date,TotAvgAggregate>>();
-			
-			for(Sonda s : sonde){
-				TreeMap<Date, TotAvgAggregate> map = new TreeMap<Date, TotAvgAggregate>();
-				Calendar cal = Calendar.getInstance();
-				boolean hourGranularity = getGranularity(startDate, endDate);
-				List<TotAvgAggregate> aggregates = sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, s.getIdSonda(), startDate, endDate, hourGranularity);
-				
-				for(TotAvgAggregate tt : aggregates){
-					
-					cal.set(Calendar.YEAR, tt.getYear());
-					cal.set(Calendar.MONTH, tt.getMonth()-1);
-					cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
-					if(hourGranularity)
-						cal.set(Calendar.HOUR, tt.getHour());
-					else
-						cal.set(Calendar.HOUR, 0);
-					cal.set(Calendar.MINUTE, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.set(Calendar.MILLISECOND, 0);
+		Map<Date, List<TotAvgAggregate>> map=null;
+		map = new TreeMap<Date, List<TotAvgAggregate>>();
+		
+		Calendar cal = Calendar.getInstance();
+		boolean hourGranularity = getGranularity(startDate, endDate);
+		List<TotAvgAggregate> aggregates = sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, startDate, endDate, hourGranularity);
+		
+		for(TotAvgAggregate tt : aggregates){
+			cal.set(Calendar.YEAR, tt.getYear());
+			cal.set(Calendar.MONTH, tt.getMonth()-1);
+			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
+			if(hourGranularity)
+				cal.set(Calendar.HOUR, tt.getHour());
+			else
+				cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
 
-					Date d = cal.getTime();
-					map.put(d, tt);
-				}
-				
-				globalMap.put(""+s.getIdSonda(),map);
+			Date d = cal.getTime();
+			if(map.containsKey(d)){
+				map.get(d).add(tt);
+			}else{
+				List<TotAvgAggregate> l = new ArrayList<TotAvgAggregate>();
+				l.add(tt);
+				map.put(d, l);
 			}
 		}
-		
-		return globalMap;
+		return map;
 	}
+
+
+
+
 
 	private boolean getGranularity(Date startDate, Date endDate) {
 		Calendar cal1 = Calendar.getInstance();
