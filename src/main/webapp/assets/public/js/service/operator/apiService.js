@@ -54,12 +54,26 @@ angular.module('asti.application').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var removeTicket = function(ticketId){
+		var p = $q.defer();
+		$http.delete('/api/v1/deleteTicket/'+ticketId).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
 		getPlacesToSell : getPlacesToSell,
 		orderTicket : orderTicket,
-		checkService : checkService
+		checkService : checkService,
+		removeTicket : removeTicket
 	}
 
 }]);
