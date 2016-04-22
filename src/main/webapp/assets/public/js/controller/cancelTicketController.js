@@ -11,7 +11,8 @@ angular.module('asti.application').controller('cancelTicketCtrl', [ 'apiService'
 	self.removeTicket = function(){
 		apiService.removeTicket(self.ticket).then(
 				function(response){
-					self.load = false;		
+					self.load = false;	
+					self.validation = false;
 				},
 				function(reason){
 					self.error=true;

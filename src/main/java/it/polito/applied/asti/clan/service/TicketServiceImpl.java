@@ -169,12 +169,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		ticketRepo.save(tickets);
 		
-//		try {
-//			postToAcl.sendTicketsToAcl(tickets);
-//		} catch (JSONException | IOException e) {
-//			ticketRepo.removeLastTickets(tickets);
-//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//		}
+		try {
+			postToAcl.sendTicketsToAcl(tickets);
+		} catch (JSONException | IOException e) {
+			ticketRepo.removeLastTickets(tickets);
+			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
