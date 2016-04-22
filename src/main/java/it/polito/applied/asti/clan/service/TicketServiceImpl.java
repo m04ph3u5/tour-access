@@ -180,6 +180,19 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
+	public void operatorDeleteTicket(String id) {
+//      TODO siamo in attesa dell'endpoint da contattare per poter comunicare all'acl la cancellazione di un biglietto
+//		try {
+//			postToAcl.sendRemoveTicketToAcl(id);
+//		} catch (JSONException | IOException e) {
+//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//		}
+		Ticket t = ticketRepo.removeTicket(id);
+		ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
+		
+	}
+	
+	@Override
 	public List<String> accessiblePlaces(String idTicket) {
 		List<Ticket> list = ticketRepo.findByIdTicket(idTicket);
 		
@@ -394,5 +407,7 @@ public class TicketServiceImpl implements TicketService{
 		}
 		return l;
 	}
+
+	
 
 }

@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -216,6 +218,20 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		for(TotAggregate t : l)
 			System.out.println(t);
 		return l;
+	}
+
+	@Override
+	public Ticket removeTicket(String id) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("idTicket").is(id));
+		Sort s = new Sort( new Order(Direction.DESC, "emissionDate"));
+		q.with(s);
+		List<Ticket> tickets = mongoOp.find(q, Ticket.class);
+		Ticket t = tickets.get(0);
+		mongoOp.remove(t);
+		
+		return t;
+
 	}
 
 }

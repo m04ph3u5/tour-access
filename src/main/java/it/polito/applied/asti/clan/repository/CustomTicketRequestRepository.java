@@ -19,4 +19,5 @@ public interface CustomTicketRequestRepository {
 	public void toReleased(TicketRequest ticketRequest);
 	public StatisticsInfo getStatisticsInfoGroup(Date start, Date end);
 	public StatisticsInfo getStatisticsInfoSingle(Date start, Date end);
+	public void removeTicketInTicketRequest(String ticketRequestId, String ticketId);
 }
