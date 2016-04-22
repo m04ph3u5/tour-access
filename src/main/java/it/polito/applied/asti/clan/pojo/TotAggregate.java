@@ -30,4 +30,8 @@ public class TotAggregate {
 		this.day = day;
 	}
 	
+	@Override
+	public String toString(){
+		return "Date: "+day+"/"+month+"/"+year+" - TOT:"+tot;
+	}
 }
