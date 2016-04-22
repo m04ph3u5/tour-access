@@ -1,6 +1,6 @@
 angular.module('asti.supervisor')
-	.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider',
-	         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+	.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', '$provide',
+	         function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $provide){
 	
 		$stateProvider
 		
@@ -139,6 +139,11 @@ angular.module('asti.supervisor')
 		});
 	  
 		$locationProvider.html5Mode(true);
+		
+		$provide.decorator('$locale', ['$delegate', function ($delegate) {
+	        $delegate.NUMBER_FORMATS.DECIMAL_SEP = '.';
+	        return $delegate;
+	    }]);
 	}])
 	.run(function (Permission, $rootScope, $stateParams, $state, userService, $q) {
 		

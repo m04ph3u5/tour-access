@@ -223,8 +223,8 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 							var list = self.series[d];
 							for(var j=0; list && j<list.length; j++){
 								var indexSonda = self.charts.idSeries.indexOf(list[j].idSonda);
-								self.tempCharts.data[indexSonda][index] = list[j].avgTemp;
-								self.humCharts.data[indexSonda][index] = list[j].avgHum;
+								self.tempCharts.data[indexSonda][index] = parseFloat($filter('number')(list[j].avgTemp,2));
+								self.humCharts.data[indexSonda][index] = parseFloat($filter('number')(list[j].avgHum,2));
 							}
 						}
 					}
