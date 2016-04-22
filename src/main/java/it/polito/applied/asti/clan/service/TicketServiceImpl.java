@@ -188,7 +188,8 @@ public class TicketServiceImpl implements TicketService{
 //			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
 //		}
 		Ticket t = ticketRepo.removeTicket(id);
-		ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
+		if(t!=null)
+			ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
 		
 	}
 	

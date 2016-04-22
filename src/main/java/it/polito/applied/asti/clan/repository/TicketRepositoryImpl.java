@@ -222,14 +222,16 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 
 	@Override
 	public Ticket removeTicket(String id) {
+		Ticket t = null;
 		Query q = new Query();
 		q.addCriteria(Criteria.where("idTicket").is(id));
 		Sort s = new Sort( new Order(Direction.DESC, "emissionDate"));
 		q.with(s);
 		List<Ticket> tickets = mongoOp.find(q, Ticket.class);
-		Ticket t = tickets.get(0);
-		mongoOp.remove(t);
-		
+		if(tickets!=null && tickets.size()>0){
+			t = tickets.get(0);
+			mongoOp.remove(t);
+		}
 		return t;
 
 	}
