@@ -10,4 +10,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface TicketRepository extends MongoRepository<Ticket, String>, CustomTicketRepository{
 	public Ticket findById(String id);
 	public List<Ticket> findByIdTicket(String idTicket);
+	
 }

@@ -17,4 +17,5 @@ public interface CustomTicketRepository {
 	public long totalTickets(Date start, Date end);
 	public long countTicketFromDate(Date date);
 	public List<TotAggregate> getTicketGrouped(Date start, Date end);
+	public Ticket removeTicket(String id);
 }

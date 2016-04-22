@@ -18,6 +18,7 @@ public class TicketRequest {
 	private InfoTicketRequest info;
 	private String tipology;
 	private boolean acceptedFromAcl=false;
+	private boolean someTicketIsCanceled=false;
 	
 	public TicketRequest(){
 		
@@ -51,6 +52,16 @@ public class TicketRequest {
 			this.info.setGender(null);
 		}		
 	}
+	
+	
+	public boolean isSomeTicketIsCanceled() {
+		return someTicketIsCanceled;
+	}
+
+	public void setSomeTicketIsCanceled(boolean someTicketIsCanceled) {
+		this.someTicketIsCanceled = someTicketIsCanceled;
+	}
+
 	public boolean getAcceptedFromAcl() {
 		return  acceptedFromAcl;
 	}

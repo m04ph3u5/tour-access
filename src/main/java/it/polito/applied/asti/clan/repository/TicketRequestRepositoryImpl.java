@@ -1,14 +1,6 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.SensorLog;
-import it.polito.applied.asti.clan.pojo.SiteSensorDTO;
-import it.polito.applied.asti.clan.pojo.StatisticsInfo;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TicketRequest;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -17,6 +9,12 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import com.mongodb.WriteResult;
+
+import it.polito.applied.asti.clan.pojo.InfoTicketRequest;
+import it.polito.applied.asti.clan.pojo.StatisticsInfo;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
 
 public class TicketRequestRepositoryImpl implements CustomTicketRequestRepository{
 	
@@ -156,6 +154,45 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		Update u = new Update();
 		u.set("acceptedFromAcl", true);
 		mongoOp.updateFirst(q, u, TicketRequest.class);
+		
+	}
+
+	@Override
+	public void removeTicketInTicketRequest(String ticketRequestId, String ticketId) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("ticketRequestId").is(ticketRequestId));	
+		TicketRequest request = (TicketRequest) mongoOp.find(q, TicketRequest.class);
+		if(request != null){
+			if(request.isGroup() && request.getTicketNumbers().size()>=3){ //ticketRequest di gruppo -> non posso cancellarla perchè ad essa fanno riferimento almeno altri due ticket oltre quello che sto cancellando
+				
+				Update u = new Update();
+				u.pull("ticketNumbers", ticketId);
+				u.set("someTicketIsCanceled", true);
+				WriteResult w = mongoOp.updateFirst(q, u, TicketRequest.class);
+				if(w.getN()==0){
+					Update u2= new Update();
+					u2.set("someTicketIsCanceled", false);
+					mongoOp.updateFirst(q, u2, TicketRequest.class);
+				}
+		
+			}else if(request.isGroup() && request.getTicketNumbers().size()==2){ //ticketRequest di gruppo che deve diventare singola perchè c'è un solo altro ticket nella ticketRequest
+				
+				InfoTicketRequest info = new InfoTicketRequest();
+				info.setAge("male");
+				info.setGender("middleAge");
+				Update u = new Update();
+				u.pull("ticketNumbers", ticketId);
+				u.set("isGroup", false);
+				u.set("info", info);
+				
+				mongoOp.updateFirst(q, u, TicketRequest.class);
+			}else{   //la ticketRequest è legata al solo biglietto che sto cancellando, quindi posso cancellarla direttamente
+
+				mongoOp.remove(request);
+			}
+		}
+		
+		
 		
 	}
 
