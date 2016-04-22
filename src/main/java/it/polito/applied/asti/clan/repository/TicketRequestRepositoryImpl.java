@@ -161,7 +161,7 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 	public void removeTicketInTicketRequest(String ticketRequestId, String ticketId) {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("ticketRequestId").is(ticketRequestId));	
-		TicketRequest request = (TicketRequest) mongoOp.find(q, TicketRequest.class);
+		TicketRequest request =  mongoOp.findOne(q, TicketRequest.class);
 		if(request != null){
 			if(request.isGroup() && request.getTicketNumbers().size()>=3){ //ticketRequest di gruppo -> non posso cancellarla perchè ad essa fanno riferimento almeno altri due ticket oltre quello che sto cancellando
 				
