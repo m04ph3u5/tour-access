@@ -4,6 +4,9 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
 	var self = this;
 	self.name = "";
 	self.avialable = true;
+	
+	self.classBuy="active";
+	self.classCancel="";
 
 	var check = function(){
 		apiService.checkService().then(
@@ -34,6 +37,7 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
 				}
 		);
 	}
+
 
 	$scope.$on("$destroy", function() {
 		if (timer) {

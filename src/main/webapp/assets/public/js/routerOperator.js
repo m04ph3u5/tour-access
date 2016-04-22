@@ -82,7 +82,24 @@ angular.module('asti.application')
 				pageTitle : 'AstiMusei - Validazione ticket'
 			}
 		})
-		
+		.state('logged.cancelTicket',{
+			url : '/operator/cancelTicket',
+			views : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbar.html",
+					controller : 'navbarCtrl',
+					controllerAs : 'navbar'
+				},
+				"body@logged" : {
+					templateUrl : "assets/public/partials/cancelTicket.html",
+					controller : 'cancelTicketCtrl',
+					controllerAs : 'cancelTicket'
+				}
+			},
+			data : {
+				pageTitle : 'AstiMusei - Invalida biglietto',
+			}
+		})
 		$urlRouterProvider.otherwise(function($injector,$location){
 			var state = $injector.get('$state');
 			state.go('notLogged.login');
