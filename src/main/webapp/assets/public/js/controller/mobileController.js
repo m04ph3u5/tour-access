@@ -42,9 +42,10 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 	self.dateStart = angular.copy(self.dateEnd);
 	
 	var monthAgo = angular.copy(self.dateEnd);
-	monthAgo.addDays(-100);
+	monthAgo.addDays(-30);
 	apiService.appSeries(monthAgo.getTime(), self.dateEnd.getTime()).then(
 			function(data){
+				console.log(data);
 				self.series = data;
 				self.lineChart = {};
 				self.lineChart.labels = [];
@@ -67,6 +68,28 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 
 	
 	self.updateData = function(){
+		switch(self.period){
+		case "0":{
+			self.periodString = "oggi";
+			break;
+		}
+		case "1":{
+			self.periodString = "ultima settimana";
+			break;
+		}
+		case "2": {
+			self.periodString = "ultimo mese";
+			break;
+		}
+		case "3": {
+			self.periodString = "ultimi tre mesi";
+			break;
+		}
+		case "4": {
+			self.periodString="dal "+$filter('date')(self.dateStart, "d MMMM")+" al "+$filter('date')(self.dateEnd, "d MMMM");
+			break;
+		}
+		}
 		apiService.appInfo(self.dateStart.getTime(),self.dateEnd.getTime()).then(
 				function(data){
 					self.table = data;
@@ -81,24 +104,18 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 	self.selectPeriod = function(){
 		self.dateEnd = new Date();
 		self.dateStart = angular.copy(self.dateEnd);
-		if(self.period=="0"){
-			self.periodString = "oggi";
-		}
-		else if(self.period=="1"){
-			self.periodString = "ultima settimana";
+	
+		if(self.period=="1"){
 			self.dateStart.addDays(-7);
 		}else if(self.period=="2"){
-			self.periodString = "ultimo mese";
 			self.dateStart.addDays(-30);
 		}else if(self.period=="3"){
-			self.periodString = "ultimi tre mesi";
 			self.dateStart.addDays(-90);
 		}
-		self.updateData();
 	}
 	
 	self.elaborate = function(){
-		self.updateDate();
+		self.updateData();
 	}
 	
 	self.updateData();

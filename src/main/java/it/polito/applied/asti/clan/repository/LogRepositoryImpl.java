@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -83,7 +84,13 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				andOperator(Criteria.where("date").lte(end)));
 		
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.project()
+				.andExpression("year(date)").as("year")
+				.andExpression("month(date)").as("month")
+				.andExpression("dayOfMonth(date)").as("day"),
+				Aggregation.group("year","month", "day").count().as("tot"),
+				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
 		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
@@ -99,7 +106,13 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				andOperator(Criteria.where("logType").is(LogType.Install))));
 		
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.project()
+				.andExpression("year(date)").as("year")
+				.andExpression("month(date)").as("month")
+				.andExpression("dayOfMonth(date)").as("day"),
+				Aggregation.group("year","month", "day").count().as("tot"),
+				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
 		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
@@ -115,7 +128,13 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				andOperator(Criteria.where("logType").is(LogType.OpenPath))));
 		
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.project()
+				.andExpression("year(date)").as("year")
+				.andExpression("month(date)").as("month")
+				.andExpression("dayOfMonth(date)").as("day"),
+				Aggregation.group("year","month", "day").count().as("tot"),
+				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
 		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
@@ -126,12 +145,19 @@ public class LogRepositoryImpl implements CustomLogRepository{
 	@Override
 	public List<TotAggregate> getCheckedTicket(Date start, Date end) {
 		Criteria c = new Criteria();
-		c = (Criteria.where("date").gte(start).
+		Criteria orC = new Criteria();
+		orC.orOperator(Criteria.where("logType").is(LogType.CheckTicket), Criteria.where("logType").is(LogType.CheckTicketFEC));
+		c = Criteria.where("date").gte(start).
 				andOperator(Criteria.where("date").lte(end).
-				andOperator(Criteria.where("logType").is(LogType.CheckTicket))));
+				andOperator(orC));
 		
-		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("date").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.project()
+				.andExpression("year(date)").as("year")
+				.andExpression("month(date)").as("month")
+				.andExpression("dayOfMonth(date)").as("day"),
+				Aggregation.group("year","month", "day").count().as("tot"),
+				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
 		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		

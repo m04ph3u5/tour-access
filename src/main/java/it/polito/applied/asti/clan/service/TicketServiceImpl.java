@@ -169,12 +169,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		ticketRepo.save(tickets);
 		
-		try {
-			postToAcl.sendTicketsToAcl(tickets);
-		} catch (JSONException | IOException e) {
-			ticketRepo.removeLastTickets(tickets);
-			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-		}
+//		try {
+//			postToAcl.sendTicketsToAcl(tickets);
+//		} catch (JSONException | IOException e) {
+//			ticketRepo.removeLastTickets(tickets);
+//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
@@ -303,81 +303,81 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
-		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
-		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
-		Calendar c = Calendar.getInstance();
-		c.setTime(end);
-		c.set(Calendar.HOUR_OF_DAY,23);
-		c.set(Calendar.MINUTE,59);
-		c.set(Calendar.SECOND, 59);
-		c.set(Calendar.MILLISECOND, 999);
-		end = c.getTime();
-
-		c.set(Calendar.YEAR, 2015);
-		c.set(Calendar.MONTH, 11);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE,0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		Date first = c.getTime();
-		
-		c.setTime(start);
-
-		if(start.before(first)){
-			c.set(Calendar.YEAR, 2015);
-			c.set(Calendar.MONTH, 11);
-			c.set(Calendar.DAY_OF_MONTH, 1);
-		}
-		
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE,0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		start = c.getTime();
-
-		while(start.before(end)){
-			map.put(start, new TicketAccessSeries());
-			c.setTime(start);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-			c.add(Calendar.DAY_OF_MONTH, 1);
-			start = c.getTime();
-		}
-		
-		for(TotAggregate a : access){
-			Date d = a.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			TicketAccessSeries tAS = map.get(d);
-			if(tAS!=null){
-					tAS.addToTotAccesses(a.getTot());
-					map.put(d, tAS);
-			}
-		}
-		
-		for(TotAggregate t : ticket){
-			Date d = t.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			TicketAccessSeries tAS = map.get(d);
-			if(tAS!=null){
-				tAS.addToTotTickets(t.getTot());
-				map.put(d, tAS);
-			}
-		}
+//		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
+//		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(end);
+//		c.set(Calendar.HOUR_OF_DAY,23);
+//		c.set(Calendar.MINUTE,59);
+//		c.set(Calendar.SECOND, 59);
+//		c.set(Calendar.MILLISECOND, 999);
+//		end = c.getTime();
+//
+//		c.set(Calendar.YEAR, 2015);
+//		c.set(Calendar.MONTH, 11);
+//		c.set(Calendar.DAY_OF_MONTH, 1);
+//		c.set(Calendar.HOUR_OF_DAY,0);
+//		c.set(Calendar.MINUTE,0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		Date first = c.getTime();
+//		
+//		c.setTime(start);
+//
+//		if(start.before(first)){
+//			c.set(Calendar.YEAR, 2015);
+//			c.set(Calendar.MONTH, 11);
+//			c.set(Calendar.DAY_OF_MONTH, 1);
+//		}
+//		
+//		c.set(Calendar.HOUR_OF_DAY,0);
+//		c.set(Calendar.MINUTE,0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		start = c.getTime();
+//
+//		while(start.before(end)){
+//			map.put(start, new TicketAccessSeries());
+//			c.setTime(start);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//			c.add(Calendar.DAY_OF_MONTH, 1);
+//			start = c.getTime();
+//		}
+//		
+//		for(TotAggregate a : access){
+//			Date d = a.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			TicketAccessSeries tAS = map.get(d);
+//			if(tAS!=null){
+//					tAS.addToTotAccesses(a.getTot());
+//					map.put(d, tAS);
+//			}
+//		}
+//		
+//		for(TotAggregate t : ticket){
+//			Date d = t.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			TicketAccessSeries tAS = map.get(d);
+//			if(tAS!=null){
+//				tAS.addToTotTickets(t.getTot());
+//				map.put(d, tAS);
+//			}
+//		}
 		return map;
 	}
 

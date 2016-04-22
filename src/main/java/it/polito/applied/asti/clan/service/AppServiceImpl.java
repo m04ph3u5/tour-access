@@ -236,8 +236,8 @@ public class AppServiceImpl implements AppService{
 		c.set(Calendar.MILLISECOND, 999);
 		end = c.getTime();
 
-		c.set(Calendar.YEAR, 2015);
-		c.set(Calendar.MONTH, 11);
+		c.set(Calendar.YEAR, 2016);
+		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DAY_OF_MONTH, 1);
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE,0);
@@ -247,175 +247,164 @@ public class AppServiceImpl implements AppService{
 		
 		c.setTime(start);
 
-		if(start.before(first)){
-			c.set(Calendar.YEAR, 2015);
-			c.set(Calendar.MONTH, 11);
+//		if(start.before(first)){
+			c.set(Calendar.YEAR, 2016);
+			c.set(Calendar.MONTH, 0);
 			c.set(Calendar.DAY_OF_MONTH, 1);
-		}
+//		}
 		
 		c.set(Calendar.HOUR_OF_DAY,0);
 		c.set(Calendar.MINUTE,0);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
-		start = c.getTime();
-
-		while(start.before(end)){
-			map.put(start, new AppAccessInstallSeries());
-			c.setTime(start);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
+		Date current = c.getTime();
+		for(TotAggregate tt : access){
+			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
+			Date d = c.getTime();
+		
+			while(current.before(d)){
+				map.put(current, new AppAccessInstallSeries());
+				c.setTime(current);
+				c.add(Calendar.DAY_OF_MONTH, 1);
+				current = c.getTime();
+			}
+			AppAccessInstallSeries aa = new AppAccessInstallSeries();
+			aa.setTotAccesses(tt.getTot());
+			map.put(current, aa);
+			c.setTime(current);
 			c.add(Calendar.DAY_OF_MONTH, 1);
-			start = c.getTime();
+			current = c.getTime();
 		}
 		
-		for(TotAggregate a : access){
-			Date d = a.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppAccessInstallSeries tAS = map.get(d);
-			if(tAS!=null){
-					tAS.addToTotAccesses(a.getTot());
-					map.put(d, tAS);
+		for(TotAggregate tt : install){
+			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
+			Date d = c.getTime();
+			AppAccessInstallSeries aa = map.get(d);
+			if(aa!=null){
+				aa.setTotAccesses(tt.getTot());
+				map.put(d, aa);
 			}
 		}
 		
-		for(TotAggregate t : install){
-			Date d = t.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppAccessInstallSeries tAS = map.get(d);
-			if(tAS!=null){
-				tAS.addToTotInstall(t.getTot());
-				map.put(d, tAS);
-			}
+		for(Date d : map.keySet()){
+			System.out.println("Access: "+map.get(d).getTotAccesses()+" Install: "+map.get(d).getTotInstall());
 		}
+		
 		return map;
 	}
 
 	@Override
 	public Map<Date, AppInfo> getAppInfo(Date start, Date end) {
 		TreeMap<Date, AppInfo> map = new TreeMap<Date, AppInfo>();
-		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
-		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
-		List<TotAggregate> pathStarted = logRepo.getPathStarted(start, end);
-		List<TotAggregate> checkedTicket = logRepo.getCheckedTicket(start, end);
-		
-		Calendar c = Calendar.getInstance();
-		c.setTime(end);
-		c.set(Calendar.HOUR_OF_DAY,23);
-		c.set(Calendar.MINUTE,59);
-		c.set(Calendar.SECOND, 59);
-		c.set(Calendar.MILLISECOND, 999);
-		end = c.getTime();
-
-		c.set(Calendar.YEAR, 2015);
-		c.set(Calendar.MONTH, 11);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE,0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		Date first = c.getTime();
-		
-		c.setTime(start);
-
-		if(start.before(first)){
-			c.set(Calendar.YEAR, 2015);
-			c.set(Calendar.MONTH, 11);
-			c.set(Calendar.DAY_OF_MONTH, 1);
-		}
-		
-		c.set(Calendar.HOUR_OF_DAY,0);
-		c.set(Calendar.MINUTE,0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		start = c.getTime();
-
-		while(start.before(end)){
-			map.put(start, new AppInfo());
-			c.setTime(start);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-			c.add(Calendar.DAY_OF_MONTH, 1);
-			start = c.getTime();
-		}
-		
-		for(TotAggregate a : access){
-			Date d = a.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppInfo tAS = map.get(d);
-			if(tAS!=null){
-					tAS.addToNumAccess(a.getTot());
-					map.put(d, tAS);
-			}
-		}
-		
-		for(TotAggregate t : install){
-			Date d = t.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppInfo tAS = map.get(d);
-			if(tAS!=null){
-				tAS.addToNumInstallation(t.getTot());
-				map.put(d, tAS);
-			}
-		}
-		for(TotAggregate p : pathStarted){
-			Date d = p.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppInfo tAS = map.get(d);
-			if(tAS!=null){
-					tAS.addToNumPathStarted(p.getTot());
-					map.put(d, tAS);
-			}
-		}
-		
-		for(TotAggregate ct : checkedTicket){
-			Date d = ct.getDate();
-			c.setTime(d);
-			c.set(Calendar.HOUR_OF_DAY,0);
-			c.set(Calendar.MINUTE,0);
-			c.set(Calendar.SECOND, 0);
-			c.set(Calendar.MILLISECOND, 0);
-
-			d = c.getTime();
-			AppInfo tAS = map.get(d);
-			if(tAS!=null){
-				tAS.addToNumCheckedTicket(ct.getTot());
-				map.put(d, tAS);
-			}
-		}
+//		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
+//		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
+//		List<TotAggregate> pathStarted = logRepo.getPathStarted(start, end);
+//		List<TotAggregate> checkedTicket = logRepo.getCheckedTicket(start, end);
+//		
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(end);
+//		c.set(Calendar.HOUR_OF_DAY,23);
+//		c.set(Calendar.MINUTE,59);
+//		c.set(Calendar.SECOND, 59);
+//		c.set(Calendar.MILLISECOND, 999);
+//		end = c.getTime();
+//
+//		c.set(Calendar.YEAR, 2015);
+//		c.set(Calendar.MONTH, 11);
+//		c.set(Calendar.DAY_OF_MONTH, 1);
+//		c.set(Calendar.HOUR_OF_DAY,0);
+//		c.set(Calendar.MINUTE,0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		Date first = c.getTime();
+//		
+//		c.setTime(start);
+//
+//		if(start.before(first)){
+//			c.set(Calendar.YEAR, 2015);
+//			c.set(Calendar.MONTH, 11);
+//			c.set(Calendar.DAY_OF_MONTH, 1);
+//		}
+//		
+//		c.set(Calendar.HOUR_OF_DAY,0);
+//		c.set(Calendar.MINUTE,0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		start = c.getTime();
+//
+//		while(start.before(end)){
+//			map.put(start, new AppInfo());
+//			c.setTime(start);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//			c.add(Calendar.DAY_OF_MONTH, 1);
+//			start = c.getTime();
+//		}
+//		
+//		for(TotAggregate a : access){
+//			Date d = a.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			AppInfo tAS = map.get(d);
+//			if(tAS!=null){
+//					tAS.addToNumAccess(a.getTot());
+//					map.put(d, tAS);
+//			}
+//		}
+//		
+//		for(TotAggregate t : install){
+//			Date d = t.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			AppInfo tAS = map.get(d);
+//			if(tAS!=null){
+//				tAS.addToNumInstallation(t.getTot());
+//				map.put(d, tAS);
+//			}
+//		}
+//		for(TotAggregate p : pathStarted){
+//			Date d = p.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			AppInfo tAS = map.get(d);
+//			if(tAS!=null){
+//					tAS.addToNumPathStarted(p.getTot());
+//					map.put(d, tAS);
+//			}
+//		}
+//		
+//		for(TotAggregate ct : checkedTicket){
+//			Date d = ct.getDate();
+//			c.setTime(d);
+//			c.set(Calendar.HOUR_OF_DAY,0);
+//			c.set(Calendar.MINUTE,0);
+//			c.set(Calendar.SECOND, 0);
+//			c.set(Calendar.MILLISECOND, 0);
+//
+//			d = c.getTime();
+//			AppInfo tAS = map.get(d);
+//			if(tAS!=null){
+//				tAS.addToNumCheckedTicket(ct.getTot());
+//				map.put(d, tAS);
+//			}
+//		}
 		return map;
 	}
 

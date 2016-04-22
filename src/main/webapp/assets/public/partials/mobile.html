@@ -47,7 +47,7 @@
 
 	<section>
 		<div class="center">
-			<h2>N° Accessi/Installazioni</h2>
+			<h2>N° Accessi/Installazioni ultimi 30 giorni</h2>
 
 
 				<canvas height="450" width="800" id="line" class="chart chart-line" data-chart-data="mobile.lineChart.data"
@@ -83,10 +83,10 @@
 						<option value="1">Ultima settimana</option>
 						<option value="2">Ultimo mese</option>
 						<option value="3">Ultimi 3 mesi</option>
-
+						<option value="4">Periodo</option>
 					</select>
 				</div>
-				<div class="col-md-3 form-group ">
+				<div data-ng-if="mobile.period==4" class="col-md-3 form-group ">
 
 					<span class="col-md-1">Da:</span>
 					<div id="dataStart" class="input-group col-md-10">
@@ -98,7 +98,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 ">
+				<div data-ng-if="mobile.period==4" class="col-md-3 ">
 
 					<span class="col-md-1">A:</span>
 
