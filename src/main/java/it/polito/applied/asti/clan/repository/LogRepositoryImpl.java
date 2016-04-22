@@ -100,6 +100,7 @@ public class LogRepositoryImpl implements CustomLogRepository{
 
 	@Override
 	public List<TotAggregate> getInstallGrouped(Date start, Date end) {
+		System.out.println(start+" "+end);
 		Criteria c = new Criteria();
 		c = (Criteria.where("date").gte(start).
 				andOperator(Criteria.where("date").lte(end).
