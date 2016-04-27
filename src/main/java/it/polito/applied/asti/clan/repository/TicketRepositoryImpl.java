@@ -230,7 +230,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		List<Ticket> tickets = mongoOp.find(q, Ticket.class);
 		if(tickets!=null && tickets.size()>0){
 			t = tickets.get(0);
-			mongoOp.remove(t);
+			mongoOp.findAndRemove(q, Ticket.class);
 		}
 		return t;
 
