@@ -319,7 +319,8 @@ public class TicketServiceImpl implements TicketService{
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
 //		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
-//		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		
 //		Calendar c = Calendar.getInstance();
 //		c.setTime(end);
 //		c.set(Calendar.HOUR_OF_DAY,23);

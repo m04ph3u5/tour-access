@@ -1,7 +1,10 @@
 package it.polito.applied.asti.clan.repository;
 
+import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
+import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
+import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -203,20 +206,36 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		return mongoOp.count(q, Ticket.class);
 	}
 	
+	
+	
 	@Override
 	public List<TotAggregate> getTicketGrouped(Date start, Date end){
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		
 		Criteria c = new Criteria();
 		c = (Criteria.where("emissionDate").gte(start).
 				andOperator(Criteria.where("emissionDate").lte(end).andOperator(Criteria.where("status").ne(PENDING))));
 		
 		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), Aggregation.group("emissionDate").count().as("tot"), Aggregation.project("tot").and("date").previousOperation(), Aggregation.sort(Direction.ASC, "date"));
-		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project()
+				.and("emissionDate").plus(offset).as("emissionDate"),
+				Aggregation.sort(Sort.Direction.DESC, "emissionDate"),
+				Aggregation.project()
+				.andExpression("year(emissionDate)").as("year")
+				.andExpression("month(emissionDate)").as("month")
+				.andExpression("dayOfMonth(emissionDate)").as("day"),
+				Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+				.count().as("tot"));
+				
+				 
+				
 		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
-		
 		List<TotAggregate> l = result.getMappedResults();
-		for(TotAggregate t : l)
-			System.out.println(t);
+		
 		return l;
 	}
 

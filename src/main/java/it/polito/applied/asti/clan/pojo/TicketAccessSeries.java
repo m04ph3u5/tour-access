@@ -5,6 +5,7 @@ public class TicketAccessSeries {
 
 	private long totTickets;
 	private long totAccesses;
+	
 	public long getTotTickets() {
 		return totTickets;
 	}
