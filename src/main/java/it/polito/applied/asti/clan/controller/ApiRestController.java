@@ -384,16 +384,33 @@ public class ApiRestController extends BaseController{
 	@ResponseStatus(value = HttpStatus.OK)
 	public Map<Date,TicketAccessSeries> getStatisticsSeries(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
 		
-		Date start;
-		Date end;
-		Calendar c = Calendar.getInstance();
-
-		c.setTimeInMillis(Long.parseLong(startTS));
-		start = c.getTime();
-		c.setTimeInMillis(Long.parseLong(endTS));
-		end = c.getTime();
 		
-		return ticketService.getTicketAccessSeries(start, end);
+		if(startTS==null || startTS.isEmpty() || endTS==null || endTS.isEmpty())
+			throw new BadRequestException();
+		
+		
+		
+		Date startDate, endDate;
+		Calendar cStart = Calendar.getInstance();
+		Calendar cEnd = Calendar.getInstance();
+		
+		cStart.setTimeInMillis(Long.parseLong(startTS));
+		cStart.set(Calendar.HOUR_OF_DAY, 0);
+		cStart.set(Calendar.MINUTE, 0);
+		cStart.set(Calendar.SECOND, 0);
+		cStart.set(Calendar.MILLISECOND, 0);
+
+		cEnd.setTimeInMillis(Long.parseLong(endTS));
+		cEnd.set(Calendar.HOUR_OF_DAY, 23);
+		cEnd.set(Calendar.MINUTE, 59);
+		cEnd.set(Calendar.SECOND, 59);
+		cEnd.set(Calendar.MILLISECOND, 999);
+
+		startDate = cStart.getTime();
+		endDate = cEnd.getTime();
+		
+	
+		return ticketService.getTicketAccessSeries(startDate, endDate);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")

@@ -27,6 +27,7 @@ import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
+import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
@@ -318,9 +319,63 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
-//		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
+		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
 		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
 		
+		Calendar cal = Calendar.getInstance();
+		
+		while(start.before(end)){
+			map.put(start, new TicketAccessSeries());
+			cal.setTime(start);
+			cal.set(Calendar.HOUR_OF_DAY,0);
+			cal.set(Calendar.MINUTE,0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+			start = cal.getTime();
+		}
+		
+		for(TotAggregate tt : ticket){
+			cal.set(Calendar.YEAR, tt.getYear());
+			cal.set(Calendar.MONTH, tt.getMonth()-1);
+			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
+			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+
+			Date d = cal.getTime();
+			if(map.containsKey(d)){
+				map.get(d).addToTotTickets(tt.getTot());
+				
+			}else{
+				TicketAccessSeries tas = new TicketAccessSeries();
+				tas.setTotTickets(tt.getTot());
+				map.put(d, tas);
+			}
+		}
+		for(TotAggregate aa : access){
+			cal.set(Calendar.YEAR, aa.getYear());
+			cal.set(Calendar.MONTH, aa.getMonth()-1);
+			cal.set(Calendar.DAY_OF_MONTH, aa.getDay());
+			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+
+			Date d = cal.getTime();
+			if(map.containsKey(d)){
+				map.get(d).addToTotAccesses(aa.getTot());
+				
+			}else{
+				TicketAccessSeries tas = new TicketAccessSeries();
+				tas.setTotAccesses(aa.getTot());
+				map.put(d, tas);
+			}
+		}
+		
+		
+		return map;
 //		Calendar c = Calendar.getInstance();
 //		c.setTime(end);
 //		c.set(Calendar.HOUR_OF_DAY,23);
@@ -394,7 +449,7 @@ public class TicketServiceImpl implements TicketService{
 //				map.put(d, tAS);
 //			}
 //		}
-		return map;
+		
 	}
 
 	@Override

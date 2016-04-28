@@ -56,6 +56,7 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 	self.updateSeries = function(){
 		apiService.statisticsSeries(self.dateStart.getTime(), self.dateEnd.getTime()).then(
 				function(data){
+					console.log(data);
 					self.series = data;
 					self.lineChart = {};
 					self.lineChart.labels = [];

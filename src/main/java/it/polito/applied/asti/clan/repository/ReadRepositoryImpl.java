@@ -2,12 +2,15 @@ package it.polito.applied.asti.clan.repository;
 
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -41,18 +44,29 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 	
 	@Override
 	public List<TotAggregate> getAccessGrouped(Date start, Date end){
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		
+		
 		Criteria c = new Criteria();
 		c = (Criteria.where("dtaTransit").gte(start)
 				.andOperator(Criteria.where("dtaTransit").lte(end)
 				.andOperator(Criteria.where("isAccepted").is(true))));
 		
-		
-		
-		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
-				Aggregation.group("dtaTransit").count().as("tot"), 
-				Aggregation.project("tot").and("date").previousOperation(), 
-				Aggregation.sort(Direction.ASC, "date"));
-		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project()
+				.and("dtaTransit").plus(offset).as("dtaTransit"),
+				Aggregation.sort(Sort.Direction.DESC, "dtaTransit"),
+				Aggregation.project()
+				.andExpression("year(dtaTransit)").as("year")
+				.andExpression("month(dtaTransit)").as("month")
+				.andExpression("dayOfMonth(dtaTransit)").as("day"),
+				Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+				.count().as("tot"));
+				
+	
 		AggregationResults result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
