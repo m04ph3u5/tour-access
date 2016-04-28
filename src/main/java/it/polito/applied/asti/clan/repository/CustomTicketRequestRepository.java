@@ -13,6 +13,7 @@ public interface CustomTicketRequestRepository {
 	public long totalSingleWomanTickets(Date start, Date end);
 	public long totalGroupWithChildrenTickets(Date start, Date end);
 	public long totalGroupWithOldManTickets(Date start, Date end);
+	public long totalGroupWithChildrenAndOldManTickets(Date start, Date end);
 	public long totalSingleYoung(Date start, Date end);
 	public long totalSingleMiddleAge(Date start, Date end);
 	public long totalSingleElderly(Date start, Date end);

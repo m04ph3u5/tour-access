@@ -38,8 +38,9 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					self.statistics = data;
 					self.pie1 = [self.statistics.totSingleTickets, self.statistics.totGroupTickets];
 					self.pie1Labels = ["Biglietti singoli", "Biglietti di gruppo"];
-					self.pie2 = [self.statistics.totChildren, self.statistics.totElderly];
-					self.pie2Labels = ["Gruppi con bambini", "Gruppi con anziani"];
+					var others = self.statistics.totGroups - self.statistics.totChildren - self.statistics.totElderly -self.statistics.totChildrenAndElderly;
+					self.pie2 = [self.statistics.totChildren, self.statistics.totElderly, self.statistics.totChildrenAndElderly, others];
+					self.pie2Labels = ["Gruppi con bambini", "Gruppi con anziani", "Gruppi con bambini ed anziani", "Gruppi senza bambini e anziani"];
 					self.pie3 = [self.statistics.totMale, self.statistics.totFemale];
 					self.pie3Labels = ["Uomini", "Donne"];
 					self.pie4 = [self.statistics.young, self.statistics.middleAge, self.statistics.elderly];

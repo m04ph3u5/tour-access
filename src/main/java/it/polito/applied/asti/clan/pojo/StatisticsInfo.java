@@ -11,6 +11,7 @@ public class StatisticsInfo {
 	private long totFemale;
 	private long totChildren;
 	private long totElderly;
+	private long totChildrenAndElderly;
 	private long young;
 	private long middleAge;
 	private long elderly;
@@ -21,6 +22,16 @@ public class StatisticsInfo {
 	}
 	
 	
+	public long getTotChildrenAndElderly() {
+		return totChildrenAndElderly;
+	}
+
+
+	public void setTotChildrenAndElderly(long totChildrenAndElderly) {
+		this.totChildrenAndElderly = totChildrenAndElderly;
+	}
+
+
 	public long getTotTickets() {
 		return totTickets;
 	}

@@ -102,7 +102,8 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
 				.andOperator(Criteria.where("info.withChildren").is(true)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.withElderly").is(false)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
@@ -112,10 +113,22 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		q.addCriteria(Criteria.where("requestDate").gte(start)
 				.andOperator(Criteria.where("requestDate").lte(end)
 				.andOperator(Criteria.where("info.withElderly").is(true)
-						.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+				.andOperator(Criteria.where("info.withChildren").is(false)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 
+	@Override
+	public long totalGroupWithChildrenAndOldManTickets(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("info.withElderly").is(true)
+				.andOperator(Criteria.where("info.withChildren").is(true)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+	
 	@Override
 	public long totalSingleYoung(Date start, Date end) {
 		Query q = new Query();

@@ -112,14 +112,18 @@
 								<td width="50%">Tot. gruppi: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups}}</b></td>
 							</tr>
 							<tr>
-								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
-							</tr>
-							<tr>
 								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td>
 							</tr>
 							<tr>
-	
-								<td width="50%">Altri: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.pie2[1] - tickets.pie2[0]}}</b></td>
+								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
+							</tr>
+							
+							<tr>
+								<td width="50%">Con bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[2]}}</b></td>
+							</tr>
+							
+							<tr>
+								<td width="50%">Senza bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.statistics.totChildren - tickets.statistics.totElderly - tickets.statistics.totChildrenAndElderly}}</b></td>
 							</tr>
 						</table>
 						

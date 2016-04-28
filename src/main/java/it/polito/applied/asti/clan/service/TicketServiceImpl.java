@@ -303,6 +303,7 @@ public class TicketServiceImpl implements TicketService{
 		s.setTotFemale(totSingle - totSingleMan);
 		s.setTotChildren(ticketRequestRepo.totalGroupWithChildrenTickets(start, end));
 		s.setTotElderly(ticketRequestRepo.totalGroupWithOldManTickets(start, end));
+		s.setTotChildrenAndElderly(ticketRequestRepo.totalGroupWithChildrenAndOldManTickets(start, end));
 		s.setYoung(ticketRequestRepo.totalSingleYoung(start, end));
 		s.setMiddleAge(ticketRequestRepo.totalSingleMiddleAge(start, end));
 		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
