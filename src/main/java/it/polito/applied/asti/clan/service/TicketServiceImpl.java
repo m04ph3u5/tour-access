@@ -343,6 +343,7 @@ public class TicketServiceImpl implements TicketService{
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.ZONE_OFFSET, cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
 
 			Date d = cal.getTime();
 			if(map.containsKey(d)){
@@ -362,6 +363,7 @@ public class TicketServiceImpl implements TicketService{
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.ZONE_OFFSET, cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
 
 			Date d = cal.getTime();
 			if(map.containsKey(d)){
