@@ -109,9 +109,9 @@ public class SensorServiceImpl implements SensorService{
 			cal.set(Calendar.MONTH, tt.getMonth()-1);
 			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
 			if(hourGranularity)
-				cal.set(Calendar.HOUR, tt.getHour());
+				cal.set(Calendar.HOUR_OF_DAY, tt.getHour());
 			else
-				cal.set(Calendar.HOUR, 0);
+				cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
