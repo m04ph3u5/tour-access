@@ -324,7 +324,9 @@ public class TicketServiceImpl implements TicketService{
 		
 		Calendar cal = Calendar.getInstance();
 		
+		
 		while(start.before(end)){
+			
 			map.put(start, new TicketAccessSeries());
 			cal.setTime(start);
 			cal.set(Calendar.HOUR_OF_DAY,0);
@@ -332,10 +334,13 @@ public class TicketServiceImpl implements TicketService{
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			cal.add(Calendar.DAY_OF_MONTH, 1);
+			
 			start = cal.getTime();
 		}
 		
+		
 		for(TotAggregate tt : ticket){
+			
 			cal.set(Calendar.YEAR, tt.getYear());
 			cal.set(Calendar.MONTH, tt.getMonth()-1);
 			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
@@ -345,6 +350,7 @@ public class TicketServiceImpl implements TicketService{
 			cal.set(Calendar.MILLISECOND, 0);
 
 			Date d = cal.getTime();
+			
 			if(map.containsKey(d)){
 				map.get(d).addToTotTickets(tt.getTot());
 				
@@ -354,6 +360,8 @@ public class TicketServiceImpl implements TicketService{
 				map.put(d, tas);
 			}
 		}
+		
+		
 		for(TotAggregate aa : access){
 			cal.set(Calendar.YEAR, aa.getYear());
 			cal.set(Calendar.MONTH, aa.getMonth()-1);

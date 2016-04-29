@@ -174,12 +174,30 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 		
 	}
 	
+	var calcTime = function (date) {
+
+//		var d = new Date();
+//	    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+//
+//	    
+//	    var nd = new Date(utc + (3600000*d.getTimezoneOffset()));
+//
+//	    
+//	    return nd.toLocaleString();
+		
+	}
+	
 	self.tempCharts = {};
 	self.humCharts = {};
 	var getTimeSeries = function(){
 		apiService.environmentSeries(self.dateStart, self.dateEnd, idSite).then(
 				function(data){
-					
+					console.log(data);
+					for(var d in data){
+						
+						console.log(d);
+						
+					}
 					self.series = data;
 					
 					self.charts = {};
