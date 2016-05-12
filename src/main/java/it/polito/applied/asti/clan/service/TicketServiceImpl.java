@@ -123,6 +123,7 @@ public class TicketServiceImpl implements TicketService{
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		for(String n : ticketRequest.getTicketNumbers()){
+
 			Ticket t = new Ticket();
 			t.setTicketRequestId(ticketRequest.getId());
 			t.setSites(ticketRequest.getPlacesId());
@@ -301,7 +302,7 @@ public class TicketServiceImpl implements TicketService{
 		s.setTotSingleTickets(totSingle);
 		s.setTotGroupTickets(totT-totSingle);
 		long totSingleMan = ticketRequestRepo.totalSingleManTickets(start, end);
-		System.out.println(totSingle);
+	
 		s.setTotGroups(ticketRequestRepo.totalGroups(start, end));
 		s.setTotMale(totSingleMan);
 		s.setTotFemale(totSingle - totSingleMan);
@@ -327,46 +328,53 @@ public class TicketServiceImpl implements TicketService{
 		
 		Calendar cal = Calendar.getInstance();
 		
+		cal.setTime(start);
+		cal.set(Calendar.HOUR_OF_DAY,14);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		start = cal.getTime();
+		
 		while(start.before(end)){
+	
 			map.put(start, new TicketAccessSeries());
-			cal.setTime(start);
-			cal.set(Calendar.HOUR_OF_DAY,0);
-			cal.set(Calendar.MINUTE,0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			start = cal.getTime();
 		}
 		
+		
 		for(TotAggregate tt : ticket){
+			
 			cal.set(Calendar.YEAR, tt.getYear());
 			cal.set(Calendar.MONTH, tt.getMonth()-1);
 			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
-			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 14);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.ZONE_OFFSET, cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
 
 			Date d = cal.getTime();
+			
 			if(map.containsKey(d)){
 				map.get(d).addToTotTickets(tt.getTot());
 				
 			}else{
+			
 				TicketAccessSeries tas = new TicketAccessSeries();
 				tas.setTotTickets(tt.getTot());
 				map.put(d, tas);
 			}
 		}
+		
+		
 		for(TotAggregate aa : access){
 			cal.set(Calendar.YEAR, aa.getYear());
 			cal.set(Calendar.MONTH, aa.getMonth()-1);
 			cal.set(Calendar.DAY_OF_MONTH, aa.getDay());
-			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 14);
 			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.ZONE_OFFSET, cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
 
 			Date d = cal.getTime();
 			if(map.containsKey(d)){

@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
@@ -291,7 +293,6 @@ public class ApiRestController extends BaseController{
 	@RequestMapping(value="/v1/statistics/groups", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public StatisticsGroupsInfo getGroupsStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		System.out.println("GROUPS STATISTICS");
 		StatisticsGroupsInfo stats = new StatisticsGroupsInfo(0, 0);
 		return stats;
 		
@@ -301,7 +302,6 @@ public class ApiRestController extends BaseController{
 	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public StatisticsSinglesInfo getSinglessStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		System.out.println("SINGLES STATISTICS");
 		StatisticsSinglesInfo stats = new StatisticsSinglesInfo("","");
 		return stats;
 		
@@ -311,7 +311,6 @@ public class ApiRestController extends BaseController{
 	@RequestMapping(value="/v1/statistics/logApp", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public LogSeriesInfo getAppLogInfp( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		System.out.println("Log APP STATISTICS");
 		return appService.getLogInfo(start, end);
 		
 	}
@@ -375,7 +374,6 @@ public class ApiRestController extends BaseController{
 		InfoEnvironmentSite info;
 		
 		info = sensorService.getInfoSite(startDate, endDate, idSite);
-		System.out.println(info.getHumid());
 		return info;
 	}
 	

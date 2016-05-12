@@ -5,7 +5,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 	var idSite = $stateParams.idSite;
 	
 	var oneDayMillis = 86400000;
-	var threeMonthsMillis = 2592000000;
+	var threeMonthsMillis = 7776000000;
 	
 	self.chartOptions = {
 	   responsive: false,
@@ -165,7 +165,11 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 		}
 		case 2: {
 			start.setHours(0,0,0,0);
-
+			var end = angular.copy(self.dateEnd);
+			while(start<end){
+				self.charts.labels.push($filter('date')(start, 'shortDate'));
+				start.addDays(1);
+			}
 			break;
 		}
 		}
@@ -173,6 +177,19 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 		start.setHours(0,0,0,0);
 		
 	}
+	
+//	var calcTime = function (date) {
+//
+////		var d = new Date();
+////	    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+////
+////	    
+////	    var nd = new Date(utc + (3600000*d.getTimezoneOffset()));
+////
+////	    
+////	    return nd.toLocaleString();
+//		
+//	}
 	
 	self.tempCharts = {};
 	self.humCharts = {};
@@ -216,6 +233,7 @@ angular.module('asti.supervisor').controller('sensorLogCtrl', [ 'apiService', '$
 								}
 								case 2: {
 									//TODO weekly granularity
+									index = self.charts.labels.indexOf($filter('date')(d, 'shortDate'));
 									break;
 								}
 							}
