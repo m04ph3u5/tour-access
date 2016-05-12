@@ -1,5 +1,9 @@
 package it.polito.applied.asti.clan.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
@@ -9,11 +13,6 @@ import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
-import it.polito.applied.asti.clan.pojo.VersionZip;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public interface AppService {
 

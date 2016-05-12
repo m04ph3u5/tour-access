@@ -1,6 +1,5 @@
 package it.polito.applied.asti.clan.pojo;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 

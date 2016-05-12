@@ -1,10 +1,10 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public interface CustomLogRepository {
 	Map<String, Long> getDateSeries(Date start, Date end);

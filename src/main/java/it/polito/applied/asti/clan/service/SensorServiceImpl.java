@@ -15,7 +15,6 @@ import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.SiteSensorDTO;
-import it.polito.applied.asti.clan.pojo.Sonda;
 import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.SensorRepository;

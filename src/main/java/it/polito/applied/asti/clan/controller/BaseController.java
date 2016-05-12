@@ -1,12 +1,5 @@
 package it.polito.applied.asti.clan.controller;
 
-import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.exception.ConflictException;
-import it.polito.applied.asti.clan.exception.ErrorInfo;
-import it.polito.applied.asti.clan.exception.ForbiddenException;
-import it.polito.applied.asti.clan.exception.NotFoundException;
-import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -19,6 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.mongodb.MongoException;
+
+import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.exception.ConflictException;
+import it.polito.applied.asti.clan.exception.ErrorInfo;
+import it.polito.applied.asti.clan.exception.ForbiddenException;
+import it.polito.applied.asti.clan.exception.NotFoundException;
+import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 
 public abstract class BaseController {
 

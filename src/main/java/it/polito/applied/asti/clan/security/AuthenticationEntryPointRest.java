@@ -1,9 +1,6 @@
 package it.polito.applied.asti.clan.security;
 
 
-import it.polito.applied.asti.clan.exception.ErrorInfo;
-import it.polito.applied.asti.clan.exception.JacksonUtil;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -15,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+
+import it.polito.applied.asti.clan.exception.ErrorInfo;
+import it.polito.applied.asti.clan.exception.JacksonUtil;
 
 @Component("restServicesEntryPoint")
 public class AuthenticationEntryPointRest extends BasicAuthenticationEntryPoint{

@@ -1,8 +1,8 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.User;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import it.polito.applied.asti.clan.pojo.User;
 
 public interface UserRepository extends MongoRepository<User, String>, CustomUserRepository{
 	

@@ -1,10 +1,10 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.PoiRank;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-
 import java.util.Date;
 import java.util.List;
+
+import it.polito.applied.asti.clan.pojo.PoiRank;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public interface CustomReadRepository {
 	public long countIngressFromDate(Date date);

@@ -27,7 +27,6 @@ import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
-import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;

@@ -1,9 +1,5 @@
 package it.polito.applied.asti.clan.service;
 
-import it.polito.applied.asti.clan.exception.BadRequestException;
-import it.polito.applied.asti.clan.pojo.SensorLog;
-import it.polito.applied.asti.clan.pojo.Ticket;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import it.polito.applied.asti.clan.exception.BadRequestException;
+import it.polito.applied.asti.clan.pojo.Ticket;
 
 @Service
 public class UtilPostToAclTaskImpl implements UtilPostToAclTask {

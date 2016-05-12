@@ -1,9 +1,5 @@
 package it.polito.applied.asti.clan.service;
 
-import it.polito.applied.asti.clan.pojo.Comment;
-import it.polito.applied.asti.clan.repository.CommentRepository;
-import it.polito.applied.asti.clan.repository.PathInfoRepository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +11,10 @@ import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import it.polito.applied.asti.clan.pojo.Comment;
+import it.polito.applied.asti.clan.repository.CommentRepository;
+import it.polito.applied.asti.clan.repository.PathInfoRepository;
 
 @Service
 public class UtilAverageTaskImpl implements UtilAverageTask{

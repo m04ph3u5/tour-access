@@ -1,8 +1,5 @@
 package it.polito.applied.asti.clan.security;
 
-import it.polito.applied.asti.clan.exception.ErrorInfo;
-import it.polito.applied.asti.clan.exception.JacksonUtil;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -16,6 +13,9 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 
 import com.mongodb.MongoException;
+
+import it.polito.applied.asti.clan.exception.ErrorInfo;
+import it.polito.applied.asti.clan.exception.JacksonUtil;
 
 @Component("authenticationFailureHandler")
 public class AuthenticationFailureHandlerRest extends SimpleUrlAuthenticationFailureHandler {

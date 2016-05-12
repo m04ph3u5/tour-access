@@ -1,21 +1,20 @@
 package it.polito.applied.asti.clan.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
-import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public interface TicketService {
 

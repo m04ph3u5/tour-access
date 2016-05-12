@@ -1,18 +1,11 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.Log;
-import it.polito.applied.asti.clan.pojo.LogType;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -21,6 +14,10 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import it.polito.applied.asti.clan.pojo.Log;
+import it.polito.applied.asti.clan.pojo.LogType;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public class LogRepositoryImpl implements CustomLogRepository{
 

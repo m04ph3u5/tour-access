@@ -1,10 +1,5 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.PoiRank;
-import it.polito.applied.asti.clan.pojo.Read;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +12,10 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
+import it.polito.applied.asti.clan.pojo.PoiRank;
+import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public class ReadRepositoryImpl implements CustomReadRepository{
 
