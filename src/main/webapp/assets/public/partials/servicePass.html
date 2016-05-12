@@ -1,0 +1,21 @@
+<div class="container">
+	<section>
+		<h1>Biglietti di servizio</h1>
+		<div class="container white boxing">
+			<div class="clearfix"></div>
+			<h5>Questa tipologia di biglietto deve essere rilasciata solo ed esclusivamente al personale di servizio per consentirne l'accesso in autonomia.</h5>
+			<div id="tagBox" class="col-sm-12 tags-wrapper">
+				<h3>Selezionare i siti a cui garantire l'accesso</h3>
+				<div id="tagsList" class="tags-cloud">
+					<div data-ng-repeat="p in servicePass.places" class="tag">
+						<input type="checkbox" data-ng-model="p.selected" data-ng-change="servicePass.check()"> <span
+							class="tagName">{{p.name}}</span><br>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-ng-if="servicePass.showButton" class="container boxing pull-right">
+			<div data-ng-click="servicePass.goAhead()" class="btn btn-primary">Avanti</div>
+		</div>
+	</section>
+</div>

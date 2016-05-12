@@ -21,8 +21,8 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 			$state.go(".infoTicket");
 		}
 	}
+	self.showSelectAll = true;
 	
-
 	apiService.getPlacesToSell().then(
 			function(response){
 				self.places = response;
@@ -40,10 +40,20 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 			}
 	);
 	self.switchSelected = function(place){
-		if(place.selected==true){
-			self.removeToSelected(place);
+		if(place){
+			if(place.selected==true){
+				self.removeToSelected(place);
+			}else{
+				self.addToSelected(place);
+				if(self.selected.length==self.places.length)
+					self.showSelectAll = false;
+			}
 		}else{
-			self.addToSelected(place);
+			for(var i=0; i<self.places.length; i++){
+				self.places[i].selected=true;
+				self.addToSelected(self.places[i]);
+			}
+			self.showSelectAll = false;
 		}
 	}
 	self.addToSelected = function(place){
@@ -82,6 +92,8 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 				}
 			}
 		}
+		self.showSelectAll = true;
+
 	}
 	
 	
@@ -93,7 +105,7 @@ angular.module('asti.application').controller('selectPlaceCtrl', [ 'apiService',
 			self.places[j].selected = false;			
 		}
 		operatorService.reset();
-
+		self.showSelectAll = true;
 	}
 	
 	

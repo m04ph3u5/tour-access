@@ -123,7 +123,6 @@ public class TicketServiceImpl implements TicketService{
 		
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		for(String n : ticketRequest.getTicketNumbers()){
-			System.out.println("Prova "+n);
 			Ticket t = new Ticket();
 			t.setTicketRequestId(ticketRequest.getId());
 			t.setSites(ticketRequest.getPlacesId());
@@ -140,22 +139,26 @@ public class TicketServiceImpl implements TicketService{
 				t.setRole(DAILY_VISITOR);
 				t.setStatus(PENDING);
 				
-			}else if(ticketRequest.getTipology().equals("WEEKLY_VISITOR")){
-				t.setRole(WEEKLY_VISITOR);
+//			}else if(ticketRequest.getTipology().equals("WEEKLY_VISITOR")){
+//				t.setRole(WEEKLY_VISITOR);
+//				t.setStatus(PENDING);
+//				
+//			}else if(ticketRequest.getTipology().equals("DAILY_VIP_VISITOR")){
+//				t.setRole(DAILY_VIP_VISITOR);
+//				t.setStatus(PENDING);
+//				
+//			}else if(ticketRequest.getTipology().equals("WEEKLY_VIP_VISITOR")){
+//				t.setRole(WEEKLY_VIP_VISITOR);
+//				t.setStatus(PENDING);
+				
+			}else if(ticketRequest.getTipology().equals("SERVICE")){
+				t.setRole(SERVICE);
 				t.setStatus(PENDING);
-				
-			}else if(ticketRequest.getTipology().equals("DAILY_VIP_VISITOR")){
-				t.setRole(DAILY_VIP_VISITOR);
-				t.setStatus(PENDING);
-				
-			}else if(ticketRequest.getTipology().equals("WEEKLY_VIP_VISITOR")){
-				t.setRole(WEEKLY_VIP_VISITOR);
-				t.setStatus(PENDING);
-				
-//			}else if(ticketRequest.getTipology().equals("SERVICE")){
-//				t.setRole(SERVICE);
-//				t.setStatus(VALIDATED);
-				
+				c.setTime(end);
+				c.add(Calendar.YEAR, 2);
+				end = c.getTime();
+				t.setEndDate(end);
+
 //			}else if(ticketRequest.getTipology().equals("SUPERVISOR")){
 //				t.setRole(SUPERVISOR);
 //				t.setStatus(VALIDATED);

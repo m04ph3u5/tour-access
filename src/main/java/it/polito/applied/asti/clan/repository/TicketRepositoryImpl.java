@@ -1,11 +1,5 @@
 package it.polito.applied.asti.clan.repository;
 
-import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
-import it.polito.applied.asti.clan.pojo.SensorLog;
-import it.polito.applied.asti.clan.pojo.Ticket;
-import it.polito.applied.asti.clan.pojo.TotAggregate;
-import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +16,9 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import it.polito.applied.asti.clan.pojo.Ticket;
+import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public class TicketRepositoryImpl implements CustomTicketRepository{
 

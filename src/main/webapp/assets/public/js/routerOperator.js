@@ -100,6 +100,24 @@ angular.module('asti.application')
 				pageTitle : 'AstiMusei - Invalida biglietto',
 			}
 		})
+		.state('logged.servicePassTicket',{
+			url : '/operator/servicePass',
+			views : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbar.html",
+					controller : 'navbarCtrl',
+					controllerAs : 'navbar'
+				},
+				"body@logged" : {
+					templateUrl : "assets/public/partials/servicePass.html",
+					controller : 'servicePassCtrl',
+					controllerAs : 'servicePass'
+				}
+			},
+			data : {
+				pageTitle : 'AstiMusei - Biglietti di servizio',
+			}
+		})
 		$urlRouterProvider.otherwise(function($injector,$location){
 			var state = $injector.get('$state');
 			state.go('notLogged.login');

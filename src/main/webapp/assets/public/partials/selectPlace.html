@@ -24,7 +24,10 @@
 				</div>
 				<div class="clearfix"></div>
 				<div class="clearfix"></div>
-			
+				
+			 	<div data-ng-if="selectPlace.showSelectAll" style="margin-bottom:20px;" class="col-sm-4 col-sm-offset-4 btn btn-primary" data-ng-click="selectPlace.switchSelected()">
+					<b>Seleziona tutti</b>
+				</div>
 		</div><!-- grid POI end-->
 			
 		
@@ -48,7 +51,7 @@
 				
 				<div class="form-group pull-right space " >
 	            	<label for="num_ticket" class="bolding h4"> N° biglietti da acquistare:
-	               	 <input type="number" id="num_ticket" class="normal-txt" data-ng-model="selectPlace.numFullTicket" min="1">
+	               	 <input type="number" id="num_ticket" class="normal-txt" data-ng-model="selectPlace.numFullTicket" min="1" max="20">
 	            	</label>
 	        	</div>	
 	        	
@@ -84,7 +87,7 @@
 				
 				<div class="form-group pull-right space " >
 	            	<label for="num_ticket" class="bolding h4"> N° biglietti da acquistare:
-	               	 <input type="number" id="num_ticket" class="normal-txt" data-ng-model="selectPlace.numFullTicket" min="1">
+	               	 <input type="number" id="num_ticket" class="normal-txt" data-ng-model="selectPlace.numFullTicket" min="1" max="20">
 	            	</label>
 	        	</div>	
 	        	

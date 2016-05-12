@@ -94,5 +94,9 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		$state.go("logged.selectPlace");
 	}
 	
+	self.checkTypology = function(){
+		console.log("CHECK");
+	}
+	
 	
 }]);
