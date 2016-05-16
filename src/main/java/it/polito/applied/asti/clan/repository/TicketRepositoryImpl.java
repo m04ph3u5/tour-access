@@ -109,7 +109,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		List<Ticket> tList = mongoOp.find(q, Ticket.class);
 		if(tList!=null && tList.size()>0){
 			myTicket = tList.get(0); //in prima posizione c'� sicuramente quello pi� recente
-			if(myTicket.getStatus().equals(RELEASED)){
+			if(myTicket.getStatus().equals(RELEASED) && myTicket.getRole()!=SERVICE){
 				Update u = new Update();
 				u.set("startDate", d);
 				
@@ -237,7 +237,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	}
 
 	@Override
-	public Ticket removeTicket(String id) {
+	public Ticket findLastTicket(String id) {
 		Ticket t = null;
 		Query q = new Query();
 		q.addCriteria(Criteria.where("idTicket").is(id));
@@ -245,11 +245,18 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		q.with(s);
 		List<Ticket> tickets = mongoOp.find(q, Ticket.class);
 		if(tickets!=null && tickets.size()>0){
-			t = tickets.get(0);
-			mongoOp.findAndRemove(q, Ticket.class);
-		}
-		return t;
+			return tickets.get(0);
+		}else
+			return null;
+		
 
+	}
+
+	@Override
+	public void removeById(String id) {
+		Query q  = new Query();
+		q.addCriteria(Criteria.where("id").is(id));
+		mongoOp.remove(q, Ticket.class);
 	}
 
 }

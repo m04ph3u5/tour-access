@@ -48,6 +48,7 @@ public class CustomAuthenticationFilter extends GenericFilterBean{
 		final HttpServletRequest request = (HttpServletRequest) req;
 		final HttpServletResponse response = (HttpServletResponse) res;
 
+	
 		String header = request.getHeader("Authorization");
 
 		if (header == null || !header.startsWith("xBasic ")) {
@@ -128,7 +129,8 @@ public class CustomAuthenticationFilter extends GenericFilterBean{
         // Only reauthenticate if username doesn't match SecurityContextHolder and user isn't authenticated
         // (see SEC-53)
         Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
-
+        if(existingAuth!=null)
+        	System.out.println("AUTH:  "+existingAuth.getName());
         if(existingAuth == null || !existingAuth.isAuthenticated()) {
             return true;
         }
@@ -137,7 +139,7 @@ public class CustomAuthenticationFilter extends GenericFilterBean{
         // (see SEC-348)
 
         if (existingAuth instanceof UsernamePasswordAuthenticationToken && !existingAuth.getName().equals(username)) {
-            return true;
+        	return true;
         }
 
         // Handle unusual condition where an AnonymousAuthenticationToken is already present
@@ -148,7 +150,7 @@ public class CustomAuthenticationFilter extends GenericFilterBean{
         // both of which force re-authentication if the respective header is detected (and in doing so replace
         // any existing AnonymousAuthenticationToken). See SEC-610.
         if (existingAuth instanceof AnonymousAuthenticationToken) {
-            return true;
+        	return true;
         }
 
         return false;

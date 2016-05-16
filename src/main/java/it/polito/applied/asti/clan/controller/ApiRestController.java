@@ -28,6 +28,7 @@ import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.AppPoiRank;
 import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
@@ -336,10 +337,10 @@ public class ApiRestController extends BaseController{
 		date = c.getTime();
 		d.setTodayTicketSelled(ticketService.getNumberSelledTicket(date));
 		d.setTodayIngress(ticketService.getNumberIngress(date));
-		d.setTodayAppAccess(appService.getAccess(date));
 		d.setTodayAppInstallation(appService.getInstallation(date));
 		d.setTodayDevices(appService.getDevices(date));
 		d.setMonitoredSites(sensorService.getMonitoredSiteInfo(date));
+		d.setTodayPoi(appService.getViewedPoi(date));
 		return d;
 	}
 	
@@ -424,6 +425,23 @@ public class ApiRestController extends BaseController{
 		end = c.getTime();
 		
 		return ticketService.getPoiRank(start, end);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/appPoiRank", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<AppPoiRank> getAppPoiRank(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return appService.getAppPoiRank(start, end);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")

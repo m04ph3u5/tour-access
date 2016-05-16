@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import it.polito.applied.asti.clan.pojo.AppPoiRank;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public interface CustomLogRepository {
@@ -13,8 +14,12 @@ public interface CustomLogRepository {
 	long countNumberInstallationFromDate(Date date);
 	long distinctDevicesFromDate(Date date);
 	boolean isDeviceInstalled(String deviceId);
+	List<TotAggregate> getDevicesGrouped(Date start, Date end);
 	List<TotAggregate> getAccessGrouped(Date start, Date end);
 	List<TotAggregate> getInstallGrouped(Date start, Date end);
 	List<TotAggregate> getPathStarted(Date start, Date end);
 	List<TotAggregate> getCheckedTicket(Date start, Date end);
+	long countViewedPoiFromDate(Date date);
+	List<AppPoiRank> getOpenPoiRank(Date start, Date end);
+
 }

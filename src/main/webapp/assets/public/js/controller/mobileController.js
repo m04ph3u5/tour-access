@@ -51,15 +51,15 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 				self.lineChart.labels = [];
 				self.lineChart.data = [];
 				var install = [];
-				var accesses = [];
-				self.lineChart.series = ["Installazioni", "Accessi"];
+				var poi = [];
+				self.lineChart.series = ["Installazioni", "Device attivi"];
 				for (var e in self.series) {
 					 self.lineChart.labels.push($filter('date')(e, 'shortDate'));
 					 install.push(self.series[e].totInstall);
-					 accesses.push(self.series[e].totAccesses);
+					 poi.push(self.series[e].totDevice);
 				}
 				self.lineChart.data[0] = install;
-				self.lineChart.data[1] = accesses;
+				self.lineChart.data[1] = poi;
 			},
 			function(reason){
 				console.log(reason);

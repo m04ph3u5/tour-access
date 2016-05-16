@@ -3,6 +3,7 @@ package it.polito.applied.asti.clan.service;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,6 +16,7 @@ import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.AppPoiRank;
 import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.Comment;
 import it.polito.applied.asti.clan.pojo.CommentDTO;
@@ -26,6 +28,7 @@ import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
 import it.polito.applied.asti.clan.pojo.LogType;
 import it.polito.applied.asti.clan.pojo.PathInfo;
+import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketTime;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
@@ -33,6 +36,7 @@ import it.polito.applied.asti.clan.repository.CommentRepository;
 import it.polito.applied.asti.clan.repository.DeviceTicketAssociationRepository;
 import it.polito.applied.asti.clan.repository.LogRepository;
 import it.polito.applied.asti.clan.repository.PathInfoRepository;
+import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
 
 @Service
@@ -75,6 +79,9 @@ public class AppServiceImpl implements AppService{
 	
 	@Autowired
 	private DeviceTicketAssociationRepository deviceTicketAssociationRepo;
+	
+	@Autowired
+	private PoiRepository poiRepo;
 	
 	
 	@Override
@@ -209,8 +216,8 @@ public class AppServiceImpl implements AppService{
 	}
 
 	@Override
-	public long getAccess(Date date) {
-		return logRepo.countNumberAccessFromDate(date);
+	public long getViewedPoi(Date date) {
+		return logRepo.countViewedPoiFromDate(date);
 	}
 
 	@Override
@@ -226,7 +233,7 @@ public class AppServiceImpl implements AppService{
 	@Override
 	public Map<Date, AppAccessInstallSeries> getAppInstallAccessSeries(Date start, Date end) {
 		TreeMap<Date, AppAccessInstallSeries> map = new TreeMap<Date, AppAccessInstallSeries>();
-		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
+		List<TotAggregate> devices = logRepo.getDevicesGrouped(start, end);
 		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
 		Calendar c = Calendar.getInstance();
 		c.setTime(end);
@@ -258,7 +265,7 @@ public class AppServiceImpl implements AppService{
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		Date current = c.getTime();
-		for(TotAggregate tt : access){
+		for(TotAggregate tt : devices){
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
 		
@@ -269,7 +276,7 @@ public class AppServiceImpl implements AppService{
 				current = c.getTime();
 			}
 			AppAccessInstallSeries aa = new AppAccessInstallSeries();
-			aa.setTotAccesses(tt.getTot());
+			aa.setTotDevice(tt.getTot());
 			map.put(current, aa);
 			c.setTime(current);
 			c.add(Calendar.DAY_OF_MONTH, 1);
@@ -379,6 +386,20 @@ public class AppServiceImpl implements AppService{
 	public void checkAppVersion(int appVersion) throws ConflictException {
 		if(appVersion<minSupportedVersion)
 			throw new ConflictException("La tua versione dell'app ("+appVersion+") è obsoleta. Per favore, scarica la nuova versione");
+	}
+
+	@Override
+	public List<AppPoiRank> getAppPoiRank(Date start, Date end) {
+		List<Poi> poiList = poiRepo.findAll();
+		Map<String, String> namePoi = new HashMap<String, String>();
+		for(Poi p : poiList){
+			namePoi.put(p.getIdSite(), p.getName());
+		}
+		List<AppPoiRank> l = logRepo.getOpenPoiRank(start, end);
+		for(AppPoiRank p : l){
+			p.setName(namePoi.get(p.getIdPoi()));
+		}
+		return l;
 	}
 
 }

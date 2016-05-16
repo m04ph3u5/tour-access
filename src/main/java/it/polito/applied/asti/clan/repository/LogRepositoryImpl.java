@@ -15,8 +15,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import it.polito.applied.asti.clan.pojo.AppPoiRank;
 import it.polito.applied.asti.clan.pojo.Log;
 import it.polito.applied.asti.clan.pojo.LogType;
+import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public class LogRepositoryImpl implements CustomLogRepository{
@@ -61,6 +63,15 @@ public class LogRepositoryImpl implements CustomLogRepository{
 			return 0;
 
 	}
+	
+
+	@Override
+	public long countViewedPoiFromDate(Date date) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("date").gte(date)
+				.andOperator(Criteria.where("logType").is(LogType.OpenPoi)));
+		return mongoOp.count(q, Log.class);	}
+
 
 	@Override
 	public boolean isDeviceInstalled(String deviceId) {
@@ -89,7 +100,29 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				Aggregation.group("year","month", "day").count().as("tot"),
 				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		return l;
+	}
+	
+	@Override
+	public List<TotAggregate> getDevicesGrouped(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = (Criteria.where("date").gte(start).
+				andOperator(Criteria.where("date").lte(end)));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
+				Aggregation.project()
+				.andExpression("year(date)").as("year")
+				.andExpression("month(date)").as("month")
+				.andExpression("dayOfMonth(date)").as("day")
+				.and("deviceId").as("deviceId"),
+				Aggregation.group("year","month", "day", "deviceId").count().as("tot"),
+				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
+		
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
 		return l;
@@ -112,7 +145,7 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				Aggregation.group("year","month", "day").count().as("tot"),
 				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
 		return l;
@@ -134,7 +167,7 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				Aggregation.group("year","month", "day").count().as("tot"),
 				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
 		return l;
@@ -157,9 +190,25 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				Aggregation.group("year","month", "day").count().as("tot"),
 				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
-		AggregationResults result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
 		
 		List<TotAggregate> l = result.getMappedResults();
+		return l;
+	}
+
+	@Override
+	public List<AppPoiRank> getOpenPoiRank(Date start, Date end) {
+		Criteria c = new Criteria();
+		c = Criteria.where("date").gte(start)
+				.andOperator(Criteria.where("date").lte(end)
+			    .andOperator(Criteria.where("logType").is(LogType.OpenPoi)));
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.group("idPoi").count().as("tot"));
+		
+		AggregationResults<AppPoiRank> result = mongoOp.aggregate(agg, Log.class, AppPoiRank.class);
+		
+		List<AppPoiRank> l = result.getMappedResults();
 		return l;
 	}
 

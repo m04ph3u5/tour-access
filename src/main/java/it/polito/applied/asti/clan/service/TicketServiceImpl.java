@@ -48,6 +48,8 @@ public class TicketServiceImpl implements TicketService{
 	private String RELEASED;
 	@Value("${status.pending.id}")
 	private String PENDING;
+	@Value("${status.deleted.id}")
+	private String DELETED;
 	/*
 	role.dailyVisitor.id = 1
 	role.weeklyVisitor.id = 2
@@ -133,7 +135,7 @@ public class TicketServiceImpl implements TicketService{
 			
 			//TODO da decidere come e quando settare la duration
 			
-			//setto il ruoloe lo stato del/dei biglietto/i
+			//setto il ruolo e lo stato del/dei biglietto/i
 			
 			if(ticketRequest.getTipology().equals("DAILY_VISITOR")){
 				t.setRole(DAILY_VISITOR);
@@ -184,16 +186,20 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
-	public void operatorDeleteTicket(String id) {
-//      TODO siamo in attesa dell'endpoint da contattare per poter comunicare all'acl la cancellazione di un biglietto
-//		try {
-//			postToAcl.sendRemoveTicketToAcl(id);
-//		} catch (JSONException | IOException e) {
-//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//		}
-		Ticket t = ticketRepo.removeTicket(id);
-		if(t!=null)
+	public void operatorDeleteTicket(String id) throws BadRequestException, ServiceUnaivalableException {
+
+		Ticket t = ticketRepo.findLastTicket(id);
+		if(t!=null){
+			try{
+				postToAcl.deleteTicketToAcl(t);
+			} catch (JSONException | IOException e) {
+				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+			}
+			ticketRepo.removeById(t.getId());
 			ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
+
+		}else
+			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
 		
 	}
 	
@@ -269,6 +275,9 @@ public class TicketServiceImpl implements TicketService{
 		
 		StatusTicket s3 = new StatusTicket(CANCELED,"CANCELED","");
 		status.add(s3);
+		
+		StatusTicket s4 = new StatusTicket(DELETED,"DELETED","");
+		status.add(s4);
 		
 		return status;
 	}

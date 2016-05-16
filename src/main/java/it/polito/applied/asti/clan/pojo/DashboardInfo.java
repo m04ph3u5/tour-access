@@ -6,7 +6,7 @@ public class DashboardInfo {
 	
 	private long todayTicketSelled;
 	private long todayIngress;
-	private long todayAppAccess;
+	private long todayPoi;
 	private long todayDevices;
 	private long todayAppInstallation;
 	private List<SiteSensorDTO> monitoredSites;
@@ -22,12 +22,6 @@ public class DashboardInfo {
 	}
 	public void setTodayIngress(long todayIngress) {
 		this.todayIngress = todayIngress;
-	}
-	public long getTodayAppAccess() {
-		return todayAppAccess;
-	}
-	public void setTodayAppAccess(long todayAppAccess) {
-		this.todayAppAccess = todayAppAccess;
 	}
 	public long getTodayAppInstallation() {
 		return todayAppInstallation;
@@ -46,6 +40,12 @@ public class DashboardInfo {
 	}
 	public void setMonitoredSites(List<SiteSensorDTO> monitoredSites) {
 		this.monitoredSites = monitoredSites;
+	}
+	public long getTodayPoi() {
+		return todayPoi;
+	}
+	public void setTodayPoi(long todayPoi) {
+		this.todayPoi = todayPoi;
 	}
 	
 	

@@ -13,5 +13,6 @@ public interface UtilPostToAclTask {
 
 	public void sendTicketsToAcl(List<Ticket> tickets) throws JSONException, BadRequestException, MalformedURLException, IOException;
 	public void ping() throws BadRequestException, MalformedURLException, IOException;
+	public void deleteTicketToAcl(Ticket ticket) throws JSONException, BadRequestException, MalformedURLException, IOException;
 	
 }

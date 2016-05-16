@@ -26,6 +26,8 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 	private String URLTOSEND;
 	@Value("${url.ping}")
 	private String URLTOPING;
+	@Value("${url.deleteTicket}")
+	private String URLTODELETE;
 
 	
 	public void sendTicketsToAcl(List<Ticket> tickets) throws JSONException, BadRequestException, IOException{
@@ -107,7 +109,39 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 	}
 
 
-	
-	
+	@Override
+	public void deleteTicketToAcl(Ticket ticket)
+			throws JSONException, BadRequestException, MalformedURLException, IOException {
+		if(ticket==null)
+			throw new BadRequestException();
+		
+		JSONObject obj = new JSONObject();		
+		obj.put("idTicket", ticket.getIdTicket());
+		URL url = new URL(URLTODELETE);
+		HttpsURLConnection httpCon = (HttpsURLConnection) url.openConnection();
+		httpCon.setDoOutput(true);
+		httpCon.setRequestMethod("PUT");
+		httpCon.setRequestProperty("Accept", "application/json");
+		httpCon.setRequestProperty("Content-Type", "application/json");
+		httpCon.setConnectTimeout(10000);
+		OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+		out.write(obj.toString());
+		out.flush();
+		out.close();
+		InputStream res = httpCon.getInputStream();
+		BufferedReader in = new BufferedReader(new InputStreamReader(res));
+		String temp = null;
+		StringBuilder sb = new StringBuilder();
+		while((temp = in.readLine()) != null){
+			sb.append(temp).append(" ");
+		}
+		String result = sb.toString();
+		int response = httpCon.getResponseCode();
+		if(response!=200 && response!=201)
+			throw new BadRequestException();
+
+		System.out.println(result);
+		in.close();
+	}
 	 
 }

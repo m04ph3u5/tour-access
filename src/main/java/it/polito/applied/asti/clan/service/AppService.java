@@ -8,11 +8,13 @@ import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
+import it.polito.applied.asti.clan.pojo.AppPoiRank;
 import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
 import it.polito.applied.asti.clan.pojo.LogDTO;
 import it.polito.applied.asti.clan.pojo.LogSeriesInfo;
+import it.polito.applied.asti.clan.pojo.PoiRank;
 
 public interface AppService {
 
@@ -28,7 +30,7 @@ public interface AppService {
 
 	public LogSeriesInfo getLogInfo(Date start, Date end);
 
-	public long getAccess(Date date);
+	public long getViewedPoi(Date date);
 
 	public long getInstallation(Date date);
 
@@ -40,4 +42,6 @@ public interface AppService {
 	public Map<Date, AppInfo> getAppInfo(Date start, Date end);
 
 	public void checkAppVersion(int appVersion) throws ConflictException;
+
+	public List<AppPoiRank> getAppPoiRank(Date start, Date end);
 }

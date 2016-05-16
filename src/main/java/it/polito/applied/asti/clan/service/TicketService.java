@@ -31,5 +31,5 @@ public interface TicketService {
 	public StatisticsInfo getStatisticsInfo(Date start, Date end);
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end);
 	public List<PoiRank> getPoiRank(Date start, Date end);
-	public void operatorDeleteTicket(String id);
+	public void operatorDeleteTicket(String id) throws BadRequestException, ServiceUnaivalableException;
 }
