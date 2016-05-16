@@ -204,7 +204,9 @@ public class LogRepositoryImpl implements CustomLogRepository{
 			    .andOperator(Criteria.where("logType").is(LogType.OpenPoi)));
 		
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
-				Aggregation.group("idPoi").count().as("tot"));
+				Aggregation.group("idPoi").count().as("tot"),
+				Aggregation.project("tot").and("idPoi").previousOperation());
+
 		
 		AggregationResults<AppPoiRank> result = mongoOp.aggregate(agg, Log.class, AppPoiRank.class);
 		

@@ -135,13 +135,12 @@
 
 				<div class="gap"></div>
 
-
 				<div class="col-xs-12 col-sm-12 center">
 
 
 					<!-- dettagli aprirà un'altra tabella con elenco POI visitati-->
-
-					<table class="table table-striped text-left">
+		
+					<table data-ng-if="mobile.showTable()" class="table table-striped text-left">
 
 						<thead>
 							<tr>
@@ -163,14 +162,23 @@
 						</tr>
 						</tbody>
 					</table>
-
+					<div data-ng-hide="mobile.showTable()">Non ci sono valori per il periodo selezionato</div>
 				</div>
 
 
 			</div>
 			<!--end risultati-->
 
-
+			<section>
+				<div data-ng-if="mobile.rank.data[0].length>0" class="center">
+					<h2>Punti di interesse consultati</h2>		
+					<canvas height="450" width="800" id="bar" class="chart chart-bar" data-chart-data="mobile.rank.data"
+					  data-chart-labels="mobile.rank.labels" data-chart-options="mobile.chartOptions">
+					</canvas> 		
+				</div>
+				<div class="center" data-ng-hide="mobile.rank.data[0].length>0">Non sono stati consultati POI nel periodo selezionato</div>
+			</section>
+							
 
 
 		</div>

@@ -352,7 +352,6 @@ public class AppServiceImpl implements AppService{
 			current = c.getTime();
 		}
 		for(TotAggregate tt : install){
-			System.out.println(tt);
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
 			AppInfo aa = map.get(d);
@@ -361,7 +360,6 @@ public class AppServiceImpl implements AppService{
 			}
 		}
 		for(TotAggregate tt : pathStarted){
-			System.out.println(tt);
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
 			AppInfo aa = map.get(d);
@@ -370,7 +368,6 @@ public class AppServiceImpl implements AppService{
 			}
 		}
 		for(TotAggregate tt : checkedTicket){
-			System.out.println(tt);
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
 			AppInfo aa = map.get(d);
@@ -401,5 +398,12 @@ public class AppServiceImpl implements AppService{
 		}
 		return l;
 	}
+	
+//	private String transformName(String s){
+//		if(s==null)
+//			return null;
+//		String string = s.replace('_', ' ');
+//		return string;
+//	}
 
 }

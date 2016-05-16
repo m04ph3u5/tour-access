@@ -129,8 +129,7 @@ public class CustomAuthenticationFilter extends GenericFilterBean{
         // Only reauthenticate if username doesn't match SecurityContextHolder and user isn't authenticated
         // (see SEC-53)
         Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
-        if(existingAuth!=null)
-        	System.out.println("AUTH:  "+existingAuth.getName());
+       
         if(existingAuth == null || !existingAuth.isAuthenticated()) {
             return true;
         }

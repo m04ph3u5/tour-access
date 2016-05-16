@@ -65,7 +65,6 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 				console.log(reason);
 			}
 	);		/*TODO update data*/
-
 	
 	self.updateData = function(){
 		switch(self.period){
@@ -90,6 +89,29 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 			break;
 		}
 		}
+		apiService.appPoiRank(self.dateStart.getTime(),self.dateEnd.getTime()).then(
+				function(data){
+					self.rank = {};
+					self.rank.labels = [];
+					self.rank.data = [];
+
+					var access = [];
+					var name = [];
+					for(var i=0;i<data.length;i++){
+						self.rank.labels[i] = data[i].name;
+						access[i] = data[i].tot;
+					}
+					
+					self.rank.data[0] = access;
+				},
+				function(reason){
+					console.log("Impossibile recuperare i dati relativi alla classifica dei POI");
+					console.log(reason);
+
+				}
+			);
+
+		
 		apiService.appInfo(self.dateStart.getTime(),self.dateEnd.getTime()).then(
 				function(data){
 					self.table = data;
@@ -119,5 +141,12 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 	}
 	
 	self.updateData();
+	
+	self.showTable = function(){
+		if(self.table && Object.keys(self.table).length)
+			return true;
+		else
+			return false;
+	}
 
 }]);

@@ -122,6 +122,20 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var appPoiRank = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/appPoiRank?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	var environmentSeries = function(start, end, idSite){
 		var p = $q.defer();
 		$http.get('/api/v1/statistics/environmentInfo?start='+start.getTime()+'&end='+end.getTime()+'&idSite='+idSite).then(
@@ -146,7 +160,8 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		appSeries : appSeries,
 		appInfo: appInfo,
 		getInfoSite : getInfoSite,
-		environmentSeries : environmentSeries
+		environmentSeries : environmentSeries,
+		appPoiRank: appPoiRank
 	}
 
 }]);
