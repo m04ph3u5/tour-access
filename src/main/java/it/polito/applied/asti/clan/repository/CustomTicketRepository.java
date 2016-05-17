@@ -19,4 +19,6 @@ public interface CustomTicketRepository {
 	public List<TotAggregate> getTicketGrouped(Date start, Date end);
 	public Ticket findLastTicket(String id);
 	public void removeById(String id);
+	public void moveToDeleted(String id);
+
 }

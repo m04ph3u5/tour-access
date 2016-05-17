@@ -191,12 +191,12 @@ public class TicketServiceImpl implements TicketService{
 		Ticket t = ticketRepo.findLastTicket(id);
 		if(t!=null){
 			try{
+				ticketRepo.moveToDeleted(t.getId());
+				ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
 				postToAcl.deleteTicketToAcl(t);
 			} catch (JSONException | IOException e) {
 				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
 			}
-			ticketRepo.removeById(t.getId());
-			ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
 
 		}else
 			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
@@ -227,7 +227,13 @@ public class TicketServiceImpl implements TicketService{
 		readRepo.save(read);
 		//TODO modifica startDate e endDate del biglietto se il passaggio � stato accettato ed il biglietto era ancora inutilizzato
 		if(read.getIsAccepted()){
-			ticketRepo.passingAccepted(read.getIdTicket(), read.getDtaTransit());
+			Ticket t = ticketRepo.findLastTicket(read.getIdTicket());
+			if(t!=null){
+				TicketRequest tr = ticketRequestRepo.findOne(t.getTicketRequestId());
+				for(String s : tr.getTicketNumbers())
+					ticketRepo.passingAccepted(s, read.getDtaTransit());
+
+			}
 		}
 		
 	}

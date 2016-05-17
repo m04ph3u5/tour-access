@@ -35,7 +35,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	private String RELEASED;
 	@Value("${status.pending.id}")
 	private String PENDING;
-	
+	@Value("${status.deleted.id}")
+	private String DELETED;
 	/*
 	role.dailyVisitor.id = r00001
 	role.weeklyVisitor.id = r00002
@@ -94,7 +95,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		Date d = new Date();
 		Query q = new Query();
 		q.addCriteria(Criteria.where("status").ne(CANCELED).
-				andOperator(Criteria.where("endDate").gte(d)));
+				andOperator(Criteria.where("status").ne(DELETED).
+				andOperator(Criteria.where("endDate").gte(d))));
 		q.fields().exclude("id");
 		q.fields().exclude("ticketRequestId");
 		return mongoOp.find(q, Ticket.class);
@@ -257,6 +259,13 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		Query q  = new Query();
 		q.addCriteria(Criteria.where("id").is(id));
 		mongoOp.remove(q, Ticket.class);
+	}
+
+	@Override
+	public void moveToDeleted(String id) {
+		Ticket t = findLastTicket(id);
+		t.setStatus(DELETED);
+		mongoOp.save(t);
 	}
 
 }
