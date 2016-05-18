@@ -35,34 +35,42 @@
             
       
     <h2>Dati cliente</h2>
-     	
-    <div class="order">
-		
-		<label class="h4 control-label">Sesso</label>
-		<label class="radio"> <input type="radio" data-ng-model="info.gender"
-			value="male"> Maschio
-		</label>
-		<label class="radio"> <input type="radio"
-			data-ng-model="info.gender" value="female"> Femmina
-		</label>
-	
-	</div>
-	
-	<div class="order">
+     <div class="row">
+	    <div class="col-md-6">
+		    <div class="order">
+				
+				<label class="h4 control-label">Sesso</label>
+				<label class="radio"> <input type="radio" data-ng-model="info.gender"
+					value="male"> Maschio
+				</label>
+				<label class="radio"> <input type="radio"
+					data-ng-model="info.gender" value="female"> Femmina
+				</label>	
+			</div>
 			
-		<label class="h4 control-label">Età</label>
-		<label class="radio"> <input type="radio" data-ng-model="info.age"
-			value="young"> Giovane
-		</label > 
-		<label class="radio"> <input type="radio"
-			data-ng-model="info.age" value="middleAge"> Mezza età
-		</label> 
-		<label class="radio"> <input type="radio"
-			data-ng-model="info.age" value="elderly"> Anziano
-		</label>
-			
+			<div class="order">
+					
+				<label class="h4 control-label">Età</label>
+				<label class="radio"> <input type="radio" data-ng-model="info.age"
+					value="young"> Giovane
+				</label > 
+				<label class="radio"> <input type="radio"
+					data-ng-model="info.age" value="middleAge"> Mezza età
+				</label> 
+				<label class="radio"> <input type="radio"
+					data-ng-model="info.age" value="elderly"> Anziano
+				</label>
+					
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="order">
+				<label class="h4 control-label">Regione di provenienza</label>
+				<select data-ng-model="info.selectedRegion" data-ng-options="option.name for option in info.regions track by option.id">
+				</select>
+			</div>
+		</div>
 	</div>
-
          
     <hr>
             
@@ -101,20 +109,53 @@
       
     <h2>Dati clienti</h2>
      	
-	<div class="order">
-		<form name="myForm" class="form-inline">
-			<h3>Composizione gruppo</h3>
+<!-- 	<div class="order"> -->
+<!-- 		<form name="myForm" class="form-inline"> -->
+<!-- 			<h3>Composizione gruppo</h3> -->
 	
-			<img class="imgPreviewL"
-				data-ng-src="/assets/public/img/bambina.png"><label class="radio">Con
-				bambini <input type="checkbox" data-ng-model="info.withChildren">
-			</label><br /> <img class="imgPreviewL"
-				data-ng-src="/assets/public/img/anziani.png"><label class="radio">Con
-				anziani <input type="checkbox" data-ng-model="info.withElderly">
-			</label><br />
-		</form>
+<!-- 			<img class="imgPreviewL" -->
+<!-- 				data-ng-src="/assets/public/img/bambina.png"><label class="radio">Con -->
+<!-- 				bambini <input type="checkbox" data-ng-model="info.withChildren"> -->
+<!-- 			</label><br /> <img class="imgPreviewL" -->
+<!-- 				data-ng-src="/assets/public/img/anziani.png"><label class="radio">Con -->
+<!-- 				anziani <input type="checkbox" data-ng-model="info.withElderly"> -->
+<!-- 			</label><br /> -->
+<!-- 		</form> -->
+<!-- 	</div> -->
+	 <div class="row">
+	    <div class="col-md-6">
+		    <div class="order">
+				<div class="order">
+					<form class="form-inline">
+						<label class="h4 control-label">Composizione gruppo</label><br/>
+						<div style="margin-left:25px;">
+							<input type="checkbox" data-ng-model="info.couple">
+							<label class="radio">Coppia</label>
+							<br/>
+							<input type="checkbox" data-ng-model="info.family">
+							<label class="radio">Famiglia</label>
+							<br/>
+							<input type="checkbox" data-ng-model="info.schoolGroup">
+							<label class="radio">Scolaresca</label>
+	<!-- 						<br/> -->
+	<!-- 						<label class="radio">Con bambini</label> -->
+	<!-- 						<input type="checkbox" data-ng-model="info.withChildren"> -->
+	<!-- 						<br/> -->
+	<!-- 						<label class="radio">Con anziani</label> -->
+	<!-- 						<input type="checkbox" data-ng-model="info.withElderly"> -->
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="order">
+				<label class="h4 control-label">Regione di provenienza</label>
+				<select data-ng-model="info.selectedRegion" data-ng-options="option.name for option in info.regions track by option.id">
+				</select>
+			</div>
+		</div>
 	</div>
-
          
     <hr>
             

@@ -1,5 +1,5 @@
-angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$state', '$filter',
-              function ticketsCtrl(apiService, $state, $filter){
+angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$state', '$filter', 'constants',
+              function ticketsCtrl(apiService, $state, $filter, constants){
 	
 	var self = this;
 	self.chartOptions = {
@@ -38,9 +38,13 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					self.statistics = data;
 					self.pie1 = [self.statistics.totSingleTickets, self.statistics.totGroupTickets];
 					self.pie1Labels = ["Biglietti singoli", "Biglietti di gruppo"];
-					var others = self.statistics.totGroups - self.statistics.totChildren - self.statistics.totElderly -self.statistics.totChildrenAndElderly;
-					self.pie2 = [self.statistics.totChildren, self.statistics.totElderly, self.statistics.totChildrenAndElderly, others];
-					self.pie2Labels = ["Gruppi con bambini", "Gruppi con anziani", "Gruppi con bambini ed anziani", "Gruppi senza bambini e anziani"];
+//					var others = self.statistics.totGroups - self.statistics.totChildren - self.statistics.totElderly -self.statistics.totChildrenAndElderly;
+//					self.pie2 = [self.statistics.totChildren, self.statistics.totElderly, self.statistics.totChildrenAndElderly, others];
+//					self.pie2Labels = ["Gruppi con bambini", "Gruppi con anziani", "Gruppi con bambini ed anziani", "Gruppi senza bambini e anziani"];
+				
+					self.statistics.others = self.statistics.totGroups - self.statistics.couple - self.statistics.family - self.statistics.schoolGroup;
+					self.pie2 = [self.statistics.family, self.statistics.couple, self.statistics.schoolGroup, self.statistics.others];
+					self.pie2Labels = ["Famiglie", "Coppie", "Scolaresche", "Altri"];
 					self.pie3 = [self.statistics.totMale, self.statistics.totFemale];
 					self.pie3Labels = ["Uomini", "Donne"];
 					self.pie4 = [self.statistics.young, self.statistics.middleAge, self.statistics.elderly];
@@ -91,6 +95,25 @@ angular.module('asti.supervisor').controller('ticketsCtrl', [ 'apiService', '$st
 					}
 					
 					self.rank.data[0] = access;
+				},
+				function(reason){
+					console.log(reason);
+				}
+		);
+		
+		apiService.regionRank(self.dateStart.getTime(), self.dateEnd.getTime()).then(
+				function(data){
+					self.regions = {};
+					self.regions.labels = [];
+					self.regions.data = [];
+
+					var numAccess = [];
+					for(var i=0;i<data.length;i++){
+						self.regions.labels[i] = constants.getRegionName(data[i].regionCode);
+						numAccess[i] = data[i].numAccess;
+					}
+					
+					self.regions.data[0] = numAccess;
 				},
 				function(reason){
 					console.log(reason);

@@ -1,5 +1,5 @@
-angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorService',
-              function infoCtrl($state, operatorService){
+angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorService', 'constants',
+              function infoCtrl($state, operatorService, constants){
 	
 	var self = this;
 	var info = operatorService.getInfo();
@@ -7,6 +7,11 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 	
 	if(!info)
 		info = {};
+	
+	self.regions = constants.getRegionsList();
+	
+	self.selectedRegion = self.regions[0];
+	         
 	
 	
 	self.ticketTipology = operatorService.getTicketTipology();
@@ -34,6 +39,9 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		
 		self.withChildren=false;
 		self.withElderly=false;
+		self.couple=false;
+		self.family = false;
+		self.schoolGroup = false;
 	}else{
 		if(info.gender)
 			self.gender = info.gender;
@@ -53,6 +61,22 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 			self.withElderly = info.withElderly;
 		else
 			self.withElderly=false;
+		
+		if(info.couple)
+			self.couple = info.couple;
+		else
+			self.couple=false;
+		
+		if(info.family)
+			self.family = info.family;
+		else
+			self.family=false;
+		
+		if(info.schoolGroup)
+			self.schoolGroup = info.schoolGroup;
+		else
+			self.schoolGroup=false;
+		
 	}
 	
 	self.next = function(){
@@ -62,7 +86,11 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		}else{
 			info.withChildren = self.withChildren;
 			info.withElderly = self.withElderly;
+			info.couple = self.couple;
+			info.schoolGroup = self.schoolGroup;
+			info.family = self.family;
 		}
+		info.region = self.selectedRegion.id;
 		operatorService.setTip(self.ticketTipology);
 		
 		operatorService.setInfo(info);
@@ -79,7 +107,11 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 		}else{
 			info.withChildren = self.withChildren;
 			info.withElderly = self.withElderly;
+			info.couple = self.couple;
+			info.schoolGroup = self.schoolGroup;
+			info.family = self.family;
 		}
+		info.region = self.selectedRegion.id;
 		operatorService.setTip(self.ticketTipology);
 		
 		operatorService.setInfo(info);
@@ -97,6 +129,5 @@ angular.module('asti.application').controller('infoCtrl', ['$state', 'operatorSe
 	self.checkTypology = function(){
 		console.log("CHECK");
 	}
-	
 	
 }]);

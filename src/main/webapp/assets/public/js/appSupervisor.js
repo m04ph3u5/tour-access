@@ -1,2 +1,2 @@
 angular.module('asti.supervisor', ['ui.router', 'permission',
-                                    'ui.date', 'ngCookies','chart.js' ]);
+                                    'ui.date', 'ngCookies','chart.js', 'regionModule' ]);

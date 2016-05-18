@@ -150,6 +150,20 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var regionRank = function(start, end){
+		var p = $q.defer();
+		$http.get('/api/v1/statistics/regionRank?start='+start+'&end='+end).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
+	
 	
 	return {
 		validateCredential : validateCredential,
@@ -161,7 +175,8 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		appInfo: appInfo,
 		getInfoSite : getInfoSite,
 		environmentSeries : environmentSeries,
-		appPoiRank: appPoiRank
+		appPoiRank: appPoiRank,
+		regionRank: regionRank
 	}
 
 }]);

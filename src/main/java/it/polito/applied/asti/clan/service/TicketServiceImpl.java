@@ -1,6 +1,5 @@
 package it.polito.applied.asti.clan.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,7 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.RegionRank;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
@@ -175,12 +174,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		ticketRepo.save(tickets);
 		
-		try {
-			postToAcl.sendTicketsToAcl(tickets);
-		} catch (JSONException | IOException e) {
-			ticketRepo.removeLastTickets(tickets);
-			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-		}
+//		try {
+//			postToAcl.sendTicketsToAcl(tickets);
+//		} catch (JSONException | IOException e) {
+//			ticketRepo.removeLastTickets(tickets);
+//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
@@ -190,13 +189,13 @@ public class TicketServiceImpl implements TicketService{
 
 		Ticket t = ticketRepo.findLastTicket(id);
 		if(t!=null){
-			try{
-				ticketRepo.moveToDeleted(t.getId());
+//			try{
+				ticketRepo.moveToDeleted(t.getIdTicket());
 				ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
-				postToAcl.deleteTicketToAcl(t);
-			} catch (JSONException | IOException e) {
-				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-			}
+//				postToAcl.deleteTicketToAcl(t);
+//			} catch (JSONException | IOException e) {
+//				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//			}
 
 		}else
 			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
@@ -218,6 +217,13 @@ public class TicketServiceImpl implements TicketService{
 	public List<Ticket> getValidTickets() {
 		List<Ticket> tickets = new ArrayList<Ticket>();
 		tickets = ticketRepo.getValidTickets();
+		return tickets;
+	}
+	
+	@Override
+	public List<Ticket> getAllTickets() {
+		List<Ticket> tickets = new ArrayList<Ticket>();
+		tickets = ticketRepo.getAllTickets();
 		return tickets;
 	}
 
@@ -290,11 +296,11 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void pingService() throws ServiceUnaivalableException {
-		try {
-			postToAcl.ping();
-		} catch (BadRequestException | IOException e) {
-			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
-		}
+//		try {
+//			postToAcl.ping();
+//		} catch (BadRequestException | IOException e) {
+//			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
+//		}
 	}
 
 	@Override
@@ -327,7 +333,9 @@ public class TicketServiceImpl implements TicketService{
 		s.setMiddleAge(ticketRequestRepo.totalSingleMiddleAge(start, end));
 		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
 		s.setTotAccess(readRepo.countIngress(start, end));
-		
+		s.setCouple(ticketRequestRepo.totalCouple(start,end));
+		s.setFamily(ticketRequestRepo.totalFamily(start,end));
+		s.setSchoolGroup(ticketRequestRepo.totalSchoolGroup(start,end));
 //		System.out.println("male: "+ totSingleMan);
 		
 		
@@ -493,6 +501,10 @@ public class TicketServiceImpl implements TicketService{
 		return l;
 	}
 
-	
+	@Override
+	public List<RegionRank> getRegionRank(Date start, Date end) {
+		return ticketRequestRepo.getRegionRank(start, end);
+	}
+
 
 }

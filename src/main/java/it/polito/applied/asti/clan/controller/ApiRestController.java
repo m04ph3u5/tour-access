@@ -43,6 +43,7 @@ import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.PoiToAC;
 import it.polito.applied.asti.clan.pojo.PoiToSell;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.RegionRank;
 import it.polito.applied.asti.clan.pojo.Response;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.SensorLog;
@@ -177,6 +178,14 @@ public class ApiRestController extends BaseController{
 	public List<Ticket> getValidTickets() throws BadRequestException {
 
 		return ticketService.getValidTickets();
+	}
+	
+	//preauthorize in security config
+	@RequestMapping(value="/v1/history", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<Ticket> getAllTickets() throws BadRequestException {
+
+		return ticketService.getAllTickets();
 	}
 	
 	//preauthorize in security config
@@ -508,5 +517,21 @@ public class ApiRestController extends BaseController{
 		return sensorService.getEnvironmentSeries(idSite, startDate, endDate);
 	}
 
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/regionRank", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<RegionRank> getRegionRank(@RequestParam(value="start", required=true) String startTS, @RequestParam(value="end", required=true) String endTS) throws BadRequestException, NotFoundException{
+		
+		Date start;
+		Date end;
+		Calendar c = Calendar.getInstance();
+
+		c.setTimeInMillis(Long.parseLong(startTS));
+		start = c.getTime();
+		c.setTimeInMillis(Long.parseLong(endTS));
+		end = c.getTime();
+		
+		return ticketService.getRegionRank(start, end);
+	}
 	
 }

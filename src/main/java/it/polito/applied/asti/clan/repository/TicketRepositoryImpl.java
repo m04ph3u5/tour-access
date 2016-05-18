@@ -67,10 +67,11 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		Criteria c2 = new Criteria();
 		Criteria c3 = new Criteria();
 		c3.andOperator(Criteria.where("status").ne(PENDING), Criteria.where("endDate").gte(start));
-		c2.orOperator(c3, (Criteria.where("status").is(CANCELED)));
-		
+		c2.orOperator(c3, Criteria.where("status").is(CANCELED));
+		Criteria c4 = new Criteria();
+		c4.andOperator(c3, Criteria.where("status").ne(DELETED));
 		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
-				.andOperator(c2));
+				.andOperator(c4));
 			
 		
 		long tot = mongoOp.count(q, Ticket.class);
@@ -96,11 +97,24 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		Query q = new Query();
 		q.addCriteria(Criteria.where("status").ne(CANCELED).
 				andOperator(Criteria.where("status").ne(DELETED).
-				andOperator(Criteria.where("endDate").gte(d))));
+				andOperator(Criteria.where("status").ne(PENDING).
+				andOperator(Criteria.where("endDate").gte(d)))));
 		q.fields().exclude("id");
 		q.fields().exclude("ticketRequestId");
 		return mongoOp.find(q, Ticket.class);
 	}
+	
+	@Override
+	public List<Ticket> getAllTickets() {
+		Date d = new Date();
+		Query q = new Query();
+		q.addCriteria(Criteria.where("status").ne(PENDING).
+				andOperator(Criteria.where("endDate").gte(d)));
+		q.fields().exclude("id");
+		q.fields().exclude("ticketRequestId");
+		return mongoOp.find(q, Ticket.class);
+	}
+
 
 	@Override
 	public void passingAccepted(String ticketNumber, Date d) {
@@ -264,8 +278,10 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	@Override
 	public void moveToDeleted(String id) {
 		Ticket t = findLastTicket(id);
-		t.setStatus(DELETED);
-		mongoOp.save(t);
+		if(t!=null){
+			t.setStatus(DELETED);
+			mongoOp.save(t);
+		}
 	}
 
 }

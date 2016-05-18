@@ -112,19 +112,31 @@
 								<td width="50%">Tot. gruppi: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups}}</b></td>
 							</tr>
 							<tr>
-								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td>
+								<td width="50%">Famiglie: </td><td align="right" width="50%"><b> {{tickets.statistics.family}}</b></td>
 							</tr>
 							<tr>
-								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td>
+								<td width="50%">Coppie: </td><td align="right" width="50%"><b> {{tickets.statistics.couple}}</b></td>
 							</tr>
+							<tr>
+								<td width="50%">Scolaresche: </td><td align="right" width="50%"><b> {{tickets.statistics.schoolGroup}}</b></td>
+							</tr>
+							<tr>
+								<td width="50%">Altri: </td><td align="right" width="50%"><b> {{tickets.statistics.others}}</b></td>
+							</tr>
+<!-- 							<tr> -->
+<!-- 								<td width="50%">Con bambini: </td><td align="right" width="50%"><b> {{tickets.pie2[0]}}</b></td> -->
+<!-- 							</tr> -->
+<!-- 							<tr> -->
+<!-- 								<td width="50%" >Con anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[1]}}</b></td> -->
+<!-- 							</tr> -->
 							
-							<tr>
-								<td width="50%">Con bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[2]}}</b></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td width="50%">Con bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.pie2[2]}}</b></td> -->
+<!-- 							</tr> -->
 							
-							<tr>
-								<td width="50%">Senza bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.statistics.totChildren - tickets.statistics.totElderly - tickets.statistics.totChildrenAndElderly}}</b></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td width="50%">Senza bambini ed anziani: </td><td align="right" width="50%"><b> {{tickets.statistics.totGroups - tickets.statistics.totChildren - tickets.statistics.totElderly - tickets.statistics.totChildrenAndElderly}}</b></td> -->
+<!-- 							</tr> -->
 						</table>
 						
 					</div>
@@ -170,6 +182,17 @@
 			</div>
 			<!--end pie chart-->
 
+			<div class="gap"></div>
+
+			<!-- region bar chart -->
+			<div class="center">
+				<h2>Provenienza visitatori</h2>
+				<canvas height="450" width="800" id="bar" class="chart chart-bar" data-chart-data="tickets.regions.data"
+						  data-chart-labels="tickets.regions.labels" data-chart-options="tickets.chartOptions">
+				</canvas> 		
+			</div>
+
+			
 			<div class="gap"></div>
 
 			<div class="col-xs-12 col-sm-6 center">

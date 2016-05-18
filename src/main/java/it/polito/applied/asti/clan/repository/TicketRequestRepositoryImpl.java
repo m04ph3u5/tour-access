@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.mongodb.WriteResult;
 
 import it.polito.applied.asti.clan.pojo.InfoTicketRequest;
+import it.polito.applied.asti.clan.pojo.RegionRank;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 
@@ -34,23 +36,23 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		
 	}
 	
-	@Override
-	public StatisticsInfo getStatisticsInfoGroup(Date start, Date end) {
-		Criteria c = new Criteria();
-		c = Criteria.where("requestDate").gte(start)
-				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)
-				.andOperator(Criteria.where("isGroup").is(true))));
-		
-		Aggregation agg;
-		agg = Aggregation.newAggregation(Aggregation.match(c),
-				Aggregation.group("isGroup")
-				);
-		
-		AggregationResults result = mongoOp.aggregate(agg, TicketRequest.class, StatisticsInfo.class);
-		StatisticsInfo s = (StatisticsInfo)result.getUniqueMappedResult();
-		return s;
-	}
+//	@Override
+//	public StatisticsInfo getStatisticsInfoGroup(Date start, Date end) {
+//		Criteria c = new Criteria();
+//		c = Criteria.where("requestDate").gte(start)
+//				.andOperator(Criteria.where("requestDate").lte(end)
+//				.andOperator(Criteria.where("acceptedFromAcl").is(true)
+//				.andOperator(Criteria.where("isGroup").is(true))));
+//		
+//		Aggregation agg;
+//		agg = Aggregation.newAggregation(Aggregation.match(c),
+//				Aggregation.group("isGroup")
+//				);
+//		
+//		AggregationResults result = mongoOp.aggregate(agg, TicketRequest.class, StatisticsInfo.class);
+//		StatisticsInfo s = (StatisticsInfo)result.getUniqueMappedResult();
+//		return s;
+//	}
 
 	@Override
 	public StatisticsInfo getStatisticsInfoSingle(Date start, Date end) {
@@ -207,6 +209,53 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		
 		
 		
+	}
+
+	@Override
+	public long totalCouple(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("info.couple").is(true)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
+	@Override
+	public long totalFamily(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("info.family").is(true)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
+	@Override
+	public long totalSchoolGroup(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("info.schoolGroup").is(true)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
+		return mongoOp.count(q, TicketRequest.class);
+	}
+
+	@Override
+	public List<RegionRank> getRegionRank(Date start, Date end) {
+		Criteria c = Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)));
+				
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project().and("info.region").as("regionCode"),
+				Aggregation.group("regionCode").count().as("numAccess"),
+				Aggregation.project("numAccess").and("regionCode").previousOperation());
+		
+		AggregationResults<RegionRank> result = mongoOp.aggregate(agg, TicketRequest.class, RegionRank.class);
+		List<RegionRank> list  = result.getMappedResults();
+				
+		return list;
 	}
 
 	

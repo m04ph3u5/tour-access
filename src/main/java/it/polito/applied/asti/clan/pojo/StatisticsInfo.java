@@ -15,7 +15,9 @@ public class StatisticsInfo {
 	private long young;
 	private long middleAge;
 	private long elderly;
-	
+	private long family;
+	private long couple;
+	private long schoolGroup;
 	
 	public StatisticsInfo(){
 		
@@ -100,37 +102,52 @@ public class StatisticsInfo {
 		this.totElderly = totElderly;
 	}
 
-
 	public long getYoung() {
 		return young;
 	}
-
 
 	public void setYoung(long young) {
 		this.young = young;
 	}
 
-
 	public long getMiddleAge() {
 		return middleAge;
 	}
-
 
 	public void setMiddleAge(long middleAge) {
 		this.middleAge = middleAge;
 	}
 
-
 	public long getElderly() {
 		return elderly;
 	}
 
-
 	public void setElderly(long elderly) {
 		this.elderly = elderly;
 	}
-	
 
-	
+	public long getFamily() {
+		return family;
+	}
+
+	public void setFamily(long family) {
+		this.family = family;
+	}
+
+	public long getCouple() {
+		return couple;
+	}
+
+	public void setCouple(long couple) {
+		this.couple = couple;
+	}
+
+	public long getSchoolGroup() {
+		return schoolGroup;
+	}
+
+	public void setSchoolGroup(long schoolGroup) {
+		this.schoolGroup = schoolGroup;
+	}
 	
 }

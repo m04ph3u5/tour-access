@@ -9,6 +9,7 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.Poi;
 import it.polito.applied.asti.clan.pojo.PoiRank;
 import it.polito.applied.asti.clan.pojo.Read;
+import it.polito.applied.asti.clan.pojo.RegionRank;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
@@ -32,4 +33,6 @@ public interface TicketService {
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end);
 	public List<PoiRank> getPoiRank(Date start, Date end);
 	public void operatorDeleteTicket(String id) throws BadRequestException, ServiceUnaivalableException;
+	public List<Ticket> getAllTickets();
+	public List<RegionRank> getRegionRank(Date start, Date end);
 }
