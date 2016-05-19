@@ -3,7 +3,8 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
 
 	var self = this;
 	self.name = "";
-	self.avialable = true;
+	self.available = true;
+	var numFailedTry=0;
 	
 	self.classBuy="active";
 	self.classCancel="";
@@ -11,10 +12,13 @@ angular.module('asti.application').controller('navbarCtrl', ['userService', '$st
 	var check = function(){
 		apiService.checkService().then(
 				function(data){
+					numFailedTry=0;
 					self.available = true;
 				},
 				function(reason){
-					self.available = false;
+					numFailedTry++;
+					if(numFailedTry>1)
+						self.available = false;
 				}
 		);
 	}
