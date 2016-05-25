@@ -57,9 +57,11 @@ import it.polito.applied.asti.clan.pojo.TicketNumber;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.pojo.User;
+import it.polito.applied.asti.clan.pojo.UserMessage;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
+import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
@@ -82,6 +84,9 @@ public class ApiRestController extends BaseController{
 
 	@Autowired
 	private AppService appService;
+	
+	@Autowired
+	private AsyncUpdater asyncUpdater;
 	
 
 	
@@ -534,4 +539,15 @@ public class ApiRestController extends BaseController{
 		return ticketService.getRegionRank(start, end);
 	}
 	
+	@RequestMapping(value="/v1/contactUs", method=RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public UserMessage contactUs(@RequestBody @Valid UserMessage userMessage, BindingResult results) throws BadRequestException{
+		if(results.hasErrors())
+			userMessage.setResponse("Compilare correttamente tutti i campi richiesti");
+		else{
+			asyncUpdater.sendEmailFromSite(userMessage);
+			userMessage.setResponse("Messaggio inviato correttamente");
+		}
+		return userMessage;
+	}
 }

@@ -72,7 +72,17 @@ jQuery(function($) {
 	});	
       
      
-    
+
+  
+     //change  home.page full-image accordingly to device
+
+     if ($(window).width() < 767) {
+     	
+	    $("a").each(function() {
+	        var new_src = $(this).attr("href").replace('full', 'full/600x400'); 
+	        $(this).attr("href", new_src); 
+	    });
+	}
     
 });
 

@@ -1139,7 +1139,10 @@ video::-webkit-media-controls-fullscreen-button {
 
 
 
-
+  #stakeholders img{
+        display: inline-block;
+        text-align: center;
+    }
 
 
 @media screen and (max-width: 768px) {
@@ -1159,7 +1162,21 @@ video::-webkit-media-controls-fullscreen-button {
   h4 {
     font-size: 16px;  
   }
+
+    #app-description {
+        text-align: center;
+    }
+    #app-description img{
+        display: inline-block;
+    }
     
+    #app-asti{
+        max-width: 350px;
+    }
+   
+    #propose{
+          text-align:center;
+    }
     
 }
 
@@ -1455,4 +1472,16 @@ select{
 .space-dwn{
     margin-bottom: 20px;
 }
+
+#propose{
+    padding-top:2%;
+  
+}
+
+
+/*---section contact-info ------*/
+
+#contact-info{
+text-align: center;
+
 

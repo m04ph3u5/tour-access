@@ -21,8 +21,36 @@
 <!-- 		<property name="queueCapacity" value="${taskExec.queueCapacity}" /> -->
 <!-- 	</bean> -->
 
-<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
-		p:order="0" />
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+			p:order="0" />
+			
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="${taskExec.corePoolSize}" />
+		<property name="maxPoolSize" value="${taskExec.maxPoolSize}" />
+		<property name="queueCapacity" value="${taskExec.queueCapacity}" />
+	</bean>
+	
+<!-- 	<task:annotation-driven executor="taskExecutor" />  -->
+<!-- 	<task:executor id="taskExecutor" -->
+<!-- 				   pool-size="5-25" -->
+<!--         		   queue-capacity="100"/> -->
+<!-- 	<task:annotation-driven executor="taskExecutor" />  -->
+
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mailServer.host}" />
+		<property name="port" value="${mailServer.port}" />
+		<property name="username" value="${mailServer.username}" />
+		<property name="password" value="${mailServer.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">${mailServer.transport.protocol}</prop>
+				<prop key="mail.smtp.auth">${mailServer.smtp.auth}</prop>
+				<prop key="mail.smtp.starttls.enable">${mailServer.smtp.starttls.enable}</prop>
+			</props>
+		</property>
+	</bean>
+	
 
 	
 
