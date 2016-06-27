@@ -1,5 +1,6 @@
 package it.polito.applied.asti.clan.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -174,12 +176,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		ticketRepo.save(tickets);
 		
-//		try {
-//			postToAcl.sendTicketsToAcl(tickets);
-//		} catch (JSONException | IOException e) {
-//			ticketRepo.removeLastTickets(tickets);
-//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//		}
+		try {
+			postToAcl.sendTicketsToAcl(tickets);
+		} catch (JSONException | IOException e) {
+			ticketRepo.removeLastTickets(tickets);
+			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
@@ -189,13 +191,13 @@ public class TicketServiceImpl implements TicketService{
 
 		Ticket t = ticketRepo.findLastTicket(id);
 		if(t!=null){
-//			try{
+			try{
 				ticketRepo.moveToDeleted(t.getIdTicket());
 				ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
-//				postToAcl.deleteTicketToAcl(t);
-//			} catch (JSONException | IOException e) {
-//				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//			}
+				postToAcl.deleteTicketToAcl(t);
+			} catch (JSONException | IOException e) {
+				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+			}
 
 		}else
 			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
@@ -296,11 +298,11 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void pingService() throws ServiceUnaivalableException {
-//		try {
-//			postToAcl.ping();
-//		} catch (BadRequestException | IOException e) {
-//			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
-//		}
+		try {
+			postToAcl.ping();
+		} catch (BadRequestException | IOException e) {
+			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
+		}
 	}
 
 	@Override

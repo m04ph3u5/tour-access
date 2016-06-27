@@ -3,6 +3,7 @@ package it.polito.applied.asti.clan.webController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class WebController {
@@ -72,6 +73,14 @@ public class WebController {
 	public String redirectTo404() {
 		System.out.println("404");
 	    return "/template/404.html";
+	}
+	
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public String redirectToPlayStore(@RequestParam(value="c", required=false) String code) {
+		if(code!=null && !code.isEmpty())
+			return "redirect:https://play.google.com/store/apps/details?id=it.tonicminds.dev.astimusei";
+		else
+		    return "index";
 	}
 	
 	@RequestMapping(value="/**",method=RequestMethod.GET)
