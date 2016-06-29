@@ -62,6 +62,8 @@
  	   	<intercept-url pattern="/api/v1/loginSupervisor" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/api/v1/contactUs" method="POST" access="permitAll" requires-channel="https"/>
 
+ 	   	<intercept-url pattern="/api/v1/wsdl/**" access="permitAll" requires-channel="https"/>
+
  	   	<intercept-url pattern="/api/v1/places" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="https"/>
  	   	<intercept-url pattern="/api/v1/tickets" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="https"/>
  	   	<intercept-url pattern="/api/v1/history" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="https"/>
