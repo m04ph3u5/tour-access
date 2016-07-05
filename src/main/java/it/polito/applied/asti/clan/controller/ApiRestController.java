@@ -1,12 +1,14 @@
 package it.polito.applied.asti.clan.controller;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.polito.applied.asti.clan.exception.BadCredentialsException;
 import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.ConflictException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
@@ -29,6 +32,7 @@ import it.polito.applied.asti.clan.exception.ServiceUnaivalableException;
 import it.polito.applied.asti.clan.pojo.AppAccessInstallSeries;
 import it.polito.applied.asti.clan.pojo.AppInfo;
 import it.polito.applied.asti.clan.pojo.AppPoiRank;
+import it.polito.applied.asti.clan.pojo.ChangePasswordDTO;
 import it.polito.applied.asti.clan.pojo.CheckTicketInput;
 import it.polito.applied.asti.clan.pojo.CommentsPage;
 import it.polito.applied.asti.clan.pojo.CommentsRequest;
@@ -62,6 +66,7 @@ import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
+import it.polito.applied.asti.clan.service.GenerateReport;
 import it.polito.applied.asti.clan.service.SensorService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
@@ -87,8 +92,6 @@ public class ApiRestController extends BaseController{
 	
 	@Autowired
 	private AsyncUpdater asyncUpdater;
-	
-
 	
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -537,6 +540,21 @@ public class ApiRestController extends BaseController{
 		end = c.getTime();
 		
 		return ticketService.getRegionRank(start, end);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+	@RequestMapping(value="/v1/statistics/password", method=RequestMethod.POST)
+	@ResponseStatus(value=HttpStatus.OK)
+	public void changeSupervisorPassword(@RequestBody ChangePasswordDTO changePassword,
+			BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException, NotFoundException, BadCredentialsException{
+		
+		if(result.hasErrors())
+			throw new BadRequestException("Input not formatted properly");
+		
+		String username = u.getUsername();
+	    //La validazione logica della oldPassword viene fatta direttamente nella changePassword (piu' efficiente)
+	    userService.changePassword(username, changePassword.getOldPassword(), changePassword.getNewPassword());
+		
 	}
 	
 	@RequestMapping(value="/v1/contactUs", method=RequestMethod.POST)

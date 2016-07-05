@@ -8,7 +8,6 @@ public interface SensorRepository extends MongoRepository <SensorLog, String>, C
 
 	public SensorLog findByTimemarker(long timemarker);
 
-	
 		
 }
 

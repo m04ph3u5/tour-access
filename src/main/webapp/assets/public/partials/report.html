@@ -1,0 +1,77 @@
+<div style="margin-top: 20px;">
+	<section id="report">
+
+		<div style="margin-bottom:20px;" class="container">
+			<div class="col-md-12 center ">
+				<h1>Report</h1>
+			</div>
+		</div>
+		<div class="container">
+			<form class="row">
+				<!--datepicker start-->
+				<div class="col-md-3"><span><b>Seleziona il periodo di riferimento: </b></span></div>
+				<div class="col-md-3 ">
+					<select data-ng-model="report.period"
+						data-ng-change="report.selectPeriod()" id="period"
+						class="form-control">
+						<option selected value="0">Oggi</option>
+						<option value="1">Ultima settimana</option>
+						<option value="2">Ultimo mese</option>
+						<option value="3">Ultimi 3 mesi</option>
+						<option value="4">Periodo</option>
+					</select>
+				</div>
+				<div data-ng-if="report.period==4" class="col-md-3 form-group ">
+	
+					<span class="col-md-3">Da:</span>
+					<div id="dataStart" class="input-group col-md-10">
+						<input data-ui-date="report.dateStartOptions"
+							data-ng-model="report.dateStart"
+							data-ng-change="report.setDate(report.dateStart)" id="date-from"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend" class="input-group-addon"> <i
+							class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+				</div>
+	
+				<div data-ng-if="report.period==4" class="col-md-3 ">
+	
+					<span class="col-md-3">A:</span>
+	
+					<div id="dataEnd" class="input-group col-md-10">
+	
+						<input data-ui-date="report.dateEndOptions"
+							data-ng-model="report.dateEnd" id="date-to"
+							class="form-control col-xs-9 datepicker"> <span
+							id="calend2" class="input-group-addon"> <i
+							class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
+	
+				</div>
+	
+			</form>
+		</div>	
+	</section>
+	<section id="list">
+		<div class="container col-sm-6 col-sm-offset-3">
+			<table  class="table table-striped text-center">
+				<tr>
+					<td><b>Biglietti</b></td>
+					<td><a target="_blank" data-ng-href="{{report.report.ticketUrl}}"><span class="btn btn-primary">Scarica</span></a></td>
+				</tr>
+				<tr>
+					<td><b>Ingressi</b></td>
+					<td><a target="_blank" data-ng-href="{{report.report.entranceUrl}}"><span class="btn btn-primary">Scarica</span></a></td>
+				</tr>
+				<tr>
+					<td><b>Sensori ambientali</b></td>
+					<td><a target="_blank" data-ng-href="{{report.report.environmentUrl}}"><span class="btn btn-primary">Scarica</span></a></td>
+				</tr>
+				<tr><td></td><td></td></tr>
+			</table>
+		</div>
+	</section>
+	
+</div>

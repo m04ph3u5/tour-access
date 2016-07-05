@@ -31,15 +31,15 @@ public class TicketRequest {
 		this.requestDate = new Date();
 		this.info = dto.getInfo();
 		this.tipology = dto.getTipology();
-		if(dto.getTipology().equals("")){
-			
-		}else if(dto.getTipology().equals("")){
-			
-		}else if(dto.getTipology().equals("")){
-			
-		}else if(dto.getTipology().equals("")){
-			
-		}
+//		if(dto.getTipology().equals("")){
+//			
+//		}else if(dto.getTipology().equals("")){
+//			
+//		}else if(dto.getTipology().equals("")){
+//			
+//		}else if(dto.getTipology().equals("")){
+//			
+//		}
 		
 		if(this.ticketNumbers!=null && this.ticketNumbers.size()==1){
 			this.isGroup=false;

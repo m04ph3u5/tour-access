@@ -67,7 +67,6 @@
  	   	<intercept-url pattern="/api/v1/history" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="https"/>
 
 
-<!-- 	<intercept-url pattern="/api/v1/tickets" access="permitAll"></intercept-url> -->
 <!-- 	<intercept-url pattern="/api/v1/history" access="permitAll"></intercept-url> -->
 
  	   	<intercept-url pattern="/api/v1/roles" access="hasRole('ROLE_ACCESSCONTROL') and (hasIpAddress('10.8.0.5') or hasIpAddress('10.8.0.9'))" requires-channel="https"/>

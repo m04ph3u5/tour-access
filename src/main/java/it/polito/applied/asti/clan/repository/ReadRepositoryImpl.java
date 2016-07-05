@@ -90,4 +90,17 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		return l;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomReadRepository#find(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<Read> find(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("dtaTransit").lte(end)
+				.andOperator(Criteria.where("dtaTransit").gte(start)));
+		q.with(new Sort(Sort.Direction.ASC, "dtaTransit"));
+		
+		return mongoOp.find(q, Read.class);
+	}
+
 }

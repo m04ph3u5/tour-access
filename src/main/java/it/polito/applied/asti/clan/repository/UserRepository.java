@@ -8,5 +8,9 @@ public interface UserRepository extends MongoRepository<User, String>, CustomUse
 	
 	public User findById(String id);
 	public User findByUsername(String username);
-
+	/**
+	 * @param userEmail
+	 * @param hashNewPassword
+	 * @return
+	 */
 }

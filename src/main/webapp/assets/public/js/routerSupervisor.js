@@ -131,6 +131,24 @@ angular.module('asti.supervisor')
 				pageTitle : 'AstiMusei - Modifica password'
 			}
 		})
+			.state('logged.report',{
+			url : '/supervisor/report',
+			views : {
+				"header@logged" : {
+					templateUrl : "assets/public/partials/navbarSupervisor.html",
+					controller : 'navbarSupervisorCtrl',
+					controllerAs : 'navbar'
+				},
+				"body" : {
+					templateUrl : "assets/public/partials/report.html",
+					controller : 'reportSupervisorCtrl',
+					controllerAs : 'report'
+				}
+			},
+			data : {
+				pageTitle : 'AstiMusei - Report'
+			}
+		})
 	
 		
 		$urlRouterProvider.otherwise(function($injector,$location){

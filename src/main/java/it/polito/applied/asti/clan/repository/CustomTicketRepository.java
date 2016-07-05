@@ -2,6 +2,7 @@ package it.polito.applied.asti.clan.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
@@ -21,5 +22,6 @@ public interface CustomTicketRepository {
 	public Ticket findLastTicket(String id);
 	public void removeById(String id);
 	public void moveToDeleted(String id);
+	public List<Ticket> findInList(Set<String> ticketNumbers, Date start, Date end);
 
 }

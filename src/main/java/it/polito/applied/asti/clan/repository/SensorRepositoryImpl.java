@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import it.polito.applied.asti.clan.pojo.InfoEnvironmentSonda;
 import it.polito.applied.asti.clan.pojo.SensorLog;
@@ -126,6 +127,20 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 //			}
 //		}
 		return i;
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomSensorRepository#find(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<SensorLog> find(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("timestamp").lte(end)
+				.andOperator(Criteria.where("timestamp").gte(start)));
+		
+		q.with(new Sort(Sort.Direction.ASC, "timestamp"));
+		
+		return mongoOp.find(q, SensorLog.class);
 	}
 
 }

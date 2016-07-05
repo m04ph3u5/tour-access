@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -256,6 +258,19 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		List<RegionRank> list  = result.getMappedResults();
 				
 		return list;
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRequestRepository#find(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<TicketRequest> find(Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)));
+		q.with(new Sort(Direction.ASC, "requestDate"));
+		
+		return mongoOp.find(q, TicketRequest.class);
 	}
 
 	

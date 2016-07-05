@@ -2,6 +2,10 @@ package it.polito.applied.asti.clan.exception;
 
 public class ServiceUnaivalableException extends Exception{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3784288996362045061L;
 	private String message;
 
 	public ServiceUnaivalableException() {

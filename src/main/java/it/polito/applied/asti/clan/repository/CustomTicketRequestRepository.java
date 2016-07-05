@@ -27,5 +27,6 @@ public interface CustomTicketRequestRepository {
 	public long totalFamily(Date start, Date end);
 	public long totalSchoolGroup(Date start, Date end);
 	public List<RegionRank> getRegionRank(Date start, Date end);
+	List<TicketRequest> find(Date start, Date end);
 
 }

@@ -1,58 +1,47 @@
-angular.module('asti.supervisor').controller('changePasswordSupervisorCtrl', ['$state', 'apiService',
-              function changePasswordSupervisorCtrl($state, apiService){
+angular.module('asti.supervisor').controller('changePasswordSupervisorCtrl', ['$state', 'apiService', 'alertingGeneric',
+              function changePasswordSupervisorCtrl($state, apiService, alertingGeneric){
 	
 	var self = this;
-	self.showError = false;
-	self.error = "";
 	
 	self.change = function(){
 
-		self.showError = false;
-		self.error = "";
-		self.errorOldPwd = false;
-		self.errorPwd = false;
-		self.errorRePwd = false;
 
 		if(!self.oldPwd){
-			self.showError = true;
-			self.errorOldPwd = true;
-			self.errorPwd = false;
-			self.errorRePwd = true;
-			self.error = "Digita la vecchia password";
+			alertingGeneric.addWarning("Inserisci la vecchia password");
 			self.pwd="";
 			self.rePwd="";
 		}
 		else if(!self.pwd){
-			self.showError = true;
-			self.error = "Digita la nuova password";
-			self.errorOldPwd = false;
-			self.errorPwd = true;
-			self.errorRePwd = true;
+			alertingGeneric.addWarning("Inserisci la nuova password");
 		}else if(self.pwd.length<8){
-			self.showError = true;
-			self.error = "La password inserita è troppo corta. Per favore utilizza almeno 8 caratteri";
-			self.errorOldPwd = false;
-			self.errorPwd = true;
-			self.errorRePwd = false;
+			alertingGeneric.addWarning("La password inserita è troppo corta. Utilizza almeno 8 caratteri.");
 			self.pwd="";
 			self.rePwd="";
 		}
 		else if(!self.rePwd){
-			self.showError = true;
-			self.error = "Per favore digita nuovamente la nuova password";
-			self.errorOldPwd = false;
-			self.errorPwd = false;
-			self.errorRePwd = true;
+			alertingGeneric.addWarning("Per favore digita nuovamente la nuova password.");
 		}
 		else if(self.pwd!=self.rePwd){
-			self.showError = true;
-			self.error = "Le password non coincidono. Per favore digitale nuovamente";
-			self.errorOldPwd = false;
-			self.errorPwd = true;
-			self.errorRePwd = true;
+			alertingGeneric.addWarning("Le password inserite non coincidono!");
 			self.pwd="";
 			self.rePwd="";
 		}
+		else{
+			
+			var passwordDTO = {};
+			passwordDTO.oldPassword = self.oldPwd;
+			passwordDTO.newPassword = self.pwd;
+			apiService.changePassword(passwordDTO).then(
+					function(data){
+						alertingGeneric.addSuccess("Password cambiata correttamente!");
+					},
+					function(reason){
+						alertingGeneric.addDanger("Impossibile cambiare la password, si è verificato un errore inaspettato. La preghiamo di riprovare");
+					}
+			);
+		}
+		
+		
 	}
 	
 }]);

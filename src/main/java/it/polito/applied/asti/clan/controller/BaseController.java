@@ -106,6 +106,7 @@ public abstract class BaseController {
 	public ErrorInfo handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("400");
+		error.setMessage(e.getMessage());
 		System.out.println("HttpMessageNotReadableException: "+e.getMessage());
 		writeLog(e.getMessage(),"400");
 		return error;
@@ -131,6 +132,7 @@ public abstract class BaseController {
 	public ErrorInfo handleAccessDeniedException(AccessDeniedException e){
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("403");
+		error.setMessage(e.getMessage());
 		System.out.println("FORBIDDEN");
 		writeLog(e.getMessage(),"403");
 
@@ -142,6 +144,7 @@ public abstract class BaseController {
 	public ErrorInfo handleFileNotFoundException(FileNotFoundException e){
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("404");
+		error.setMessage(e.getMessage());
 		System.out.println("File not found"+e.getMessage());
 		writeLog(e.getMessage(),"404");
 		return error;
@@ -152,21 +155,23 @@ public abstract class BaseController {
 	public ErrorInfo handleIOException(IOException e){
 		ErrorInfo error = new ErrorInfo();
 		error.setStatusCode("400");
+		error.setMessage(e.getMessage());
 		System.out.println("io exception: "+e.getMessage());
 		writeLog(e.getMessage(),"400");
 
 		return error;
 	}
 	
-//	@ExceptionHandler(Exception.class)
-//	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//	public ErrorInfo handleGenericException(Exception e){
-//		ErrorInfo error = new ErrorInfo();
-//		error.setStatusCode("400");
-//		System.out.println("generic exception: "+e.getClass()+" "+e.getMessage());
-//		writeLog(e.getMessage(),"400");
-//		return error;
-//	}
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ErrorInfo handleGenericException(Exception e){
+		ErrorInfo error = new ErrorInfo();
+		error.setStatusCode("400");
+		error.setMessage(e.getMessage());
+		System.out.println("generic exception: "+e.getClass()+" "+e.getMessage());
+		writeLog(e.getMessage(),"400");
+		return error;
+	}
 	
 	private void writeLog(String message, String statusCode){
 		System.err.println("EXCEPTION: "+statusCode+" "+message);

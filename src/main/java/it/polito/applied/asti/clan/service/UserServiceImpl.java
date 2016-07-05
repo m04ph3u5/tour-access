@@ -7,6 +7,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.MongoException;
+
+import it.polito.applied.asti.clan.exception.BadCredentialsException;
+import it.polito.applied.asti.clan.exception.BadRequestException;
 import it.polito.applied.asti.clan.exception.NotFoundException;
 import it.polito.applied.asti.clan.pojo.Credential;
 import it.polito.applied.asti.clan.pojo.Name;
@@ -57,6 +61,42 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				return false;
 		}else
 			return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.service.UserService#changePassword(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void changePassword(String username, String oldPassword, String newPassword) throws NotFoundException, BadCredentialsException, BadRequestException {
+		User u = null;
+		try{
+			u = checkOldPassword(username,oldPassword,false);
+			if(u==null)
+				throw new BadCredentialsException();
+
+			String hashNewPassword=passwordEncoder.encode(newPassword);
+			int n = userRepo.changePassword(username, hashNewPassword);
+			if(n==0){
+				throw new BadRequestException();
+			}
+
+		}catch(MongoException e){
+			throw e;
+		}
+	}
+	
+	private User checkOldPassword(String userEmail, String oldPassword, boolean first) throws NotFoundException{
+
+		User u = userRepo.findByUsername(userEmail);
+		if(u==null)
+			throw new NotFoundException("User not found");
+
+		
+		/*Metodo di BCrypt per comparare una password in chiaro (oldPassword), con la sua versione hashata (u.getPassword()))*/
+		if(passwordEncoder.matches(oldPassword, u.getPassword()))
+			return u;
+		else
+			return null;
 	}
 
 }

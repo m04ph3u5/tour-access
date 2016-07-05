@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -282,6 +283,20 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 			t.setStatus(DELETED);
 			mongoOp.save(t);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#findInList(java.util.Set, java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<Ticket> findInList(Set<String> ticketNumbers, Date start, Date end) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("idTicket").in(ticketNumbers)
+				.andOperator(Criteria.where("emissionDate").gte(start)
+				.andOperator(Criteria.where("emissionDate").lte(end))));
+		q.with(new Sort(Direction.ASC,"emissionDate"));
+		
+		return mongoOp.find(q, Ticket.class);
 	}
 
 }

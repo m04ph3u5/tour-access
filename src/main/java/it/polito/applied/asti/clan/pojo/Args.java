@@ -6,7 +6,7 @@ public class Args {
 	private	String id_poi;
 	private int audio_current_position;
 	private int image_gallery_position;
-	private int orientation;	// 0-landscape, 1-portrait
+	private int orientation;	// 0-undefined, 1-portrait, 2-landscape
 	private String ticket_contents; /*Numero biglietto*/
 	private int video_current_position;
 	private String user_location; // latitute+”|”+longitude

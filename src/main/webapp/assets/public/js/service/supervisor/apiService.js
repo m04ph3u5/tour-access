@@ -164,6 +164,19 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		return p.promise;
 	}
 	
+	var changePassword = function(passwordDTO){
+		var p = $q.defer();
+		$http.post('/api/v1/statistics/password', passwordDTO).then(
+				function(response){
+					p.resolve(response.data);
+				},
+				function(reason){
+					p.reject(reason);
+				}
+		);
+		
+		return p.promise;
+	}
 	
 	return {
 		validateCredential : validateCredential,
@@ -176,7 +189,8 @@ angular.module('asti.supervisor').factory('apiService', [ '$http', '$q',
 		getInfoSite : getInfoSite,
 		environmentSeries : environmentSeries,
 		appPoiRank: appPoiRank,
-		regionRank: regionRank
+		regionRank: regionRank,
+		changePassword: changePassword,
 	}
 
 }]);
