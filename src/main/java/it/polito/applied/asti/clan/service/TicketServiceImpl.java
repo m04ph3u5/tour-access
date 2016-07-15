@@ -319,6 +319,7 @@ public class TicketServiceImpl implements TicketService{
 	public StatisticsInfo getStatisticsInfo(Date start, Date end) {
 		StatisticsInfo s = new StatisticsInfo();
 		long totT = ticketRepo.totalTickets(start, end);
+		System.out.println(totT);
 		s.setTotTickets(totT); //setto il numero totale di tickets prendendolo dal repo dei ticket
 		long totSingle = ticketRequestRepo.totalSingleTickets(start, end);
 		s.setTotSingleTickets(totSingle);

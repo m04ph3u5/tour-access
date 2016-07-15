@@ -296,23 +296,26 @@ public class ApiRestController extends BaseController{
 		Date start;
 		Date end;
 		Calendar c = Calendar.getInstance();
-
 		c.setTimeInMillis(Long.parseLong(startTS));
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
 		start = c.getTime();
 		c.setTimeInMillis(Long.parseLong(endTS));
 		end = c.getTime();
-
+		System.out.println(start);
+		System.out.println(end);
 		return ticketService.getStatisticsInfo(start, end);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
-	@RequestMapping(value="/v1/statistics/groups", method=RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public StatisticsGroupsInfo getGroupsStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		StatisticsGroupsInfo stats = new StatisticsGroupsInfo(0, 0);
-		return stats;
-		
-	}
+//	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+//	@RequestMapping(value="/v1/statistics/groups", method=RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public StatisticsGroupsInfo getGroupsStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+//		StatisticsGroupsInfo stats = new StatisticsGroupsInfo(0, 0);
+//		return stats;
+//		
+//	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)

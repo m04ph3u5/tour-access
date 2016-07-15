@@ -204,11 +204,16 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		if(start != null && end != null)
 			q.addCriteria(Criteria.where("emissionDate").gte(start)
 					.andOperator(Criteria.where("emissionDate").lte(end)
-					.andOperator(Criteria.where("status").ne(PENDING))));
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED)))));
 		else if(start == null && end != null)
-			q.addCriteria(Criteria.where("emissionDate").lte(end).andOperator(Criteria.where("status").ne(PENDING)));
+			q.addCriteria(Criteria.where("emissionDate").lte(end)
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED))));
 		else if(start != null && end == null)
-			q.addCriteria(Criteria.where("emissionDate").gte(start).andOperator(Criteria.where("status").ne(PENDING)));
+			q.addCriteria(Criteria.where("emissionDate").gte(start)
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED))));
 		return mongoOp.count(q, Ticket.class);
 		
 	}
