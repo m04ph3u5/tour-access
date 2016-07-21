@@ -104,6 +104,8 @@ public class SensorServiceImpl implements SensorService{
 		List<TotAvgAggregate> aggregates = sensorRepo.getAvgSeriesTemperatureAndHumidity(idSite, startDate, endDate, hourGranularity);
 		
 		for(TotAvgAggregate tt : aggregates){
+			if(tt.getTot()==0)
+				continue;
 			cal.set(Calendar.YEAR, tt.getYear());
 			cal.set(Calendar.MONTH, tt.getMonth()-1);
 			cal.set(Calendar.DAY_OF_MONTH, tt.getDay());
