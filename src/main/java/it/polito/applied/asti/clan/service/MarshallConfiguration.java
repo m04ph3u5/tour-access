@@ -16,6 +16,9 @@ public class MarshallConfiguration {
 
 	private final String wsdl ="it.polito.applied.asti.clan.artacom.wsdl";
 	private final String urlService ="http://tickettest.artacom.it:80/biglietteria/services-ws/client/v1_1";
+	private String userId="tonic";
+	private String password="tonic001";
+	private String termId="ws_tonic1";
 
 	@Bean
 	public Jaxb2Marshaller marshaller() {
@@ -25,8 +28,8 @@ public class MarshallConfiguration {
 	}
 	
 	@Bean
-	public ArtacomClientService weatherClient(Jaxb2Marshaller marshaller) {
-		ArtacomClientService client = new ArtacomClientService();
+	public ArtacomClientService webServiceClient(Jaxb2Marshaller marshaller) {
+		ArtacomClientService client = new ArtacomClientService(userId, password, termId);
 		client.setDefaultUri(urlService);
 		client.setMarshaller(marshaller);
 		client.setUnmarshaller(marshaller);
