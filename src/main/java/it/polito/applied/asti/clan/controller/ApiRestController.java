@@ -1,14 +1,12 @@
 package it.polito.applied.asti.clan.controller;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +49,6 @@ import it.polito.applied.asti.clan.pojo.RegionRank;
 import it.polito.applied.asti.clan.pojo.Response;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.SensorLog;
-import it.polito.applied.asti.clan.pojo.StatisticsGroupsInfo;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
@@ -66,7 +63,6 @@ import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
-import it.polito.applied.asti.clan.service.GenerateReport;
 import it.polito.applied.asti.clan.service.SensorService;
 import it.polito.applied.asti.clan.service.TicketService;
 import it.polito.applied.asti.clan.service.UserService;
