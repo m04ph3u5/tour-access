@@ -71,6 +71,8 @@ public class TicketServiceImpl implements TicketService{
 	private int SERVICE;
 	@Value("${role.supervisor.id}")
 	private int SUPERVISOR;
+	@Value("${ticketService.duration}")
+	private int SERVICE_DURATION;
 	
 	@Autowired
 	private PoiRepository poiRepo;
@@ -158,7 +160,7 @@ public class TicketServiceImpl implements TicketService{
 				t.setRole(SERVICE);
 				t.setStatus(PENDING);
 				c.setTime(end);
-				c.add(Calendar.YEAR, 2);
+				c.add(Calendar.YEAR, SERVICE_DURATION-1);
 				end = c.getTime();
 				t.setEndDate(end);
 
