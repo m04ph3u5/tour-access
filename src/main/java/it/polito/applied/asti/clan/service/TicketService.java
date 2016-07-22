@@ -35,4 +35,8 @@ public interface TicketService {
 	public void operatorDeleteTicket(String id) throws BadRequestException, ServiceUnaivalableException;
 	public List<Ticket> getAllTickets();
 	public List<RegionRank> getRegionRank(Date start, Date end);
+	/**
+	 * 
+	 */
+//	public void updateValidity();
 }

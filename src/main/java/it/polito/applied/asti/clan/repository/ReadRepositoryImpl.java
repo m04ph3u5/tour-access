@@ -103,4 +103,16 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		return mongoOp.find(q, Read.class);
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomReadRepository#findAcceptedAfter(java.util.Date)
+	 */
+	@Override
+	public List<Read> findAcceptedAfter(Date from) {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("isAccepted").is(true)
+				.andOperator(Criteria.where("dtaTransit").gte(from)));
+		q.with(new Sort(Sort.Direction.DESC, "dtaTransit"));
+		return mongoOp.find(q, Read.class);
+	}
+
 }

@@ -18,5 +18,6 @@ public interface CustomReadRepository {
 	 * @return
 	 */
 	public List<Read> find(Date start, Date end);
+	public List<Read> findAcceptedAfter(Date from);
 
 }

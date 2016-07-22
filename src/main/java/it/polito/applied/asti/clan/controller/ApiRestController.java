@@ -61,6 +61,7 @@ import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.UserMessage;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
@@ -79,6 +80,9 @@ public class ApiRestController extends BaseController{
 
 	@Autowired
 	private TicketService ticketService;
+	
+	@Autowired
+	private TicketRepository ticketRepo;
 	
 	@Autowired
 	private SensorService sensorService;
@@ -223,6 +227,7 @@ public class ApiRestController extends BaseController{
 		if(result.hasErrors())
 			throw new BadRequestException();
 		read.setDateOnServer(new Date());
+		read.setIdTicket(read.getIdTicket().trim());
 		ticketService.savePassingAttempt(read);
 		TicketNumber t = new TicketNumber();
 		t.setTicket(read.getIdTicket());
@@ -567,4 +572,12 @@ public class ApiRestController extends BaseController{
 		}
 		return userMessage;
 	}
+	
+//	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+//	@RequestMapping(value="/v1/test", method=RequestMethod.POST)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public Integer test() throws BadRequestException{
+//		ticketService.updateValidity();
+//		return ticketService.getValidTickets().size();
+//	}
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
@@ -122,10 +123,12 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		
 		Ticket myTicket;
 		Query q = new Query();
-		q.addCriteria(Criteria.where("idTicket").is(ticketNumber));
+		q.addCriteria(Criteria.where("idTicket").is(ticketNumber)
+				.andOperator(Criteria.where("status").is(RELEASED)));
+		q.with(new Sort(Sort.Direction.DESC,"emissionDate"));
 		List<Ticket> tList = mongoOp.find(q, Ticket.class);
 		if(tList!=null && tList.size()>0){
-			myTicket = tList.get(0); //in prima posizione c'� sicuramente quello pi� recente
+			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
 			if(myTicket.getStatus().equals(RELEASED) && myTicket.getRole()!=SERVICE){
 				Update u = new Update();
 				u.set("startDate", d);
@@ -166,7 +169,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				
 				endDate = c.getTime();
 				u.set("endDate", endDate);
-				q.addCriteria(Criteria.where("id").is(myTicket.getId()));
+				q.addCriteria(Criteria.where("_id").is(new ObjectId(myTicket.getId())));
 				mongoOp.findAndModify(q, u, Ticket.class);
 			}
 		}
@@ -301,6 +304,18 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				.andOperator(Criteria.where("emissionDate").lte(end))));
 		q.with(new Sort(Direction.ASC,"emissionDate"));
 		
+		return mongoOp.find(q, Ticket.class);
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#findReleased()
+	 */
+	@Override
+	public List<Ticket> findReleasedNotService() {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("status").is(RELEASED)
+				.andOperator(Criteria.where("role").ne(SERVICE)));
+		q.with(new Sort(Sort.Direction.DESC, "emissionDate"));
 		return mongoOp.find(q, Ticket.class);
 	}
 

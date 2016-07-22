@@ -511,5 +511,51 @@ public class TicketServiceImpl implements TicketService{
 		return ticketRequestRepo.getRegionRank(start, end);
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.service.TicketService#updateValidity()
+	 */
+//	@Override
+//	public void updateValidity() {
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(new Date());
+//		c.set(Calendar.MONTH, 5);
+//		c.set(Calendar.DAY_OF_MONTH, 15);
+//		Date from = c.getTime();
+//		System.out.println(from);
+//		List<Read> reads = readRepo.findAcceptedAfter(from);
+//		if(reads==null){
+//			return;
+//		}
+//		List<Ticket> tickets = ticketRepo.findReleasedNotService();
+//		if(tickets==null){
+//			return;
+//		}
+//		Map<String, Ticket> mapTicket = new HashMap<String, Ticket>();
+//		Map<String, Read> mapRead = new HashMap<String, Read>();
+//		for(Ticket t : tickets){
+//			if(!mapTicket.containsKey(t.getIdTicket()))
+//				mapTicket.put(t.getIdTicket(), t);
+//		}
+//		for(Read r : reads){
+//			if(!mapRead.containsKey(r.getIdTicket()))
+//				mapRead.put(r.getIdTicket(), r);
+//		}
+//		
+//		for(String s : mapRead.keySet()){
+//			Ticket t = mapTicket.get(s.trim());
+//			if(t==null)
+//				continue;
+//			if(t.getEmissionDate().after(mapRead.get(s).getDtaTransit())){
+//				continue;
+//			}
+//			c.setTime(mapRead.get(s).getDtaTransit());
+//			c.set(Calendar.HOUR_OF_DAY, 23);
+//			c.set(Calendar.MINUTE, 59);
+//			t.setEndDate(c.getTime());
+//			ticketRepo.save(t);
+//		}
+//		
+//	}
+
 
 }
