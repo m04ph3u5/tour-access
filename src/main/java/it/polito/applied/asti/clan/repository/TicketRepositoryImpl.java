@@ -117,9 +117,17 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		return mongoOp.find(q, Ticket.class);
 	}
 
-
+	/*
+	 * Metodo che va a modificare la data di scadenza di un biglietto al momento di un passaggio registrato dal controllo accessi.
+	 * Vengono passate due date:
+	 *  - passed, data e ora a cui si è rilevato il passaggio;
+	 *  - expiration, data e ora di scadenza calcolata dal controllo accessi in base a orari e giorni di chiusura dei siti museali.
+	 *  
+	 *  Nel caso l'expiration date passata fosse null, viene settata come data di scadenza le 23.59 del giorno successivo a quello del primo passaggio.
+	 *  
+	 * */
 	@Override
-	public void passingAccepted(String ticketNumber, Date d) {
+	public void passingAccepted(String ticketNumber, Date passed, Date expiration) {
 		
 		Ticket myTicket;
 		Query q = new Query();
@@ -131,44 +139,47 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 			myTicket = tList.get(0); //in prima posizione c'è sicuramente quello più recente
 			if(myTicket.getStatus().equals(RELEASED) && myTicket.getRole()!=SERVICE){
 				Update u = new Update();
-				u.set("startDate", d);
+				u.set("startDate", passed);
 				
 				Calendar c = Calendar.getInstance();
 				Date endDate;
-				c.setTime(d);
 				
-				if(myTicket.getRole()==DAILY_VISITOR){
-					c.set(Calendar.HOUR_OF_DAY,23);
-					c.set(Calendar.MINUTE,59);
-					c.set(Calendar.SECOND, 59);
-					
+				if(expiration!=null){
+					endDate = expiration;
+				}else{
+					c.setTime(passed);
+					if(myTicket.getRole()==DAILY_VISITOR){
+						c.add(Calendar.DAY_OF_MONTH, 1);
+						c.set(Calendar.HOUR_OF_DAY,23);
+						c.set(Calendar.MINUTE,59);
+						c.set(Calendar.SECOND, 59);
+					}
+					endDate = c.getTime();
 				}
-				else if(myTicket.getRole()==WEEKLY_VISITOR){
-					c.add(Calendar.DAY_OF_MONTH, 7);
-					c.set(Calendar.HOUR_OF_DAY,23);
-					c.set(Calendar.MINUTE,59);
-					c.set(Calendar.SECOND, 59);
-					
-				}
+//				else if(myTicket.getRole()==WEEKLY_VISITOR){
+//					c.add(Calendar.DAY_OF_MONTH, 7);
+//					c.set(Calendar.HOUR_OF_DAY,23);
+//					c.set(Calendar.MINUTE,59);
+//					c.set(Calendar.SECOND, 59);
+//					
+//				}
+//				
+//				else if(myTicket.getRole()==DAILY_VIP_VISITOR){
+//					
+//					c.set(Calendar.HOUR_OF_DAY,23);
+//					c.set(Calendar.MINUTE,59);
+//					c.set(Calendar.SECOND, 59);
+//					
+//				}
+//				else if(myTicket.getRole()==WEEKLY_VIP_VISITOR){
+//					c.add(Calendar.DAY_OF_MONTH, 7);
+//					c.set(Calendar.HOUR_OF_DAY,23);
+//					c.set(Calendar.MINUTE,59);
+//					c.set(Calendar.SECOND, 59);
+//					
+//				}
 				
-				else if(myTicket.getRole()==DAILY_VIP_VISITOR){
-					
-					c.set(Calendar.HOUR_OF_DAY,23);
-					c.set(Calendar.MINUTE,59);
-					c.set(Calendar.SECOND, 59);
-					
-				}
-				else if(myTicket.getRole()==WEEKLY_VIP_VISITOR){
-					c.add(Calendar.DAY_OF_MONTH, 7);
-					c.set(Calendar.HOUR_OF_DAY,23);
-					c.set(Calendar.MINUTE,59);
-					c.set(Calendar.SECOND, 59);
-					
-				}
-				
-				
-				endDate = c.getTime();
-				u.set("endDate", endDate);
+								u.set("endDate", endDate);
 				q.addCriteria(Criteria.where("_id").is(new ObjectId(myTicket.getId())));
 				mongoOp.findAndModify(q, u, Ticket.class);
 			}
@@ -255,7 +266,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 				
 				 
 				
-		AggregationResults result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
 		List<TotAggregate> l = result.getMappedResults();
 		
 		return l;
@@ -263,7 +274,6 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 
 	@Override
 	public Ticket findLastTicket(String id) {
-		Ticket t = null;
 		Query q = new Query();
 		q.addCriteria(Criteria.where("idTicket").is(id));
 		Sort s = new Sort( new Order(Direction.DESC, "emissionDate"));

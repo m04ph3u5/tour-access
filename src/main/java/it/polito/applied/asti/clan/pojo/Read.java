@@ -20,7 +20,7 @@ public class Read {
 	private Boolean isAccepted;
 	private Date dtaTransit;
 	private String desError; //null if accepted=true
-	
+	private Date dtaExpire;
 	private Date dateOnServer;
 	
 	
@@ -82,6 +82,15 @@ public class Read {
 	public void setDesError(String desError) {
 		this.desError = desError;
 	}
+
+	public Date getDtaExpire() {
+		return dtaExpire;
+	}
+
+	public void setDtaExpire(Date dtaExpire) {
+		this.dtaExpire = dtaExpire;
+	}
+
 
 	
 	

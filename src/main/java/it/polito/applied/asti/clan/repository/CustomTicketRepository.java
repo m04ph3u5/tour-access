@@ -12,7 +12,7 @@ public interface CustomTicketRepository {
 	public Ticket findByTicketNumberNow(String ticketNumber);
 	public List<Ticket> getValidTickets();
 	public List<Ticket> getAllTickets();
-	public void passingAccepted(String ticketNumber, Date d);
+	public void passingAccepted(String ticketNumber, Date passed, Date expiration);
 	public void removeLastTickets(List<Ticket> tickets);
 	public void toReleased(List<Ticket> tickets);
 	

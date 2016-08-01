@@ -160,7 +160,7 @@ public class TicketServiceImpl implements TicketService{
 				t.setRole(SERVICE);
 				t.setStatus(PENDING);
 				c.setTime(end);
-				c.add(Calendar.YEAR, SERVICE_DURATION-1);
+				c.add(Calendar.YEAR, SERVICE_DURATION);
 				end = c.getTime();
 				t.setEndDate(end);
 
@@ -241,7 +241,7 @@ public class TicketServiceImpl implements TicketService{
 			if(t!=null){
 				TicketRequest tr = ticketRequestRepo.findOne(t.getTicketRequestId());
 				for(String s : tr.getTicketNumbers())
-					ticketRepo.passingAccepted(s, read.getDtaTransit());
+					ticketRepo.passingAccepted(s, read.getDtaTransit(), read.getDtaExpire());
 
 			}
 		}

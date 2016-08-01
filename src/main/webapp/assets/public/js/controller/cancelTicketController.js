@@ -35,6 +35,15 @@ angular.module('asti.application').controller('cancelTicketCtrl', [ 'apiService'
 		}
 	}
 	
+	self.invalidate = function(){
+		if(validateTicket())
+			self.removeTicket();
+		else{
+			self.ticket="";
+			alert("Si e' verificato un errore. Ti preghiamo di riprovare");
+		}
+	}
+	
 	var validateTicket = function(){
 		var regex = /^[0-9]{10}$/;
 		return regex.test(self.ticket);
