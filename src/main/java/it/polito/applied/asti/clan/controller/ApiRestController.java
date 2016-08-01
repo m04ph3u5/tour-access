@@ -61,7 +61,6 @@ import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.UserMessage;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
-import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
@@ -81,8 +80,8 @@ public class ApiRestController extends BaseController{
 	@Autowired
 	private TicketService ticketService;
 	
-	@Autowired
-	private TicketRepository ticketRepo;
+//	@Autowired
+//	private TicketRepository ticketRepo;
 	
 	@Autowired
 	private SensorService sensorService;

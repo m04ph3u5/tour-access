@@ -179,7 +179,8 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 //					
 //				}
 				
-								u.set("endDate", endDate);
+				u.set("endDate", endDate);
+				u.set("status", VALIDATED);
 				q.addCriteria(Criteria.where("_id").is(new ObjectId(myTicket.getId())));
 				mongoOp.findAndModify(q, u, Ticket.class);
 			}
@@ -320,13 +321,13 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	/* (non-Javadoc)
 	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#findReleased()
 	 */
-	@Override
-	public List<Ticket> findReleasedNotService() {
-		Query q = new Query();
-		q.addCriteria(Criteria.where("status").is(RELEASED)
-				.andOperator(Criteria.where("role").ne(SERVICE)));
-		q.with(new Sort(Sort.Direction.DESC, "emissionDate"));
-		return mongoOp.find(q, Ticket.class);
-	}
+//	@Override
+//	public List<Ticket> findReleasedNotService() {
+//		Query q = new Query();
+//		q.addCriteria(Criteria.where("status").is(RELEASED)
+//				.andOperator(Criteria.where("role").ne(SERVICE)));
+//		q.with(new Sort(Sort.Direction.DESC, "emissionDate"));
+//		return mongoOp.find(q, Ticket.class);
+//	}
 
 }

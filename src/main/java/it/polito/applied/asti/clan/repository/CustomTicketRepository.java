@@ -23,5 +23,5 @@ public interface CustomTicketRepository {
 	public void removeById(String id);
 	public void moveToDeleted(String id);
 	public List<Ticket> findInList(Set<String> ticketNumbers, Date start, Date end);
-	public List<Ticket> findReleasedNotService();
+//	public List<Ticket> findReleasedNotService();
 }

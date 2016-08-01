@@ -238,7 +238,7 @@ public class TicketServiceImpl implements TicketService{
 		//TODO modifica startDate e endDate del biglietto se il passaggio � stato accettato ed il biglietto era ancora inutilizzato
 		if(read.getIsAccepted()){
 			Ticket t = ticketRepo.findLastTicket(read.getIdTicket());
-			if(t!=null){
+			if(t!=null && t.getStatus().equals(RELEASED)){
 				TicketRequest tr = ticketRequestRepo.findOne(t.getTicketRequestId());
 				for(String s : tr.getTicketNumbers())
 					ticketRepo.passingAccepted(s, read.getDtaTransit(), read.getDtaExpire());
