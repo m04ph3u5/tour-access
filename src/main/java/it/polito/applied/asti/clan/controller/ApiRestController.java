@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,9 +136,12 @@ public class ApiRestController extends BaseController{
 	@RequestMapping(value="/v1/buyTickets", method=RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void postTickets(@RequestBody @Valid TicketRequestDTO ticketRequestDTO, BindingResult result, @AuthenticationPrincipal User u) throws BadRequestException, ServiceUnaivalableException {
-		if(result.hasErrors())
+		if(result.hasErrors()){
+			for(ObjectError e : result.getAllErrors()){
+				System.out.println(e);
+			}
 			throw new BadRequestException();
-
+		}
 		ticketService.operatorGenerateTickets(ticketRequestDTO, u.getId());
 	}
 

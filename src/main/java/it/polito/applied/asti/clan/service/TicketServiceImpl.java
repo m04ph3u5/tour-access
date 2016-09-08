@@ -86,8 +86,8 @@ public class TicketServiceImpl implements TicketService{
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
 	
-	@Autowired
-	private UtilPostToAclTask postToAcl;
+//	@Autowired
+//	private UtilPostToAclTask postToAcl;
 	
 	@Override
 	public void operatorGenerateTickets(TicketRequestDTO ticketRequestDTO, String operatorId) throws BadRequestException, ServiceUnaivalableException {
@@ -114,8 +114,8 @@ public class TicketServiceImpl implements TicketService{
 		end = c.getTime();
 		
 		
-		if(!ticketRepo.isValid(ticketRequestDTO.getTicketsNumber().toArray(new String [0]),startForValidation)){
-			if(ticketRequestDTO.getTicketsNumber().size()==1)
+		if(!ticketRepo.isValid(ticketRequestDTO.getTicketNumber(),startForValidation)){
+			if(ticketRequestDTO.getNumPeople()==1)
 				throw new BadRequestException("Ticket gia' prenotato per la data selezionata");
 			else
 				throw new BadRequestException("Ticket gia' prenotati per la data selezionata");
@@ -132,11 +132,11 @@ public class TicketServiceImpl implements TicketService{
 			t.setTicketRequestId(ticketRequest.getId());
 			t.setSites(ticketRequest.getPlacesId());
 			t.setIdTicket(n);
-			t.setStartDate(start);  //TODO decidere se va bene
+			t.setStartDate(start);  
 			t.setEmissionDate(start);
 			t.setEndDate(end);
-			
-			//TODO da decidere come e quando settare la duration
+			t.setNumPeople(ticketRequest.getNumPeople());
+		
 			
 			//setto il ruolo e lo stato del/dei biglietto/i
 			
@@ -177,13 +177,14 @@ public class TicketServiceImpl implements TicketService{
 		}
 		
 		ticketRepo.save(tickets);
-		
-		try {
-			postToAcl.sendTicketsToAcl(tickets);
-		} catch (JSONException | IOException e) {
-			ticketRepo.removeLastTickets(tickets);
-			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-		}
+
+		// TODO comment out		
+//		try {
+//			postToAcl.sendTicketsToAcl(tickets);
+//		} catch (JSONException | IOException e) {
+//			ticketRepo.removeLastTickets(tickets);
+//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
@@ -193,13 +194,14 @@ public class TicketServiceImpl implements TicketService{
 
 		Ticket t = ticketRepo.findLastTicket(id);
 		if(t!=null){
-			try{
+			// TODO comment out		
+//			try{
 				ticketRepo.moveToDeleted(t.getIdTicket());
 				ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
-				postToAcl.deleteTicketToAcl(t);
-			} catch (JSONException | IOException e) {
-				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-			}
+//				postToAcl.deleteTicketToAcl(t);
+//			} catch (JSONException | IOException e) {
+//				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+//			}
 
 		}else
 			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
@@ -235,7 +237,6 @@ public class TicketServiceImpl implements TicketService{
 	public void savePassingAttempt(Read read) {
 		//salvo la lettura nel db (cos� come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
-		//TODO modifica startDate e endDate del biglietto se il passaggio � stato accettato ed il biglietto era ancora inutilizzato
 		if(read.getIsAccepted()){
 			Ticket t = ticketRepo.findLastTicket(read.getIdTicket());
 			if(t!=null && t.getStatus().equals(RELEASED)){
@@ -250,7 +251,6 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public List<Poi> getAllPlaces() {
-		// TODO Auto-generated method stub
 		return poiRepo.findAllPlaceCustom();
 	}
 
@@ -300,11 +300,13 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void pingService() throws ServiceUnaivalableException {
-		try {
-			postToAcl.ping();
-		} catch (BadRequestException | IOException e) {
-			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
-		}
+		// TODO comment out		
+
+//		try {
+//			postToAcl.ping();
+//		} catch (BadRequestException | IOException e) {
+//			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
+//		}
 	}
 
 	@Override

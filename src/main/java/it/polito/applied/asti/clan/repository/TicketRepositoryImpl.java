@@ -64,7 +64,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	private MongoOperations mongoOp;
 	
 	@Override
-	public boolean isValid(String[] ticketNumbers, Date start) {
+	public boolean isValid(String ticketNumber, Date start) {
 		Query q = new Query();
 		Criteria c2 = new Criteria();
 		Criteria c3 = new Criteria();
@@ -72,7 +72,7 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		c2.orOperator(c3, Criteria.where("status").is(CANCELED));
 		Criteria c4 = new Criteria();
 		c4.andOperator(c3, Criteria.where("status").ne(DELETED));
-		q.addCriteria(Criteria.where("idTicket").in((Object[])ticketNumbers)
+		q.addCriteria(Criteria.where("idTicket").is(ticketNumber)
 				.andOperator(c4));
 			
 		

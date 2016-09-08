@@ -1,6 +1,7 @@
 package it.polito.applied.asti.clan.pojo;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class TicketRequest {
 	private String tipology;
 	private boolean acceptedFromAcl=false;
 	private boolean someTicketIsCanceled=false;
+	private int numPeople;
 	
 	public TicketRequest(){
 		
@@ -26,31 +28,24 @@ public class TicketRequest {
 	
 	public TicketRequest(TicketRequestDTO dto, String operatorId){
 		this.operatorId = operatorId;
-		this.ticketNumbers = dto.getTicketsNumber();
+		this.ticketNumbers = new HashSet<String>();
+		ticketNumbers.add(dto.getTicketNumber());
 		this.placesId = dto.getPlacesId();
 		this.requestDate = new Date();
 		this.info = dto.getInfo();
 		this.tipology = dto.getTipology();
-//		if(dto.getTipology().equals("")){
-//			
-//		}else if(dto.getTipology().equals("")){
-//			
-//		}else if(dto.getTipology().equals("")){
-//			
-//		}else if(dto.getTipology().equals("")){
-//			
-//		}
+		this.numPeople = dto.getNumPeople();
 		
-		if(this.ticketNumbers!=null && this.ticketNumbers.size()==1){
+		if(numPeople==1){
 			this.isGroup=false;
-			this.info.setWithChildren(null);
-			this.info.setWithElderly(null);
-		}
-		else if(this.ticketNumbers!=null && this.ticketNumbers.size()>1){
+			info.setCouple(null);
+			info.setFamily(null);
+			info.setSchoolGroup(null);
+		}else if(numPeople>1){
 			this.isGroup=true;
-			this.info.setAge(null);
-			this.info.setGender(null);
-		}		
+			info.setAge(null);
+			info.setGender(null);
+		}
 	}
 	
 	
@@ -115,6 +110,12 @@ public class TicketRequest {
 	}
 	public void setRequestDate(Date requestDate) {
 		this.requestDate = requestDate;
+	}
+	public int getNumPeople() {
+		return numPeople;
+	}
+	public void setNumPeople(int numPeople) {
+		this.numPeople = numPeople;
 	}
 	
 	

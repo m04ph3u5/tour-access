@@ -8,7 +8,7 @@ import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TotAggregate;
 
 public interface CustomTicketRepository {
-	public boolean isValid(String[] ticketNumbers, Date start);
+	public boolean isValid(String string, Date start);
 	public Ticket findByTicketNumberNow(String ticketNumber);
 	public List<Ticket> getValidTickets();
 	public List<Ticket> getAllTickets();

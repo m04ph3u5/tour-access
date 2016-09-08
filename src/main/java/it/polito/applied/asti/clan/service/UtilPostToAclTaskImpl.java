@@ -45,6 +45,7 @@ public class UtilPostToAclTaskImpl implements UtilPostToAclTask {
 		
 		obj.put("idTickets", idTickets);
 		obj.put("role", t.getRole());
+		obj.put("numPeople", t.getNumPeople());
 		if(t.getEmissionDate()!=null)
 			obj.put("emissionDate", t.getEmissionDate().getTime());
 		if(t.getStartDate()!=null)

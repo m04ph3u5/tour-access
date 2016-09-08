@@ -20,6 +20,8 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 	self.error = false;
 	
 	self.validateTicket = 1;
+	// When ticketGroup was enabled there is no more need to evaluate and pass on card reader more than one ticket.
+	var toValideteTicketGroup=1;
 	
 	self.addTicket = function(){
 		buffer.splice(0, buffer.length);
@@ -37,13 +39,14 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 				self.validateTicket++;
 				self.t="";
 
-				if(self.validateTicket>(self.numTicket)){
+				if(self.validateTicket>(toValideteTicketGroup)){
 					self.validateTicket--;
 					self.validation = false;
 					self.load = true;
 					
 					var ticketRequest = {};
-					ticketRequest.ticketsNumber = self.tickets;
+					//Don't pass array anymore to ticketRequest, but just string that represents a single ticketId
+					ticketRequest.ticketNumber = self.tickets[0];
 					ticketRequest.placesId = new Array();
 					if(self.places){
 						for(var i=0; i<self.places.length; i++){
@@ -53,6 +56,10 @@ angular.module('asti.application').controller('associateCtrl', ['$state', 'apiSe
 					ticketRequest.info = self.info;
 				
 					ticketRequest.tipology = self.ticketTipology;
+					ticketRequest.numPeople = self.numTicket;
+					
+					console.log("#####");
+					console.log(ticketRequest);
 					
 					apiService.orderTicket(ticketRequest).then(
 							function(response){

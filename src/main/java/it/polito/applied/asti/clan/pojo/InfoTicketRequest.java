@@ -8,9 +8,6 @@ public class InfoTicketRequest {
 	private String gender;
 	private String age;
 	
-	private Boolean withChildren;
-	private Boolean withElderly;
-	
 	private Boolean family;
 	private Boolean couple;
 	private Boolean schoolGroup;
@@ -30,20 +27,7 @@ public class InfoTicketRequest {
 	}
 	public void setAge(String age) {
 		this.age = age;
-	}
-	public Boolean isWithChildren() {
-		return withChildren;
-	}
-	public void setWithChildren(Boolean withChildren) {
-		this.withChildren = withChildren;
-	}
-	public Boolean isWithElderly() {
-		return withElderly;
-	}
-	public void setWithElderly(Boolean withElderly) {
-		this.withElderly = withElderly;
-	}
-	
+	}	
 	public Boolean getFamily() {
 		return family;
 	}
@@ -68,16 +52,10 @@ public class InfoTicketRequest {
 	public void setRegion(int region) {
 		this.region = region;
 	}
-	public Boolean getWithChildren() {
-		return withChildren;
-	}
-	public Boolean getWithElderly() {
-		return withElderly;
-	}
 	@Override
 	public String toString(){
-		return "Gender: "+gender+" Age: "+age+" withChildren: "+withChildren+" withElderly: "+withElderly+
-				" familiy: "+family+" couple: "+couple+" schoolGroup: "+schoolGroup+" region: "+region;
+		return "Gender: "+gender+" Age: "+age+" familiy: "+family+
+				" couple: "+couple+" schoolGroup: "+schoolGroup+" region: "+region;
 	}
 	
 	
