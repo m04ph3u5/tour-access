@@ -1,6 +1,5 @@
 package it.polito.applied.asti.clan.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -235,7 +233,7 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void savePassingAttempt(Read read) {
-		//salvo la lettura nel db (cos� come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
+		//salvo la lettura nel db (così come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
 		if(read.getIsAccepted()){
 			Ticket t = ticketRepo.findLastTicket(read.getIdTicket());
@@ -311,7 +309,7 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public long getNumberSelledTicket(Date date) {
-		return ticketRepo.countTicketFromDate(date);
+		return ticketRepo.totalTicketsV2(date, null);
 	}
 
 	@Override
@@ -322,8 +320,7 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public StatisticsInfo getStatisticsInfo(Date start, Date end) {
 		StatisticsInfo s = new StatisticsInfo();
-		long totT = ticketRepo.totalTickets(start, end);
-		System.out.println(totT);
+		long totT = ticketRepo.totalTicketsV2(start, end);
 		s.setTotTickets(totT); //setto il numero totale di tickets prendendolo dal repo dei ticket
 		long totSingle = ticketRequestRepo.totalSingleTickets(start, end);
 		s.setTotSingleTickets(totSingle);
@@ -333,17 +330,13 @@ public class TicketServiceImpl implements TicketService{
 		s.setTotGroups(ticketRequestRepo.totalGroups(start, end));
 		s.setTotMale(totSingleMan);
 		s.setTotFemale(totSingle - totSingleMan);
-		s.setTotChildren(ticketRequestRepo.totalGroupWithChildrenTickets(start, end));
-		s.setTotElderly(ticketRequestRepo.totalGroupWithOldManTickets(start, end));
-		s.setTotChildrenAndElderly(ticketRequestRepo.totalGroupWithChildrenAndOldManTickets(start, end));
 		s.setYoung(ticketRequestRepo.totalSingleYoung(start, end));
 		s.setMiddleAge(ticketRequestRepo.totalSingleMiddleAge(start, end));
 		s.setElderly(ticketRequestRepo.totalSingleElderly(start, end));
-		s.setTotAccess(readRepo.countIngress(start, end));
+		s.setTotAccess(readRepo.countIngressV2(start, end));
 		s.setCouple(ticketRequestRepo.totalCouple(start,end));
 		s.setFamily(ticketRequestRepo.totalFamily(start,end));
 		s.setSchoolGroup(ticketRequestRepo.totalSchoolGroup(start,end));
-//		System.out.println("male: "+ totSingleMan);
 		
 		
 		return s;
@@ -352,8 +345,8 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
-		List<TotAggregate> access = readRepo.getAccessGrouped(start, end);
-		List<TotAggregate> ticket = ticketRepo.getTicketGrouped(start, end);
+		List<TotAggregate> access = readRepo.getAccessGrouped(start, end); //TODO adapt this method to tickets' group
+		List<TotAggregate> ticket = ticketRepo.getTicketGroupedV2(start, end);
 		
 		Calendar cal = Calendar.getInstance();
 		
@@ -370,7 +363,6 @@ public class TicketServiceImpl implements TicketService{
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			start = cal.getTime();
 		}
-		
 		
 		for(TotAggregate tt : ticket){
 			
@@ -395,7 +387,6 @@ public class TicketServiceImpl implements TicketService{
 			}
 		}
 		
-		
 		for(TotAggregate aa : access){
 			cal.set(Calendar.YEAR, aa.getYear());
 			cal.set(Calendar.MONTH, aa.getMonth()-1);
@@ -416,82 +407,7 @@ public class TicketServiceImpl implements TicketService{
 			}
 		}
 		
-		
 		return map;
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(end);
-//		c.set(Calendar.HOUR_OF_DAY,23);
-//		c.set(Calendar.MINUTE,59);
-//		c.set(Calendar.SECOND, 59);
-//		c.set(Calendar.MILLISECOND, 999);
-//		end = c.getTime();
-//
-//		c.set(Calendar.YEAR, 2015);
-//		c.set(Calendar.MONTH, 11);
-//		c.set(Calendar.DAY_OF_MONTH, 1);
-//		c.set(Calendar.HOUR_OF_DAY,0);
-//		c.set(Calendar.MINUTE,0);
-//		c.set(Calendar.SECOND, 0);
-//		c.set(Calendar.MILLISECOND, 0);
-//		Date first = c.getTime();
-//		
-//		c.setTime(start);
-//
-//		if(start.before(first)){
-//			c.set(Calendar.YEAR, 2015);
-//			c.set(Calendar.MONTH, 11);
-//			c.set(Calendar.DAY_OF_MONTH, 1);
-//		}
-//		
-//		c.set(Calendar.HOUR_OF_DAY,0);
-//		c.set(Calendar.MINUTE,0);
-//		c.set(Calendar.SECOND, 0);
-//		c.set(Calendar.MILLISECOND, 0);
-//		start = c.getTime();
-//
-//		while(start.before(end)){
-//			map.put(start, new TicketAccessSeries());
-//			c.setTime(start);
-//			c.set(Calendar.HOUR_OF_DAY,0);
-//			c.set(Calendar.MINUTE,0);
-//			c.set(Calendar.SECOND, 0);
-//			c.set(Calendar.MILLISECOND, 0);
-//			c.add(Calendar.DAY_OF_MONTH, 1);
-//			start = c.getTime();
-//		}
-//		
-//		for(TotAggregate a : access){
-//			Date d = a.getDate();
-//			c.setTime(d);
-//			c.set(Calendar.HOUR_OF_DAY,0);
-//			c.set(Calendar.MINUTE,0);
-//			c.set(Calendar.SECOND, 0);
-//			c.set(Calendar.MILLISECOND, 0);
-//
-//			d = c.getTime();
-//			TicketAccessSeries tAS = map.get(d);
-//			if(tAS!=null){
-//					tAS.addToTotAccesses(a.getTot());
-//					map.put(d, tAS);
-//			}
-//		}
-//		
-//		for(TotAggregate t : ticket){
-//			Date d = t.getDate();
-//			c.setTime(d);
-//			c.set(Calendar.HOUR_OF_DAY,0);
-//			c.set(Calendar.MINUTE,0);
-//			c.set(Calendar.SECOND, 0);
-//			c.set(Calendar.MILLISECOND, 0);
-//
-//			d = c.getTime();
-//			TicketAccessSeries tAS = map.get(d);
-//			if(tAS!=null){
-//				tAS.addToTotTickets(t.getTot());
-//				map.put(d, tAS);
-//			}
-//		}
-		
 	}
 
 	@Override
@@ -510,7 +426,23 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public List<RegionRank> getRegionRank(Date start, Date end) {
-		return ticketRequestRepo.getRegionRank(start, end);
+		return ticketRequestRepo.getRegionRankV2(start, end);
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.service.TicketService#savePassingAttemptV2(it.polito.applied.asti.clan.pojo.Read)
+	 */
+	@Override
+	public void savePassingAttemptV2(Read read) {
+		//salvo la lettura nel db (così come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
+		Ticket t = ticketRepo.findLastTicket(read.getIdTicket());
+		if(t!=null && t.getStatus().equals(RELEASED)){
+			if(t.getNumPeople()!=0)
+				read.setNumPeople(t.getNumPeople());
+			else
+				read.setNumPeople(1);
+		}
+		readRepo.save(read);
 	}
 
 	/* (non-Javadoc)

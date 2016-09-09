@@ -319,15 +319,70 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 	}
 
 	/* (non-Javadoc)
-	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#findReleased()
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#totalTicketsV2(java.util.Date, java.util.Date)
 	 */
-//	@Override
-//	public List<Ticket> findReleasedNotService() {
-//		Query q = new Query();
-//		q.addCriteria(Criteria.where("status").is(RELEASED)
-//				.andOperator(Criteria.where("role").ne(SERVICE)));
-//		q.with(new Sort(Sort.Direction.DESC, "emissionDate"));
-//		return mongoOp.find(q, Ticket.class);
-//	}
+	@Override
+	public long totalTicketsV2(Date start, Date end) {
+		Criteria c = new Criteria();
+
+		if(start != null && end != null)
+			c = (Criteria.where("emissionDate").gte(start)
+					.andOperator(Criteria.where("emissionDate").lte(end)
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED)))));
+		else if(start == null && end != null)
+			c = (Criteria.where("emissionDate").lte(end)
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED))));
+		else if(start != null && end == null)
+			c = (Criteria.where("emissionDate").gte(start)
+					.andOperator(Criteria.where("status").ne(PENDING)
+					.andOperator(Criteria.where("status").ne(DELETED))));
+
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.group().sum("numPeople").as("tot"));
+		
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
+		List<TotAggregate> l = result.getMappedResults();
+		if(l==null || l.isEmpty())
+			return 0;
+		else
+			return l.get(0).getTot();
+	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#getTicketGroupedV2(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<TotAggregate> getTicketGroupedV2(Date start, Date end) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		
+		Criteria c = new Criteria();
+		c = (Criteria.where("emissionDate").gte(start).
+				andOperator(Criteria.where("emissionDate").lte(end)
+						.andOperator(Criteria.where("status").ne(PENDING)
+								.andOperator(Criteria.where("status").ne(DELETED)))));
+		
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project()
+				.and("emissionDate").plus(offset).as("emissionDate")
+				.and("numPeople").as("numPeople"),
+				Aggregation.sort(Sort.Direction.DESC, "emissionDate"),
+				Aggregation.project()
+				.andExpression("year(emissionDate)").as("year")
+				.andExpression("month(emissionDate)").as("month")
+				.andExpression("dayOfMonth(emissionDate)").as("day")
+				.and("numPeople").as("numPeople"),
+				Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+				.sum("numPeople").as("tot"));
+				
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Ticket.class, TotAggregate.class);
+		List<TotAggregate> l = result.getMappedResults();
+		
+		return l;
+	}
 
 }

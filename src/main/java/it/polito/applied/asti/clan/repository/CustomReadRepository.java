@@ -19,5 +19,8 @@ public interface CustomReadRepository {
 	 */
 	public List<Read> find(Date start, Date end);
 	public List<Read> findAcceptedAfter(Date from);
+	
+	public long countIngressFromDateV2(Date date);
+	public long countIngressV2(Date start, Date end);
 
 }

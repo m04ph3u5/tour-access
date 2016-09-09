@@ -9,9 +9,6 @@ public class StatisticsInfo {
 	private long totAccess;
 	private long totMale;
 	private long totFemale;
-	private long totChildren;
-	private long totElderly;
-	private long totChildrenAndElderly;
 	private long young;
 	private long middleAge;
 	private long elderly;
@@ -24,16 +21,6 @@ public class StatisticsInfo {
 	}
 	
 	
-	public long getTotChildrenAndElderly() {
-		return totChildrenAndElderly;
-	}
-
-
-	public void setTotChildrenAndElderly(long totChildrenAndElderly) {
-		this.totChildrenAndElderly = totChildrenAndElderly;
-	}
-
-
 	public long getTotTickets() {
 		return totTickets;
 	}
@@ -84,22 +71,6 @@ public class StatisticsInfo {
 
 	public void setTotFemale(long totFemale) {
 		this.totFemale = totFemale;
-	}
-
-	public long getTotChildren() {
-		return totChildren;
-	}
-
-	public void setTotChildren(long totChildren) {
-		this.totChildren = totChildren;
-	}
-
-	public long getTotElderly() {
-		return totElderly;
-	}
-
-	public void setTotElderly(long totElderly) {
-		this.totElderly = totElderly;
 	}
 
 	public long getYoung() {

@@ -51,7 +51,6 @@ import it.polito.applied.asti.clan.pojo.Response;
 import it.polito.applied.asti.clan.pojo.RoleTicket;
 import it.polito.applied.asti.clan.pojo.SensorLog;
 import it.polito.applied.asti.clan.pojo.StatisticsInfo;
-import it.polito.applied.asti.clan.pojo.StatisticsSinglesInfo;
 import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
@@ -62,6 +61,7 @@ import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.UserMessage;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.TicketRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
@@ -81,8 +81,8 @@ public class ApiRestController extends BaseController{
 	@Autowired
 	private TicketService ticketService;
 	
-//	@Autowired
-//	private TicketRepository ticketRepo;
+	@Autowired
+	private TicketRepository ticketRepo;
 	
 	@Autowired
 	private SensorService sensorService;
@@ -231,7 +231,7 @@ public class ApiRestController extends BaseController{
 			throw new BadRequestException();
 		read.setDateOnServer(new Date());
 		read.setIdTicket(read.getIdTicket().trim());
-		ticketService.savePassingAttempt(read);
+		ticketService.savePassingAttemptV2(read);
 		TicketNumber t = new TicketNumber();
 		t.setTicket(read.getIdTicket());
 		return t;
@@ -321,14 +321,14 @@ public class ApiRestController extends BaseController{
 //		
 //	}
 	
-	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
-	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public StatisticsSinglesInfo getSinglessStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
-		StatisticsSinglesInfo stats = new StatisticsSinglesInfo("","");
-		return stats;
-		
-	}
+//	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
+//	@RequestMapping(value="/v1/statistics/singles", method=RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public StatisticsSinglesInfo getSinglessStatistics( @RequestParam(value = "start", required=false) Date start, @RequestParam (value = "end", required=false) Date end) throws BadRequestException, NotFoundException{
+//		StatisticsSinglesInfo stats = new StatisticsSinglesInfo("","");
+//		return stats;
+//		
+//	}
 	
 	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
 	@RequestMapping(value="/v1/statistics/logApp", method=RequestMethod.GET)
@@ -576,11 +576,15 @@ public class ApiRestController extends BaseController{
 		return userMessage;
 	}
 	
-//	@PreAuthorize("hasRole('ROLE_SUPERVISOR')")
-//	@RequestMapping(value="/v1/test", method=RequestMethod.POST)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	public Integer test() throws BadRequestException{
-//		ticketService.updateValidity();
-//		return ticketService.getValidTickets().size();
-//	}
+	
+	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public Long test() throws BadRequestException{
+		Date start = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		cal.set(Calendar.HOUR_OF_DAY, 1);
+		start = cal.getTime();
+		return ticketRepo.totalTicketsV2(start,null);
+	}
 }

@@ -115,4 +115,46 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 		return mongoOp.find(q, Read.class);
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomReadRepository#countIngressFromDateV2(java.util.Date)
+	 */
+	@Override
+	public long countIngressFromDateV2(Date date) {
+		Criteria c = new Criteria();
+		c = Criteria.where("isAccepted").is(true)
+				.andOperator(Criteria.where("dtaTransit").gte(date));
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.group().sum("numPeople").as("tot"));
+		
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
+		List<TotAggregate> l = result.getMappedResults();
+		if(l==null || l.isEmpty())
+			return 0;
+		else
+			return l.get(0).getTot();	}
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomReadRepository#countIngressV2(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public long countIngressV2(Date start, Date end) {
+
+		
+		Criteria c = new Criteria();
+		c = Criteria.where("isAccepted").is(true)
+				.andOperator(Criteria.where("dtaTransit").gte(start)
+						.andOperator(Criteria.where("dtaTransit").lte(end)));
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.group().sum("numPeople").as("tot"));
+		
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
+		List<TotAggregate> l = result.getMappedResults();
+		if(l==null || l.isEmpty())
+			return 0;
+		else
+			return l.get(0).getTot();
+	}
+
 }

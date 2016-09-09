@@ -17,7 +17,6 @@ import com.mongodb.WriteResult;
 
 import it.polito.applied.asti.clan.pojo.InfoTicketRequest;
 import it.polito.applied.asti.clan.pojo.RegionRank;
-import it.polito.applied.asti.clan.pojo.StatisticsInfo;
 import it.polito.applied.asti.clan.pojo.TicketRequest;
 
 public class TicketRequestRepositoryImpl implements CustomTicketRequestRepository{
@@ -38,35 +37,6 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		
 	}
 	
-//	@Override
-//	public StatisticsInfo getStatisticsInfoGroup(Date start, Date end) {
-//		Criteria c = new Criteria();
-//		c = Criteria.where("requestDate").gte(start)
-//				.andOperator(Criteria.where("requestDate").lte(end)
-//				.andOperator(Criteria.where("acceptedFromAcl").is(true)
-//				.andOperator(Criteria.where("isGroup").is(true))));
-//		
-//		Aggregation agg;
-//		agg = Aggregation.newAggregation(Aggregation.match(c),
-//				Aggregation.group("isGroup")
-//				);
-//		
-//		AggregationResults result = mongoOp.aggregate(agg, TicketRequest.class, StatisticsInfo.class);
-//		StatisticsInfo s = (StatisticsInfo)result.getUniqueMappedResult();
-//		return s;
-//	}
-
-	@Override
-	public StatisticsInfo getStatisticsInfoSingle(Date start, Date end) {
-		Criteria c = new Criteria();
-		c = Criteria.where("requestDate").gte(start)
-				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true)
-				.andOperator(Criteria.where("isGroup").is(false))));
-		
-		Aggregation agg;
-		return null;
-	}
 
 	@Override
 	public long totalSingleTickets(Date start, Date end) {
@@ -97,39 +67,6 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 				.andOperator(Criteria.where("requestDate").lte(end)
 				.andOperator(Criteria.where("info.gender").is("female")
 				.andOperator(Criteria.where("acceptedFromAcl").is(true)))));
-		return mongoOp.count(q, TicketRequest.class);
-	}
-
-	@Override
-	public long totalGroupWithChildrenTickets(Date start, Date end) {
-		Query q = new Query();
-		q.addCriteria(Criteria.where("requestDate").gte(start)
-				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.withChildren").is(true)
-				.andOperator(Criteria.where("info.withElderly").is(false)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
-		return mongoOp.count(q, TicketRequest.class);
-	}
-
-	@Override
-	public long totalGroupWithOldManTickets(Date start, Date end) {
-		Query q = new Query();
-		q.addCriteria(Criteria.where("requestDate").gte(start)
-				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.withElderly").is(true)
-				.andOperator(Criteria.where("info.withChildren").is(false)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
-		return mongoOp.count(q, TicketRequest.class);
-	}
-
-	@Override
-	public long totalGroupWithChildrenAndOldManTickets(Date start, Date end) {
-		Query q = new Query();
-		q.addCriteria(Criteria.where("requestDate").gte(start)
-				.andOperator(Criteria.where("requestDate").lte(end)
-				.andOperator(Criteria.where("info.withElderly").is(true)
-				.andOperator(Criteria.where("info.withChildren").is(true)
-				.andOperator(Criteria.where("acceptedFromAcl").is(true))))));
 		return mongoOp.count(q, TicketRequest.class);
 	}
 	
@@ -271,6 +208,29 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		q.with(new Sort(Direction.ASC, "requestDate"));
 		
 		return mongoOp.find(q, TicketRequest.class);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRequestRepository#getRegionRankV2(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<RegionRank> getRegionRankV2(Date start, Date end) {
+		Criteria c = Criteria.where("requestDate").gte(start)
+				.andOperator(Criteria.where("requestDate").lte(end)
+				.andOperator(Criteria.where("acceptedFromAcl").is(true)));
+				
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project()
+					.and("info.region").as("regionCode")
+					.and("numPeople").as("numPeople"),
+				Aggregation.group("regionCode").sum("numPeople").as("numAccess"),
+				Aggregation.project("numAccess").and("regionCode").previousOperation());
+		
+		AggregationResults<RegionRank> result = mongoOp.aggregate(agg, TicketRequest.class, RegionRank.class);
+		List<RegionRank> list  = result.getMappedResults();
+				
+		return list;
 	}
 
 	

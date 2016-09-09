@@ -53,7 +53,7 @@
  	   	<intercept-url pattern="/supervisor" access="permitAll" requires-channel="https"/>
  	   	<intercept-url pattern="/404" access="permitAll" requires-channel="https"/>
  	   	 	   	
-<!--  	   	<intercept-url pattern="/api/v1/test" method="POST" access="permitAll" requires-channel="https"/> -->
+ 	   	<intercept-url pattern="/api/v1/test" access="permitAll" requires-channel="https"/>
  	   	
 <!--  	   	<intercept-url pattern="/api/v1/buyTickets" access="permitAll" requires-channel="https"/> -->
 

@@ -24,4 +24,10 @@ public interface CustomTicketRepository {
 	public void moveToDeleted(String id);
 	public List<Ticket> findInList(Set<String> ticketNumbers, Date start, Date end);
 //	public List<Ticket> findReleasedNotService();
+	
+	
+	//NEW VERSION FOR GROUP TICKET
+	public long totalTicketsV2(Date start, Date end);
+	public List<TotAggregate> getTicketGroupedV2(Date start, Date end);
+
 }

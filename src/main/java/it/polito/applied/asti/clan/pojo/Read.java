@@ -23,6 +23,8 @@ public class Read {
 	private Date dtaExpire;
 	private Date dateOnServer;
 	
+	/*New field inserted to manage tickets' group*/
+	private int numPeople;
 	
 	public Read(){
 		
@@ -89,6 +91,14 @@ public class Read {
 
 	public void setDtaExpire(Date dtaExpire) {
 		this.dtaExpire = dtaExpire;
+	}
+
+	public int getNumPeople() {
+		return numPeople;
+	}
+
+	public void setNumPeople(int numPeople) {
+		this.numPeople = numPeople;
 	}
 
 
