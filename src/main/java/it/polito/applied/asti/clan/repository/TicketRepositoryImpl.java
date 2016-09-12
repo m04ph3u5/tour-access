@@ -385,4 +385,17 @@ public class TicketRepositoryImpl implements CustomTicketRepository{
 		return l;
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRepository#getAllValidTicket()
+	 */
+	@Override
+	public List<Ticket> getAllValidTicket() {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("status").ne(CANCELED).
+				andOperator(Criteria.where("status").ne(DELETED).
+				andOperator(Criteria.where("status").ne(PENDING))));
+		q.with(new Sort(Sort.Direction.DESC,"emissionDate"));
+		return mongoOp.find(q, Ticket.class);
+	}
+
 }

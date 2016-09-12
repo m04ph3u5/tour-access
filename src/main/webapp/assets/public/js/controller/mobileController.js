@@ -85,7 +85,13 @@ angular.module('asti.supervisor').controller('mobileCtrl', ['$state', 'apiServic
 			break;
 		}
 		case "4": {
-			self.periodString="dal "+$filter('date')(self.dateStart, "d MMMM")+" al "+$filter('date')(self.dateEnd, "d MMMM");
+			var first = $filter('date')(self.dateStart, "d MMMM");
+			var second = $filter('date')(self.dateEnd, "d MMMM");
+			if(first!=second){
+				self.periodString="dal "+first+" al "+second;
+			}else{
+				self.periodString=""+first;
+			}
 			break;
 		}
 		}

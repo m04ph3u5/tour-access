@@ -233,8 +233,7 @@ public class AppServiceImpl implements AppService{
 	@Override
 	public Map<Date, AppAccessInstallSeries> getAppInstallAccessSeries(Date start, Date end) {
 		TreeMap<Date, AppAccessInstallSeries> map = new TreeMap<Date, AppAccessInstallSeries>();
-		List<TotAggregate> devices = logRepo.getDevicesGrouped(start, end);
-		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
+		
 		Calendar c = Calendar.getInstance();
 		c.setTime(end);
 		c.set(Calendar.HOUR_OF_DAY,23);
@@ -264,11 +263,15 @@ public class AppServiceImpl implements AppService{
 		c.set(Calendar.MINUTE,0);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
+		
 		Date current = c.getTime();
-		for(TotAggregate tt : devices){
+		List<TotAggregate> devices = logRepo.getDevicesGrouped(current, end);
+		List<TotAggregate> install = logRepo.getInstallGrouped(current, end);
+		
+		
+		for(TotAggregate tt : install){
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
-		
 			while(current.before(d)){
 				map.put(current, new AppAccessInstallSeries());
 				c.setTime(current);
@@ -276,21 +279,26 @@ public class AppServiceImpl implements AppService{
 				current = c.getTime();
 			}
 			AppAccessInstallSeries aa = new AppAccessInstallSeries();
-			aa.setTotDevice(tt.getTot());
+			aa.setTotInstall(tt.getTot());
 			map.put(current, aa);
 			c.setTime(current);
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			current = c.getTime();
 		}
 		
-		for(TotAggregate tt : install){
-			System.out.println(tt);
+		for(TotAggregate tt : devices){
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
 			Date d = c.getTime();
 			AppAccessInstallSeries aa = map.get(d);
 			if(aa!=null){
-				aa.setTotInstall(tt.getTot());
+				aa.setTotDevice(tt.getTot());
 			}
+		}	
+		while(current.before(end)){
+			map.put(current, new AppAccessInstallSeries());
+			c.setTime(current);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			current = c.getTime();
 		}
 		return map;
 	}
@@ -298,11 +306,6 @@ public class AppServiceImpl implements AppService{
 	@Override
 	public Map<Date, AppInfo> getAppInfo(Date start, Date end) {
 		TreeMap<Date, AppInfo> map = new TreeMap<Date, AppInfo>();
-		List<TotAggregate> access = logRepo.getAccessGrouped(start, end);
-		List<TotAggregate> install = logRepo.getInstallGrouped(start, end);
-		List<TotAggregate> pathStarted = logRepo.getPathStarted(start, end);
-		List<TotAggregate> checkedTicket = logRepo.getCheckedTicket(start, end);
-		
 		Calendar c = Calendar.getInstance();
 		c.setTime(end);
 		c.set(Calendar.HOUR_OF_DAY,23);
@@ -333,6 +336,11 @@ public class AppServiceImpl implements AppService{
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		Date current = c.getTime();
+		
+		List<TotAggregate> access = logRepo.getAccessGrouped(current, end);
+		List<TotAggregate> install = logRepo.getInstallGrouped(current, end);
+		List<TotAggregate> pathStarted = logRepo.getPathStarted(current, end);
+		List<TotAggregate> checkedTicket = logRepo.getCheckedTicket(current, end);
 		
 		for(TotAggregate tt : access){
 			c.set(tt.getYear(), tt.getMonth()-1, tt.getDay());
@@ -392,7 +400,38 @@ public class AppServiceImpl implements AppService{
 		for(Poi p : poiList){
 			namePoi.put(p.getIdSite(), p.getName());
 		}
-		List<AppPoiRank> l = logRepo.getOpenPoiRank(start, end);
+	
+		Calendar c = Calendar.getInstance();
+		c.setTime(end);
+		c.set(Calendar.HOUR_OF_DAY,23);
+		c.set(Calendar.MINUTE,59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 999);
+		end = c.getTime();
+		c.set(Calendar.YEAR, 2016);
+		c.set(Calendar.MONTH, 0);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Date first = c.getTime();
+		
+		c.setTime(start);
+
+		if(start.before(first)){
+			c.set(Calendar.YEAR, 2016);
+			c.set(Calendar.MONTH, 0);
+			c.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		
+		c.set(Calendar.HOUR_OF_DAY,0);
+		c.set(Calendar.MINUTE,0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Date current = c.getTime();
+		
+		List<AppPoiRank> l = logRepo.getOpenPoiRank(current, end);
 		for(AppPoiRank p : l){
 			p.setName(namePoi.get(p.getIdPoi()));
 		}

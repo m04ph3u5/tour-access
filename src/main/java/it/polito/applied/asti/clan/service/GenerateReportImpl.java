@@ -46,11 +46,11 @@ public class GenerateReportImpl implements GenerateReport{
 	//Delimiter used in CSV file
 	private final String NEW_LINE_SEPARATOR = "\n";
 
-	private final String[] ticketHeader={"IdTicket", "Data_emissione", "Data_primo_utilizzo", "Data_scadenza",  
+	private final String[] ticketHeader={"IdTicket", "Data_emissione", "Data_primo_utilizzo", "Data_scadenza", "Numero_persone",
 			"IdGruppo", "Provenienza","Genere", "Età", "Coppia", "Famiglia", "Scolaresca", "Numero_Siti", 
 			"Siti"};
 	
-	private final String[] entranceHeader={"IdTicket", "Sito", "Accettato", "Errore", "Data transito", "Data registrazione"};
+	private final String[] entranceHeader={"IdTicket", "Sito", "Accettato", "Numero_persone", "Errore", "Data transito", "Data registrazione"};
 
 	private final String[] environmentHeader={"Sito", "Sonda", "Data", "Temperatura (°C)", "Umidità (%)"};
 	
@@ -143,6 +143,8 @@ public class GenerateReportImpl implements GenerateReport{
 					ticketRecord.add(t.getStartDate());
 					//data scadenza
 					ticketRecord.add(t.getEndDate());
+					//NumPeople
+					ticketRecord.add(t.getNumPeople());
 					//Singolo o idGruppo
 					if(r.isGroup())
 						ticketRecord.add(r.getId());
@@ -189,6 +191,7 @@ public class GenerateReportImpl implements GenerateReport{
 					}
 					//NUMERO SITI
 					ticketRecord.add(r.getPlacesId().size());
+					
 					
 					//Lista siti
 					StringBuilder sb = new StringBuilder();
@@ -267,6 +270,8 @@ public class GenerateReportImpl implements GenerateReport{
 					entranceRecord.add("-");
 				//ACCETTATO
 				entranceRecord.add(r.getIsAccepted());
+				//NUMERO PERSONE
+				entranceRecord.add(r.getNumPeople());
 				//MESSAGGIO DI ERRORE
 				entranceRecord.add(r.getDesError());
 				//DATA TRANSITO

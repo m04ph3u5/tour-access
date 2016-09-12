@@ -157,4 +157,40 @@ public class ReadRepositoryImpl implements CustomReadRepository{
 			return l.get(0).getTot();
 	}
 
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomReadRepository#getAccessGroupedV2(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<TotAggregate> getAccessGroupedV2(Date start, Date end) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(start);
+		long offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		
+		
+		Criteria c = new Criteria();
+		c = (Criteria.where("dtaTransit").gte(start)
+				.andOperator(Criteria.where("dtaTransit").lte(end)
+				.andOperator(Criteria.where("isAccepted").is(true))));
+		
+		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c),
+				Aggregation.project()
+				.and("dtaTransit").plus(offset).as("dtaTransit")
+				.and("numPeople").as("numPeople"),
+				Aggregation.sort(Sort.Direction.DESC, "dtaTransit"),
+				Aggregation.project()
+				.andExpression("year(dtaTransit)").as("year")
+				.andExpression("month(dtaTransit)").as("month")
+				.andExpression("dayOfMonth(dtaTransit)").as("day")
+				.and("numPeople").as("numPeople"),
+				Aggregation.group(Aggregation.fields().and("year").and("month").and("day"))
+				.sum("numPeople").as("tot"));
+				
+	
+		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Read.class, TotAggregate.class);
+		
+		List<TotAggregate> l = result.getMappedResults();
+		
+		return l;
+	}
+
 }

@@ -117,15 +117,9 @@ public class SensorRepositoryImpl implements CustomSensorRepository {
 						.count().as("tot"));
 			}
 		
-		AggregationResults result = mongoOp.aggregate(agg, SensorLog.class, TotAvgAggregate.class);
+		AggregationResults<TotAvgAggregate> result = mongoOp.aggregate(agg, SensorLog.class, TotAvgAggregate.class);
 		List<TotAvgAggregate> i = result.getMappedResults();
 
-//		if(i!=null){
-//			System.out.println("START: "+startDate+" - END: "+endDate);
-//			for(TotAvgAggregate tt : i){
-//				System.out.println("AVG: "+tt.getAvgTemp()+" °C - "+tt.getAvgHum()+"% - DATE: "+tt.getYear()+"/"+tt.getMonth()+"/"+tt.getDay()+" "+tt.getHour() + " idSonda: " + tt.getIdSonda());
-//			}
-//		}
 		return i;
 	}
 

@@ -89,7 +89,8 @@ public class LogRepositoryImpl implements CustomLogRepository{
 	public List<TotAggregate> getAccessGrouped(Date start, Date end) {
 		Criteria c = new Criteria();
 		c = (Criteria.where("date").gte(start).
-				andOperator(Criteria.where("date").lte(end)));
+				andOperator(Criteria.where("date").lte(end)
+				.andOperator(Criteria.where("logType").is(LogType.OpenApp))));
 		
 		
 		Aggregation agg = Aggregation.newAggregation(Aggregation.match(c), 
@@ -119,7 +120,9 @@ public class LogRepositoryImpl implements CustomLogRepository{
 				.andExpression("month(date)").as("month")
 				.andExpression("dayOfMonth(date)").as("day")
 				.and("deviceId").as("deviceId"),
-				Aggregation.group("year","month", "day", "deviceId").count().as("tot"),
+				Aggregation.group("year","month", "day").addToSet("deviceId").as("set"),
+				Aggregation.unwind("set"),
+				Aggregation.group("year","month", "day").count().as("tot"),
 				Aggregation.sort(Sort.Direction.ASC, "year","month","day"));
 		
 		AggregationResults<TotAggregate> result = mongoOp.aggregate(agg, Log.class, TotAggregate.class);
@@ -130,7 +133,6 @@ public class LogRepositoryImpl implements CustomLogRepository{
 
 	@Override
 	public List<TotAggregate> getInstallGrouped(Date start, Date end) {
-		System.out.println(start+" "+end);
 		Criteria c = new Criteria();
 		c = (Criteria.where("date").gte(start).
 				andOperator(Criteria.where("date").lte(end).

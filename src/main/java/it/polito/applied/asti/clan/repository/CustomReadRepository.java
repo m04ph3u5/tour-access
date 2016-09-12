@@ -22,5 +22,6 @@ public interface CustomReadRepository {
 	
 	public long countIngressFromDateV2(Date date);
 	public long countIngressV2(Date start, Date end);
+	List<TotAggregate> getAccessGroupedV2(Date start, Date end);
 
 }

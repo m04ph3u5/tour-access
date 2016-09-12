@@ -4,8 +4,12 @@ package it.polito.applied.asti.clan.controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -55,13 +59,16 @@ import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
+import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.pojo.User;
 import it.polito.applied.asti.clan.pojo.UserMessage;
 import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
+import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
+import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
@@ -81,8 +88,15 @@ public class ApiRestController extends BaseController{
 	@Autowired
 	private TicketService ticketService;
 	
-	@Autowired
-	private TicketRepository ticketRepo;
+//	/*Next 3 are useful just for migration 
+//	 * TODO remove them after migration*/
+//	@Autowired
+//	private TicketRepository ticketRepo;
+//	@Autowired
+//	private TicketRequestRepository ticketRequestRepo;
+//	@Autowired
+//	private ReadRepository readRepo;
+//	/**/
 	
 	@Autowired
 	private SensorService sensorService;
@@ -307,8 +321,6 @@ public class ApiRestController extends BaseController{
 		start = c.getTime();
 		c.setTimeInMillis(Long.parseLong(endTS));
 		end = c.getTime();
-		System.out.println(start);
-		System.out.println(end);
 		return ticketService.getStatisticsInfo(start, end);
 	}
 	
@@ -577,14 +589,56 @@ public class ApiRestController extends BaseController{
 	}
 	
 	
-	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
-	@ResponseStatus(value = HttpStatus.OK)
-	public Long test() throws BadRequestException{
-		Date start = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(start);
-		cal.set(Calendar.HOUR_OF_DAY, 1);
-		start = cal.getTime();
-		return ticketRepo.totalTicketsV2(start,null);
-	}
+//	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public void test() throws BadRequestException{
+//		migrateTicket();
+//		migrateRead();
+//	}
+//
+//	/**
+//	 * 
+//	 */
+//	private void migrateTicket() {
+//		long t1 = System.currentTimeMillis();
+//		
+//		List<Ticket> tickets = ticketRepo.getAllValidTicket();
+//		Map<String, List<Ticket>> map = new HashMap<String, List<Ticket>>();
+//		for(Ticket t : tickets){
+//			t.setNumPeople(1);
+//			if(map.containsKey(t.getTicketRequestId())){
+//				map.get(t.getTicketRequestId()).add(t);
+//			}else{
+//				List<Ticket> tList = new LinkedList<Ticket>();
+//				tList.add(t);
+//				map.put(t.getTicketRequestId(), tList);
+//			}
+//		}
+//		
+//		List<TicketRequest> requests = ticketRequestRepo.getAllAcceptedRequest();
+//		Iterator<TicketRequest> itRequest = requests.iterator();
+//		
+//		while(itRequest.hasNext()){
+//			TicketRequest r = itRequest.next();
+//			List<Ticket> in = map.get(r.getId());
+//			if(in.size()!=r.getTicketNumbers().size()){
+//				System.out.println("ERROR: missing tickets");
+//			}
+//			r.setNumPeople(in.size());
+//			ticketRequestRepo.save(r);
+//			ticketRepo.save(in);
+//		}
+//		System.out.println((System.currentTimeMillis()-t1));
+//	}
+//
+//	/**
+//	 * 
+//	 */
+//	private void migrateRead() {
+//		List<Read> reads = readRepo.findAll();
+//		for(Read r : reads){
+//			r.setNumPeople(1);
+//		}
+//		readRepo.save(reads);
+//	}
 }

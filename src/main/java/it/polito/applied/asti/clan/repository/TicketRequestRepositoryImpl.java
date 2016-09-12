@@ -233,6 +233,18 @@ public class TicketRequestRepositoryImpl implements CustomTicketRequestRepositor
 		return list;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see it.polito.applied.asti.clan.repository.CustomTicketRequestRepository#getAllAcceptedRequest()
+	 */
+	@Override
+	public List<TicketRequest> getAllAcceptedRequest() {
+		Query q = new Query();
+		q.addCriteria(Criteria.where("acceptedFromAcl").is(true));
+		q.with(new Sort(Sort.Direction.DESC,"requestDate"));
+		return mongoOp.find(q, TicketRequest.class);
+	}
+
 	
 	
 

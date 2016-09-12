@@ -27,4 +27,6 @@ public interface CustomTicketRequestRepository {
 	public List<RegionRank> getRegionRankV2(Date start, Date end);
 
 
+	/*Method for migration data only. TODO remove it after migration*/
+	public List<TicketRequest> getAllAcceptedRequest();
 }

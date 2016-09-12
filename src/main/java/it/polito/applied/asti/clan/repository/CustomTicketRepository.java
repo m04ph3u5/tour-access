@@ -30,4 +30,7 @@ public interface CustomTicketRepository {
 	public long totalTicketsV2(Date start, Date end);
 	public List<TotAggregate> getTicketGroupedV2(Date start, Date end);
 
+	
+	//Method for migration data. TODO Remove it after migration
+	public List<Ticket> getAllValidTicket();
 }

@@ -1,5 +1,6 @@
 package it.polito.applied.asti.clan.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -84,8 +86,8 @@ public class TicketServiceImpl implements TicketService{
 	@Autowired
 	private TicketRequestRepository ticketRequestRepo;
 	
-//	@Autowired
-//	private UtilPostToAclTask postToAcl;
+	@Autowired
+	private UtilPostToAclTask postToAcl;
 	
 	@Override
 	public void operatorGenerateTickets(TicketRequestDTO ticketRequestDTO, String operatorId) throws BadRequestException, ServiceUnaivalableException {
@@ -176,13 +178,12 @@ public class TicketServiceImpl implements TicketService{
 		
 		ticketRepo.save(tickets);
 
-		// TODO comment out		
-//		try {
-//			postToAcl.sendTicketsToAcl(tickets);
-//		} catch (JSONException | IOException e) {
-//			ticketRepo.removeLastTickets(tickets);
-//			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//		}
+		try {
+			postToAcl.sendTicketsToAcl(tickets);
+		} catch (JSONException | IOException e) {
+			ticketRepo.removeLastTickets(tickets);
+			throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+		}
 		ticketRepo.toReleased(tickets);	
 		ticketRequestRepo.toReleased(ticketRequest);
 	}
@@ -192,14 +193,13 @@ public class TicketServiceImpl implements TicketService{
 
 		Ticket t = ticketRepo.findLastTicket(id);
 		if(t!=null){
-			// TODO comment out		
-//			try{
+			try{
 				ticketRepo.moveToDeleted(t.getIdTicket());
 				ticketRequestRepo.removeTicketInTicketRequest(t.getTicketRequestId(), id);
-//				postToAcl.deleteTicketToAcl(t);
-//			} catch (JSONException | IOException e) {
-//				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
-//			}
+				postToAcl.deleteTicketToAcl(t);
+			} catch (JSONException | IOException e) {
+				throw new ServiceUnaivalableException("Connessione col server non disponibile. Riprovare più tardi.");
+			}
 
 		}else
 			throw new BadRequestException("Impossibile invalidare. Biglietto non valido");
@@ -298,13 +298,11 @@ public class TicketServiceImpl implements TicketService{
 
 	@Override
 	public void pingService() throws ServiceUnaivalableException {
-		// TODO comment out		
-
-//		try {
-//			postToAcl.ping();
-//		} catch (BadRequestException | IOException e) {
-//			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
-//		}
+		try {
+			postToAcl.ping();
+		} catch (BadRequestException | IOException e) {
+			throw new ServiceUnaivalableException("IO|BAD: "+e.getMessage());
+		}
 	}
 
 	@Override
@@ -345,9 +343,8 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public Map<Date, TicketAccessSeries> getTicketAccessSeries(Date start, Date end) {
 		TreeMap<Date, TicketAccessSeries> map = new TreeMap<Date, TicketAccessSeries>();
-		List<TotAggregate> access = readRepo.getAccessGrouped(start, end); //TODO adapt this method to tickets' group
+		List<TotAggregate> access = readRepo.getAccessGroupedV2(start, end); 
 		List<TotAggregate> ticket = ticketRepo.getTicketGroupedV2(start, end);
-		
 		Calendar cal = Calendar.getInstance();
 		
 		cal.setTime(start);
@@ -444,52 +441,5 @@ public class TicketServiceImpl implements TicketService{
 		}
 		readRepo.save(read);
 	}
-
-	/* (non-Javadoc)
-	 * @see it.polito.applied.asti.clan.service.TicketService#updateValidity()
-	 */
-//	@Override
-//	public void updateValidity() {
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(new Date());
-//		c.set(Calendar.MONTH, 5);
-//		c.set(Calendar.DAY_OF_MONTH, 15);
-//		Date from = c.getTime();
-//		System.out.println(from);
-//		List<Read> reads = readRepo.findAcceptedAfter(from);
-//		if(reads==null){
-//			return;
-//		}
-//		List<Ticket> tickets = ticketRepo.findReleasedNotService();
-//		if(tickets==null){
-//			return;
-//		}
-//		Map<String, Ticket> mapTicket = new HashMap<String, Ticket>();
-//		Map<String, Read> mapRead = new HashMap<String, Read>();
-//		for(Ticket t : tickets){
-//			if(!mapTicket.containsKey(t.getIdTicket()))
-//				mapTicket.put(t.getIdTicket(), t);
-//		}
-//		for(Read r : reads){
-//			if(!mapRead.containsKey(r.getIdTicket()))
-//				mapRead.put(r.getIdTicket(), r);
-//		}
-//		
-//		for(String s : mapRead.keySet()){
-//			Ticket t = mapTicket.get(s.trim());
-//			if(t==null)
-//				continue;
-//			if(t.getEmissionDate().after(mapRead.get(s).getDtaTransit())){
-//				continue;
-//			}
-//			c.setTime(mapRead.get(s).getDtaTransit());
-//			c.set(Calendar.HOUR_OF_DAY, 23);
-//			c.set(Calendar.MINUTE, 59);
-//			t.setEndDate(c.getTime());
-//			ticketRepo.save(t);
-//		}
-//		
-//	}
-
 
 }
