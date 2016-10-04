@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -59,7 +62,6 @@ import it.polito.applied.asti.clan.pojo.StatusTicket;
 import it.polito.applied.asti.clan.pojo.Ticket;
 import it.polito.applied.asti.clan.pojo.TicketAccessSeries;
 import it.polito.applied.asti.clan.pojo.TicketNumber;
-import it.polito.applied.asti.clan.pojo.TicketRequest;
 import it.polito.applied.asti.clan.pojo.TicketRequestDTO;
 import it.polito.applied.asti.clan.pojo.TotAvgAggregate;
 import it.polito.applied.asti.clan.pojo.User;
@@ -68,7 +70,6 @@ import it.polito.applied.asti.clan.pojo.VersionDTO;
 import it.polito.applied.asti.clan.repository.PoiRepository;
 import it.polito.applied.asti.clan.repository.ReadRepository;
 import it.polito.applied.asti.clan.repository.TicketRepository;
-import it.polito.applied.asti.clan.repository.TicketRequestRepository;
 import it.polito.applied.asti.clan.service.AppService;
 import it.polito.applied.asti.clan.service.AsyncUpdater;
 import it.polito.applied.asti.clan.service.SensorService;
@@ -90,12 +91,12 @@ public class ApiRestController extends BaseController{
 	
 //	/*Next 3 are useful just for migration 
 //	 * TODO remove them after migration*/
-//	@Autowired
-//	private TicketRepository ticketRepo;
+	@Autowired
+	private TicketRepository ticketRepo;
 //	@Autowired
 //	private TicketRequestRepository ticketRequestRepo;
-//	@Autowired
-//	private ReadRepository readRepo;
+	@Autowired
+	private ReadRepository readRepo;
 //	/**/
 	
 	@Autowired
@@ -106,6 +107,9 @@ public class ApiRestController extends BaseController{
 	
 	@Autowired
 	private AsyncUpdater asyncUpdater;
+	
+	@Autowired
+	private MongoOperations mongoOp;
 	
 	@RequestMapping(value="/v1/name", method=RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
@@ -591,10 +595,63 @@ public class ApiRestController extends BaseController{
 	
 //	@RequestMapping(value="/v1/test", method=RequestMethod.GET)
 //	@ResponseStatus(value = HttpStatus.OK)
-//	public void test() throws BadRequestException{
-//		migrateTicket();
-//		migrateRead();
+//	public int test() throws BadRequestException{
+//	  return refactorEndDate();
 //	}
+//
+//  private int refactorEndDate() {
+//    int i=0, j=0;;
+//    List<Ticket> tickets = ticketRepo.getValidTickets();
+//    System.out.println(tickets.size());
+//    List<Read> reads = readRepo.findAcceptedAfter(tickets.get(0).getEmissionDate());
+//    System.out.println(tickets.get(0).getEmissionDate()+" "+reads.size());
+//    Calendar cal = Calendar.getInstance();
+//    Map<String, List<Date>> map = new HashMap<String, List<Date>>();
+//    for(Read read : reads){
+//      String idTicket = read.getIdTicket().trim();
+//      if(map.containsKey(idTicket)){
+//        map.get(idTicket).add(read.getDtaTransit());
+//      }else{
+//        List<Date> dates = new LinkedList<Date>();
+//        dates.add(read.getDtaTransit());
+//        map.put(idTicket, dates);
+//      }
+//    }
+//    for(Ticket t : tickets){
+//      if(t.getRole() != 1)
+//        continue;
+//      i++;
+//      List<Date> dates = map.get(t.getIdTicket());
+//      if(dates==null)
+//        continue;
+//      for(Date d : dates){
+//        if(d.after(t.getEmissionDate())){
+//          j++;
+//          updateTicket(t, d, cal);
+//          break;
+//        }
+//      }
+//    }
+//    System.out.println(i+" "+j);
+//    tickets = ticketRepo.getValidTickets();
+//    return tickets.size();
+//  }
+//
+//  private void updateTicket(Ticket t, Date d, Calendar cal) {
+//    Query q = new Query();
+//    q.addCriteria(Criteria.where("_id").is(new ObjectId(t.getId())));
+//    cal.setTime(d);
+//    Update u = new Update();
+//    u.set("startDate", d);
+//    cal.add(Calendar.DAY_OF_YEAR, 2);
+//    cal.set(Calendar.HOUR_OF_DAY, 23);
+//    cal.set(Calendar.MINUTE, 59);
+//    u.set("endDate", cal.getTime());
+//    u.set("status", "s00002");
+//    mongoOp.updateFirst(q, u, Ticket.class);
+//  }
+	
+	
 //
 //	/**
 //	 * 

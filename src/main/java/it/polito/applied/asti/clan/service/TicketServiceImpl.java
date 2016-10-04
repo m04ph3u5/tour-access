@@ -232,6 +232,7 @@ public class TicketServiceImpl implements TicketService{
 	}
 
 	@Override
+	@Deprecated
 	public void savePassingAttempt(Read read) {
 		//salvo la lettura nel db (così come mi arriva dal client e con l'aggiunta dell'orario corrente sul server)
 		readRepo.save(read);
@@ -440,6 +441,7 @@ public class TicketServiceImpl implements TicketService{
 				read.setNumPeople(1);
 		}
 		readRepo.save(read);
+		ticketRepo.passingAccepted(read.getIdTicket(), read.getDtaTransit(), read.getDtaExpire());
 	}
 
 }
